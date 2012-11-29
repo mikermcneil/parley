@@ -2,14 +2,29 @@ var _ = require('underscore');
 
 var Parley = module.exports = function () {
 	var parley = this;
-	var virgin = 1;
+
+	// Whether this parley has been called at all yet
+	parley.virgin = true;
+
+	// Parse dependencies from arguments
+	parley.dependencies = _.toArray(arguments) || [];
 
 	// The execution queue for this parley instance
 	parley.xQ = [];
 
+	// Event delegation
+	parley.subscribers = [];
+	parley.subscribe = function (otherParley,cb) {
+		otherParley.subscribers.push(cb);
+	},
+	parley.signal = function () {
+		_.each(parley.subscribers,function (subscriberCb) {
+			if (subscriberCb) subscriberCb();
+		});
+	};
+
 	// A function to receive actual function for flow control
 	// and delay execution until the queue is cleared
-	// *** flowControl = $$$()
 	return function flowControl (fn,ctx) {
 	
 		// A function which receives and assigns arguments for the current fn
@@ -24,16 +39,23 @@ var Parley = module.exports = function () {
 				ctx: ctx
 			});
 
-			// If this is the first call, go ahead and shift the exec queue
-			if (virgin) {
-				virgin = 0;
-				shiftQueue();	
+			// If this is the first call, and all dependencies are met, go ahead and start the parley
+			if (parley.virgin) {
+				parley.virgin = false;
+
+				// Wait until all dependencies have finished before shifting the queue initially
+				if (parley.dependencies) {
+					async.forEach(parley.dependencies, function (item,cb) {
+						parley.subscribe(item,cb);
+					}, shiftQueue);
+				}
+				else shiftQueue();
 			}
 		};
 
+
 		// Wrapper for actual function call
 		// Receives original arugments as parameters
-		// *** runFunction = flowControl()
 		function runFunction () {
 
 			// Add callback as final argument
@@ -52,20 +74,12 @@ var Parley = module.exports = function () {
 		}
 
 		// A callback function that is fired when the function is complete
+		// At the end of the execution queue, fire a `done()` event, if one exists
 		function cb () {
 			if (parley.xQ.length > 0) {
 				shiftQueue();
 			}
+			else parley.signal();
 		}
 	};
 };
-
-// Thought:
-//////////////////////////////////////////////////////////////////////
-//
-// instead of a callback function, execute a generator function that
-// returns an incrementing id and pass in the result.
-// This serializes function calls by providing a unique sequence.
-// 
-// A __getter__ on globals[] could be used as well to make the syntax even more concise.
-//
