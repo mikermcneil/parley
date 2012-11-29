@@ -1,6 +1,6 @@
 {
   "name": "parley",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Convention-over-configuration flow control",
   "main": "index.js",
   "scripts": {
@@ -17,5 +17,8 @@
   ],
   "author": "Mike McNeil",
   "license": "MIT",
-  "readmeFilename": "README.md"
+  "readmeFilename": "README.md",
+  "dependencies": {
+    "underscore": "~1.4.2"
+  }
 }
