@@ -42,8 +42,7 @@ var Parley = module.exports = function () {
 				args: args,
 				ctx: ctx,
 				error: null,
-				result: null,
-				self: actionObject
+				data: null
 			};
 			parley.xQ.unshift(actionObject);
 
@@ -89,11 +88,11 @@ var Parley = module.exports = function () {
 		// After each call, peek at execution queue and save error and result data
 		// At the end of the execution queue, fire a `done()` event, if one exists
 		function cb (err,data) {
+			var lastAction = peek(parley.dStack);
+			lastAction.error = err;
+			lastAction.data = data;
+			
 			if (parley.xQ.length > 0) {
-				var lastAction = peek(parley.dStack);
-				lastAction.error = err;
-				lastAction.response = data;
-
 				shiftQueue();
 			}
 			else parley.signal(err,data);
