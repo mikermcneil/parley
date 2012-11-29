@@ -19,6 +19,7 @@
   "license": "MIT",
   "readmeFilename": "README.md",
   "dependencies": {
-    "underscore": "~1.4.2"
+    "underscore": "~1.4.2",
+    "async": "~0.1.22"
   }
 }
