@@ -13,14 +13,17 @@ var Parley = module.exports = function () {
 	// The execution queue for this parley instance
 	parley.xQ = [];
 
+	// The discard stack
+	parley.dStack = [];
+
 	// Event delegation
 	parley.subscribers = [];
 	parley.subscribe = function (otherParley,cb) {
 		otherParley.subscribers.push(cb);
 	},
-	parley.signal = function () {
+	parley.signal = function (err,data) {
 		_.each(parley.subscribers,function (subscriberCb) {
-			if (subscriberCb) subscriberCb();
+			if (subscriberCb) subscriberCb(err,data);
 		});
 	};
 
@@ -34,11 +37,15 @@ var Parley = module.exports = function () {
 
 			// Unshift runFunction to execution queue
 			var args = _.toArray(arguments);
-			parley.xQ.unshift({
+			var actionObject = {
 				fn: runFunction,
 				args: args,
-				ctx: ctx
-			});
+				ctx: ctx,
+				error: null,
+				result: null,
+				self: actionObject
+			};
+			parley.xQ.unshift(actionObject);
 
 			// If this is the first call, and all dependencies are met, go ahead and start the parley
 			if (parley.virgin) {
@@ -52,6 +59,9 @@ var Parley = module.exports = function () {
 				}
 				else shiftQueue();
 			}
+
+			// Return the action objet
+			return actionObject;
 		};
 
 
@@ -68,19 +78,30 @@ var Parley = module.exports = function () {
 			fn.apply(ctx,args);
 		}
 
-		// Shift the execution queue
+		// Shift an action out of the execution queue and onto the discard stack
 		function shiftQueue () {
 			var action = parley.xQ.pop();
+			parley.dStack.push(action);
 			action.fn.apply(action.ctx,action.args);
 		}
 
 		// A callback function that is fired when the function is complete
+		// After each call, peek at execution queue and save error and result data
 		// At the end of the execution queue, fire a `done()` event, if one exists
-		function cb () {
+		function cb (err,data) {
 			if (parley.xQ.length > 0) {
+				var lastAction = peek(parley.dStack);
+				lastAction.error = err;
+				lastAction.response = data;
+
 				shiftQueue();
 			}
-			else parley.signal();
+			else parley.signal(err,data);
+		}
+
+		// Peek at upcoming item in queue
+		function peek (arr) {
+			return arr[arr.length-1];
 		}
 	};
 
