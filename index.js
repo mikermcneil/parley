@@ -26,7 +26,7 @@ var Parley = module.exports = function () {
 
 	// A function to receive actual function for flow control
 	// and delay execution until the queue is cleared
-	return function flowControl (fn,ctx) {
+	var flowControl = function (fn,ctx) {
 	
 		// A function which receives and assigns arguments for the current fn
 		// It will also kick off the next function if necessary
@@ -83,4 +83,8 @@ var Parley = module.exports = function () {
 			else parley.signal();
 		}
 	};
+
+	// Save reference to subscribers
+	flowControl.subscribers = parley.subscribers;
+	return flowControl;
 };
