@@ -70,7 +70,7 @@ var Parley = module.exports = function () {
 
 		// Shift the execution queue
 		function shiftQueue () {
-			var action = parley.xQ.shift();
+			var action = parley.xQ.pop();
 			action.fn.apply(action.ctx,action.args);
 		}
 
