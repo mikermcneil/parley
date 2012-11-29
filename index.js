@@ -8,10 +8,10 @@ var Parley = module.exports = function () {
 	parley.xQ = [];
 
 	// A function to receive actual function for flow control
-	// flowControl = $$$()
+	// and delay execution until the queue is cleared
+	// *** flowControl = $$$()
 	return function flowControl (fn,ctx) {
 	
-
 		// A function which receives and assigns arguments for the current fn
 		// It will also kick off the next function if necessary
 		return function receiveArgumentsAndShift () {
@@ -31,15 +31,13 @@ var Parley = module.exports = function () {
 			}
 		};
 
-		// A wrapper for the actual function to run immediately
+		// Wrapper for actual function call
 		// Receives original arugments as parameters
-		// runFunction = flowControl()
+		// *** runFunction = flowControl()
 		function runFunction () {
 
-			// Add callback to args
+			// Add callback as final argument
 			var args = _.toArray(arguments);
-			// var args = this.savedArgs;
-			// console.log("SAVED ARGS:",args);
 			args.push(cb);
 
 			// Run function in proper context w/ proper arguments
@@ -58,7 +56,6 @@ var Parley = module.exports = function () {
 			if (parley.xQ.length > 0) {
 				shiftQueue();
 			}
-			else console.log( "* Done *");
 		}
 	};
 };
