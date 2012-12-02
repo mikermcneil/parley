@@ -1,3 +1,19 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// parley.js
+// A bare-bones framework for serial flow control
+//
+// NOTE: 
+// parley is very good at simple, serial async logic.
+// It does a great job of making it easy to avoid callback nesting.
+// However, the more conditionals your asynchronous logic has,
+// the more parley starts to suck.
+//
+// For more complex flow control, I highly recommnd 
+// the async framework by Caolan McMahon:
+// (https://github.com/caolan/async)
+//
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 (function() {
 	var async = require('async');
 	var _ = require('underscore');
@@ -66,10 +82,13 @@
 	// It will also kick off the next function if necessary
 	function receiveArgumentsAndShift(parley,fn,ctx) {
 		return function () {
+			var args = _.toArray(arguments);
+
 			// Append runFunction to execution queue
 			var actionObject = {
+				_isParleyCallback: true,
 				fn: runFunction,
-				args: _.toArray(arguments),
+				args: args,
 				ctx: ctx,
 				error: null,
 				data: null
@@ -115,8 +134,18 @@
 		// Wrapper for actual function call
 		// Receives original arugments as parameters
 		function runFunction () {
-			// Add callback as final argument
 			var args = _.toArray(arguments);
+
+			// If only arg is a parley callback object,
+			// convert into classic (err,data) notation
+			if (args.length === 1 && args[0] && args[0]._isParleyCallback) {
+				var cbError = args[0].error;
+				var cbData = args[0].data;
+				args[0] = cbError;
+				args[1] = cbData;
+			}
+
+			// Add callback as final argument
 			args.push(cb);
 
 			// Run function in proper context w/ proper arguments
@@ -130,21 +159,21 @@
 		return arr[arr.length - 1];
 	}
 
-	// Add deferred log function for logging parley result objects
+	// Add deferred log function for logging parley callback
 	Parley.log = function () {
 		var args = _.toArray(arguments);
-		if (args.length < 2 || !_.isFunction(args[1]) || !_.isObject(args[0])) {
-			throw new Error("Invalid arguments passed to Parley.log: ",args);
+		if (args.length < 3 || !_.isFunction(args[2])) {
+			console.warn("Invalid arguments passed to Parley.log:",args);
+			return args.pop()();
 		}
 
-		// Parse arguments
-		var cb = args.pop();
-		var result = args.shift();
+		console.log('Parley.log :: ',args);
+		return args.pop()();
 
 		// Write error or data and trigger callback
-		if (result.error) console.error(result.error);
-		else console.log(result.data);
-		cb(result.err,result.data);
+		// if (args[0]) console.error(args[0]);
+		// else console.log(args[1]);
+		// args.pop()();
 	};
 
 })();
