@@ -14,13 +14,12 @@ Convention-over-configuration flow control library for Node.js
 Functions compatible with parley must have a callback as their last parameter.  If you plan to work with the results of asynchronous calls (which is often), you should plan for an err and data argument.
 ```
 // A parley-equivalent setTimeout
-// (doesn't accept deferred data as input)
 function wait (ms,cb) {
   setTimeout(cb,ms);
 }
 
 // A parley-equivalent console.log
-// (note: only accepts a single string argument)
+// (accepts deferred data as input)
 function log (err,data,cb) {
   if (err) console.error(err,cb);
   else console.log(data,cb);
