@@ -72,6 +72,16 @@
 			}
 		};
 
+		// Add utility methods
+		flowControl.log = function (msg) {
+			return flowControl(function (msg,cb) {
+				console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+				console.log(msg);
+				console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+				cb();
+			}) (msg);
+		};
+
 		// Save reference to subscribers
 		flowControl.subscribers = parley.subscribers;
 		return flowControl;
@@ -168,21 +178,22 @@
 			var conditionsPassed = _.all(_.keys(action.conditions), function (condition) {
 				var lastAction;
 				if (!action.conditions[condition]) return false;
-				if (condition === 'ifError') {
+				else if (condition === 'ifError') {
 					args = expandArgsWithLastAction(args);
 					args = expandParleyActionObject(args);
 					return !!args[0];
 				}
-				if (condition === 'ifNull') {
+				else if (condition === 'ifNull') {
 					args = expandArgsWithLastAction(args);
 					args = expandParleyActionObject(args);
 					return _.isNull(args[1]);
 				}
-				if (condition === 'ifNotNull') {
+				else if (condition === 'ifNotNull') {
 					args = expandArgsWithLastAction(args);
 					args = expandParleyActionObject(args);
 					return !_.isNull(args[1]);
 				}
+				else return true;
 			});
 
 			// Trigger, shift queue, or signal as necessary

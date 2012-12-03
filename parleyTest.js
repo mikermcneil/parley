@@ -167,6 +167,20 @@ function runTests() {
 		}
 	}
 
+	//////////////////////////////////////////////////////////////////////
+	// An example of using $$.log
+	//////////////////////////////////////////////////////////////////////
+	function test8 (cb) {
+		console.log("\n\n\n\n\n\n\n");
+		console.log("*************");
+		console.log("Test #8");
+		console.log("*************");
+
+		var $$ = new parley();
+		$$.log("test");
+		$$(cb)();
+	}
+
 
 
 	// Run tests
@@ -196,6 +210,7 @@ function runTests() {
 		console.log("Outcome:\t("+err+",",data,")"); 
 		cb();
 	})(result);
+	result = $(test8)();
 
 
 	$(function (cb) {
