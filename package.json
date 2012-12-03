@@ -1,6 +1,6 @@
 {
   "name": "parley",
-  "version": "0.0.1202",
+  "version": "0.0.1203",
   "description": "Convention-over-configuration flow control",
   "main": "index.js",
   "scripts": {
