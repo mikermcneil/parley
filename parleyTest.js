@@ -160,7 +160,7 @@ function runTests() {
 			$(User).lock(criteria);
 			$(User).find(criteria);
 			$(cb).ifNotNull();
-			$(cb).ifError();
+			$(cb).ifError("Error encountered when trying to find User.");
 			var u = $(User).create(criteria);
 			$(User).unlock(criteria);
 			$(cb)(u);
@@ -255,6 +255,7 @@ var User = {
 	// Mock find function
 	find: function(criteria, cb) {
 		setTimeout(function() {
+			console.log("Finding users...",criteria);
 			if(_.isObject(criteria) || _.isFinite(criteria)) {
 				var result = criteria === 3 ? {
 					name: "Martin"
@@ -264,8 +265,10 @@ var User = {
 		}, 1050);
 	},
 	create: function(definition, cb) {
+		console.log("Creating User...");
 		setTimeout(function() {
 			if(_.isObject(definition)) {
+				console.log("User created!");
 				cb(null, definition);
 			} else cb("Invalid definition parameter (" + definition + ") passed to User.create.");
 		}, 150);
@@ -273,19 +276,15 @@ var User = {
 
 	lock: function (criteria,cb) {
 		setTimeout(function () {
-			var $ = new parley();
-			var u = $(User).find(criteria);
-			// lock
-			$(cb)(u);
+			console.log("Locking users...",criteria);
+			cb();
 		},500);
 	},
 
 	unlock: function (criteria,cb) {
 		setTimeout(function () {
-			var $ = new parley();
-			var u = $(User).find(criteria);
-			// unlock
-			$(cb)(u);
+			console.log("Unlocking users...",criteria);
+			cb();
 		},500);
 	}
 };
