@@ -74,12 +74,20 @@
 
 		// Add utility methods
 		flowControl.log = function (msg) {
-			return flowControl(function (msg,cb) {
-				console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-				console.log(msg);
-				console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+			if (msg._isParleyCallback) return flowControl(function (err,data,cb) {
+				doLog(err, "ERROR");
+				doLog(data,"DATA");
 				cb();
 			}) (msg);
+			else return flowControl(function (msg,cb) {
+				doLog(msg);
+				cb();
+			}) (msg);
+
+			function doLog (msg, type) {
+				if (type) console.log("$$:  ",msg,"("+type+")");
+				else console.log("$$:  ",msg);
+			}
 		};
 
 		// Save reference to subscribers
