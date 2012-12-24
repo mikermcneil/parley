@@ -1,7 +1,7 @@
 parley
 =========
 
-Convention-over-configuration flow control library for Node.js
+Serial flow control toy for Node.js
 
 ## Features
 + Simple, minimalist api
