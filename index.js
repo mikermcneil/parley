@@ -74,7 +74,7 @@
 
 		// Add utility methods
 		flowControl.log = function (msg) {
-			if (msg._isParleyCallback) return flowControl(function (err,data,cb) {
+			if (msg && msg._isParleyCallback) return flowControl(function (err,data,cb) {
 				doLog(err, "ERROR");
 				doLog(data,"DATA");
 				cb();
