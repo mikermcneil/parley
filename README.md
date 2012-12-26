@@ -3,6 +3,8 @@ parley
 
 Serial flow control toy for Node.js
 
+> DEFINITELY not production ready-- just a toy.  I'm not even sure if doing it this way is a good idea yet.
+
 ## Features
 + Simple, minimalist api
 + Expects standard node.js semantics (i.e. callbacks are of the form `function(err,data){}` and the last argument of calling functions)
@@ -98,3 +100,6 @@ var $$ = new parley();
 // Call $$(User.find) by wrapping the User object
 var user = $$(User).find(17);
 ```
+
+
+[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/c87267eee787dd508d0106260261b6dc "githalytics.com")](http://githalytics.com/mikermcneil/parley)
