@@ -21,14 +21,15 @@ describe('baseline.benchmark.js', function() {
   this.slow(240000);
   this.timeout(240000);
 
-  // before(function(){
-  //   console.log(
-  //   '  •  •      •       •      •    •    \n'+
-  //   '           •      •              o  \n'+
-  //   '  •    b e n c h m a r k s      •    \n'+
-  //   '   •    (instantiation)       °     \n'+
-  //   '');
-  // });
+  before(function(){
+    console.log(
+    '  •  •      •       •      •    •    \n'+
+    '           •      •              o  \n'+
+    '  •    b e n c h m a r k s      •    \n'+
+    '   •    (instantiation)       °     \n'+
+    '------------------------------------\n'+
+    '');
+  });
 
   //  ╔═╗╦═╗ ╦╔╦╗╦ ╦╦═╗╔═╗╔═╗
   //  ╠╣ ║╔╩╦╝ ║ ║ ║╠╦╝║╣ ╚═╗
@@ -199,6 +200,18 @@ describe('baseline.benchmark.js', function() {
 
       ]);
     });
+  });
+
+
+  after(function(){
+    console.log(
+    '------------------------------------\n'+
+    '  •  •      •       •      •    •    \n'+
+    '           •      •              o  \n'+
+    '  • < / b e n c h m a r k s >    •    \n'+
+    '   •                           °     \n'+
+    '                      o°            \n'+
+    '');
   });
 
 });//</describe (top-level) >
