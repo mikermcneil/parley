@@ -22,6 +22,7 @@ describe('behavior.test.js', function() {
     describe('with proper usage', function() {
       var deferred; before(function(){ deferred = parley(function(done){ setTimeout(function (){ return done(undefined, 'hello!'); }, 50); }); });
       it('should work', function(done){
+        this.slow(200);
         deferred.exec(function(err) {
           if (err) { return done(err); }
           return done();
@@ -31,6 +32,7 @@ describe('behavior.test.js', function() {
     describe('when called more than once', function() {
       var deferred; before(function(){ deferred = parley(function(done){ setTimeout(function (){ return done(undefined, 'hello!'); }, 50); }); });
       it('should ignore subsequent calls', function(done){
+        this.slow(1200);
 
         // As a hack, override console.warn().
         // (this is mainly to improve the experience of looking at test results,
@@ -88,6 +90,7 @@ describe('behavior.test.js', function() {
     describe('with proper usage', function() {
       var deferred; before(function(){ deferred = parley(function(done){ setTimeout(function (){ return done(undefined, 'hello!'); }, 50); }); });
       it('should work', function(done){
+        this.slow(200);
         deferred.then(function(result) {
           return done();
         }).catch(function(err){ return done(err); });
@@ -96,6 +99,7 @@ describe('behavior.test.js', function() {
     describe('when called more than once', function() {
       var deferred; before(function(){ deferred = parley(function(done){ setTimeout(function (){ return done(undefined, 'hello!'); }, 50); }); });
       it('should ignore subsequent calls', function(done){
+        this.slow(1200);
         // As a hack, override console.warn().
         // (this is mainly to improve the experience of looking at test results,
         // but it also has the benefit of adding another check.)
