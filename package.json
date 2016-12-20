@@ -1,7 +1,7 @@
 {
   "name": "parley",
   "version": "0.0.2",
-  "description": "Convention-over-configuration flow control",
+  "description": "Practical, lightweight flow control for Node.js.  Supports callbacks and promises.",
   "main": "index.js",
   "scripts": {
     "test": "node ./node_modules/mocha/bin/mocha test"
@@ -19,5 +19,10 @@
   "author": "Mike McNeil",
   "license": "MIT",
   "dependencies": {
+    "@sailshq/lodash": "3.10.2",
+    "bluebird": "3.2.1"
+  },
+  "devDependencies": {
+    "mocha": "3.0.2"
   }
 }
