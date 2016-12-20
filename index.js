@@ -117,13 +117,17 @@ module.exports = function parley(handleExecOrOpts){
       // Spinlock
       if (hasBegunExecuting) {
         console.warn(
+          '\n'+
           'That\'s odd... It looks like '+(opts.codeName ? opts.codeName+'()' : 'this Deferred')+' '+
           'has already '+(hasFinishedExecuting?'finished':'begun')+' executing.\n'+
           'But attempting to execute a Deferred more than once tends to cause\n'+
           'unexpected race conditions and other bugs!  So to be safe, rather than\n'+
           'executing it twice, the second attempt was ignored automatically, and\n'+
-          'this warning was logged instead.\n'+
-          '> See http://npmjs.com/package/parley for help.'
+          'this warning was logged instead.  See http://npmjs.com/package/parley for help.\n'+
+          'Stack trace:\n'+
+          '```\n'+
+          ((new Error()).stack).replace(/^.+\n/, '')+
+          '```\n'
         );
         return;
       }//-•
