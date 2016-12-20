@@ -232,7 +232,7 @@ User.findOne({ id: req.param('id') })
 
     return res.view('profile', {
       profile: _.omit(profileUser, ['password', 'email']),
-      me: _.omit(loggedInUser, 'password')
+      me: loggedInUser ? _.omit(loggedInUser, 'password') : {}
     });
 
   });
