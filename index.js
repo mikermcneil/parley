@@ -158,9 +158,11 @@ module.exports = function parley(handleExecOrOpts){
         hasFinishedExecuting = true;
 
         return cb(new Error(
-          'Unexpected error thrown while executing '+
-          (opts.codeName ? opts.codeName+'()' : 'this Deferred')+': '+
-          err.stack
+          'Unexpected error was thrown while executing '+
+          (opts.codeName ? opts.codeName+'()' : 'this Deferred')+':\n'+
+          '```\n'+
+          err.stack+'\n'+
+          '```'
         ));
 
       }//</catch>
