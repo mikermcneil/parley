@@ -32,10 +32,25 @@ doStuff({ foo: 123 })
 > You can also obtain a promise simply by calling [`.toPromise()`](#toPromise).
 
 
+## Help
 
-#### Implementation
+If you have questions or are having trouble, click [here](http://sailsjs.com/support).
 
-Use parley to build a **deferred object**.  Then attach any extra methods you'd like to add (optional), and return the deferred object.
+
+## Bugs &nbsp; [![NPM version](https://badge.fury.io/js/parley.svg)](http://npmjs.com/package/parley)
+
+To report a bug, [click here](http://sailsjs.com/bugs).
+
+
+
+## Overview
+
+This section offers a high-level look at how to use parley from both a userland and implementor perspective.  You can also skip ahead to the [API reference below](#api-reference).
+
+
+### Building a deferred object
+
+Use parley to build a **deferred object**.  This provides access to `.exec()`, `.then()`, `.catch()`, and `.toPromise()`, but you can also attach any extra methods you'd like to add.
 
 ```javascript
 var parley = require('parley');
@@ -56,7 +71,7 @@ var deferred = parley(function (done){
 > For a more complete version of the above example, [click here](https://gist.github.com/mikermcneil/621b55cfc54f133a1db30d7238ca52b1).
 
 
-## Results
+### Results
 
 To send back a result value from your handler, specify it as the second argument when invoking `done`.
 
@@ -79,7 +94,7 @@ Depending on how userland code chooses to work with the deferred object, your re
 ```
 
 
-## Errors
+### Errors
 
 To send back an error from your handler, handle it in the conventional Node.js way.
 
@@ -150,7 +165,7 @@ Then in userland, this can be easily negotiated.  Note that whether the code is 
 ```
 
 
-## Flow control
+### Flow control
 
 Since Node.js is asynchronous, seemingly-tricky flow control problems often arise in practical, userland code.  Fortunately, they're easy to solve when equipped with the proper tools.
 
@@ -316,9 +331,9 @@ function afterwards(err) {
 
 ## API reference
 
-#### Implementor interface
+### Implementor interface
 
-##### parley()
+#### parley()
 
 Build and return a deferred object.
 
@@ -350,11 +365,11 @@ var deferred = parley({
 
 
 
-#### Userland interface
+### Userland interface
 
 The deferred object returned by `parley()` exposes a few different methods.
 
-##### .exec()
+#### .exec()
 
 ```javascript
 .exec(function (err, result) {
@@ -376,7 +391,7 @@ parley(function(done){ return done(new Error('whoops'), 1+1); })
 });
 ```
 
-##### .then()
+#### .then()
 
 ```javascript
 parley(function(done){ return done(undefined, 1+1); })
@@ -385,7 +400,7 @@ parley(function(done){ return done(undefined, 1+1); })
 });
 ```
 
-##### .catch()
+#### .catch()
 
 ```javascript
 parley(function(done){ return done(new Error('whoops'), 1+1); })
@@ -394,7 +409,7 @@ parley(function(done){ return done(new Error('whoops'), 1+1); })
 });
 ```
 
-##### .toPromise()
+#### .toPromise()
 
 ```javascript
 var promise1 = parley(function(done){ return done(undefined, 1+1); }).toPromise();
@@ -410,16 +425,6 @@ Promise.all([
 
 });
 ```
-
-
-## Help
-
-If you have questions or are having trouble, click [here](http://sailsjs.com/support).
-
-
-## Bugs &nbsp; [![NPM version](https://badge.fury.io/js/parley.svg)](http://npmjs.com/package/parley)
-
-To report a bug, [click here](http://sailsjs.com/bugs).
 
 
 ## Contributing &nbsp; [![Master Branch Build Status](https://travis-ci.org/mikermcneil/parley.svg?branch=master)](https://travis-ci.org/mikermcneil/parley) &nbsp; [![Master Branch Build Status (Windows)](https://ci.appveyor.com/api/projects/status/tdu70ax32iymvyq3?svg=true)](https://ci.appveyor.com/project/mikermcneil/parley)
