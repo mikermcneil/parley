@@ -173,8 +173,20 @@ describe('baseline.benchmark.js', function() {
 
         function (next){
           find({ where: {id:3, x:30} })
-          .where({id:4})
           .exec(function (err, result) {
+            if (err) { return next(err); }
+            return next();
+          });
+        }
+
+      ], done);
+    });
+
+    it('should be performant enough when calling NAKED fake "find" (using bench())', function (done){
+      bench('mock "find()"', [
+
+        function (next){
+          find({ where: {id:3, x:30} }, function (err, result) {
             if (err) { return next(err); }
             return next();
           });
