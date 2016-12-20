@@ -1,6 +1,6 @@
 {
   "name": "parley",
-  "version": "1.0.0-2",
+  "version": "1.0.0",
   "description": "Practical, lightweight flow control for Node.js.  Supports callbacks and promises.",
   "main": "index.js",
   "scripts": {
