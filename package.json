@@ -19,7 +19,7 @@
   "author": "Mike McNeil",
   "license": "MIT",
   "dependencies": {
-    "@sailshq/lodash": "3.10.2",
+    "@sailshq/lodash": "^3.10.2",
     "bluebird": "3.2.1"
   },
   "devDependencies": {
