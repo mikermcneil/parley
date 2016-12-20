@@ -29,16 +29,11 @@ doStuff({ foo: 123 })
 });
 ```
 
-Or using "pure" promises:
-
-```javascript
-var promise = doStuff({ foo: 123 })
-.set({ bar: 456 })
-.toPromise();
-```
+> You can also obtain a promise simply by calling [`.toPromise()`](#toPromise).
 
 
-## Implementation
+
+#### Implementation
 
 Use parley to build a **deferred object**.  Then attach any extra methods you'd like to add (optional), and return the deferred object.
 
@@ -61,7 +56,7 @@ var deferred = parley(function (done){
 > For a more complete version of the above example, [click here](https://gist.github.com/mikermcneil/621b55cfc54f133a1db30d7238ca52b1).
 
 
-#### Results
+## Results
 
 To send back a result value from your handler, specify it as the second argument when invoking `done`.
 
@@ -165,7 +160,7 @@ When using Node-style callbacks, use the [`async` package](http://npmjs.com/pack
 var async = require('async');
 ```
 
-> Most of the examples below use async for simplicity, but note that many similar affordances are available for promises -- for example, check out `.toPromise()` (below) and `Promise.all()` (in bluebird, or native in ES6, etc.).  The concepts are more or less the same regardless.
+> Most of the examples below use async for simplicity, but note that many similar affordances are available for promises -- for example, check out `.toPromise()` ([below](#toPromise)) and `Promise.all()` (in bluebird, or native in ES6, etc.).  The concepts are more or less the same regardless.
 
 
 #### Async loops
