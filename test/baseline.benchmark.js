@@ -4,7 +4,7 @@
 
 var parley = require('../');
 var benchSync = require('./utils/bench-sync.util');
-// var bench = require('./utils/bench.util');
+var bench = require('./utils/bench.util');
 
 
 
@@ -33,7 +33,8 @@ describe('baseline.benchmark.js', function() {
   //  ╔═╗╦═╗ ╦╔╦╗╦ ╦╦═╗╔═╗╔═╗
   //  ╠╣ ║╔╩╦╝ ║ ║ ║╠╦╝║╣ ╚═╗
   //  ╚  ╩╩ ╚═ ╩ ╚═╝╩╚═╚═╝╚═╝
-  // N/A
+  var find = require('./fixtures/find.fixture');
+  var validate = require('./fixtures/validate.fixture');
 
 
   //  ╦ ╦╦╔═╗╔╦╗╔═╗╦═╗╦╔═╗╔═╗╦    ╦═╗╔═╗╔═╗╔═╗╦═╗╔╦╗╔═╗
@@ -163,5 +164,57 @@ describe('baseline.benchmark.js', function() {
     // =================================================================================
 
   });//</ describe: parley(handler().exec(cb) )
+
+
+
+  describe.only('practical benchmark', function(){
+    it('should be performant enough when calling fake "find" w/ .exec() (using bench())', function (done){
+      bench('mock "find()"', [
+
+        function (next){
+          find({ where: {id:3, x:30} })
+          .where({id:4})
+          .exec(function (err, result) {
+            if (err) { return next(err); }
+            return next();
+          });
+        }
+
+      ], done);
+    });
+
+    it('should be performant enough when calling fake "validate" w/ .exec() (using benchSync())', function (){
+      benchSync('mock "validate()"', [
+
+        function (){
+          validate()
+          .exec(function (err) {
+            if (err) {
+              console.error('Unexpected error running benchmark:',err);
+            }//>-
+            // Note: Since the handler is blocking, we actually make
+            // it in here within one tick of the event loop.
+          });
+        }
+
+      ]);
+    });
+
+    it('should be performant enough when calling NAKED "validate" (using benchSync())', function (){
+      benchSync('mock "validate()"', [
+
+        function (){
+          validate(function (err) {
+            if (err) {
+              console.error('Unexpected error running benchmark:',err);
+            }//>-
+            // Note: Since the handler is blocking, we actually make
+            // it in here within one tick of the event loop.
+          });
+        }
+
+      ]);
+    });
+  });
 
 });//</describe (top-level) >
