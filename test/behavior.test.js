@@ -3,6 +3,7 @@
  */
 
 var util = require('util');
+var assert = require('assert');
 var _ = require('@sailshq/lodash');
 var parley = require('../');
 
@@ -15,7 +16,6 @@ var parley = require('../');
  */
 
 describe('behavior.test.js', function() {
-
 
 
   describe('.exec()', function() {
@@ -31,11 +31,26 @@ describe('behavior.test.js', function() {
     describe('when called more than once', function() {
       var deferred; before(function(){ deferred = parley(function(done){ setTimeout(function (){ return done(undefined, 'hello!'); }, 50); }); });
       it('should ignore subsequent calls', function(done){
+
+        // As a hack, override console.warn().
+        // (this is mainly to improve the experience of looking at test results,
+        // but it also has the benefit of adding another check.)
+        var origConsoleWarn = global.console.warn;
+        var counter = 0;
+        global.console.warn = function(){
+          counter++;
+        };
+
         deferred.exec(function (){
           setTimeout(function (){
+            global.console.warn = origConsoleWarn;
+            try {
+              assert.equal(counter, 3);
+            } catch(e) { return done(e); }
             return done();
           }, 500);
         });
+
         // The following .exec() calls will be ignored.
         // (Note that 3 extra warnings will be logged, though.)
         deferred.exec(function (){
@@ -66,6 +81,54 @@ describe('behavior.test.js', function() {
       });
     });
   });//</.exec()>
+
+
+
+  describe('.then()', function() {
+    describe('with proper usage', function() {
+      var deferred; before(function(){ deferred = parley(function(done){ setTimeout(function (){ return done(undefined, 'hello!'); }, 50); }); });
+      it('should work', function(done){
+        deferred.then(function(result) {
+          return done();
+        }).catch(function(err){ return done(err); });
+      });
+    });
+    describe('when called more than once', function() {
+      var deferred; before(function(){ deferred = parley(function(done){ setTimeout(function (){ return done(undefined, 'hello!'); }, 50); }); });
+      it('should ignore subsequent calls', function(done){
+        // As a hack, override console.warn().
+        // (this is mainly to improve the experience of looking at test results,
+        // but it also has the benefit of adding another check.)
+        var origConsoleWarn = global.console.warn;
+        var counter = 0;
+        global.console.warn = function(){
+          counter++;
+        };
+
+        deferred.then(function (){
+          setTimeout(function (){
+            global.console.warn = origConsoleWarn;
+            try {
+              assert.equal(counter, 3);
+            } catch(e) { return done(e); }
+            return done();
+          }, 500);
+        }).catch(function(err){ return done(err); });
+
+        // The following .then() calls will be ignored.
+        // (Note that 3 extra warnings will be logged, though.)
+        deferred.then(function (){
+          return done(new Error('Should never make it here'));
+        }).catch(function(err){ return done(err); });
+        deferred.then(function (){
+          return done(new Error('Should never make it here'));
+        }).catch(function(err){ return done(err); });
+        deferred.then(function (){
+          return done(new Error('Should never make it here'));
+        }).catch(function(err){ return done(err); });
+      });
+    });
+  });//</.then()>
 
 });
 
