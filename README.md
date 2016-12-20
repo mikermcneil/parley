@@ -40,12 +40,12 @@ var promise = doStuff({ foo: 123 })
 
 ## Implementation
 
-Use parley to build a deferred object.  Then attach any extra methods you'd like to add (optional), and return the deferred object.
+Use parley to build a **deferred object**.  Then attach any extra methods you'd like to add (optional), and return the deferred object.
 
 ```javascript
 var parley = require('parley');
 
-var π = parley(function (done){
+var deferred = parley(function (done){
   setTimeout(function (){
     if (Math.random() > 0.5) {
       return done(new Error('whoops, unlucky I guess'));
@@ -69,16 +69,16 @@ To send back a result value from your handler, specify it as the second argument
 return done(undefined, 'hello world');
 ```
 
-Depending on how userland code chooses to work with the deferred object (**π**), your result will be passed back to userland as either the second argument to the `.exec()` callback, or as the value resolved from the promise.
+Depending on how userland code chooses to work with the deferred object, your result will be passed back to userland as either the second argument to the `.exec()` callback, or as the value resolved from the promise.
 
 ```javascript
 // Node-style callback
-π.exec(function(err, result) {
+.exec(function(err, result) {
   // => undefined, 'hello world'
 });
 
 // or promise
-π.then(function(result) {
+.then(function(result) {
   // => 'hello world'
 });
 ```
@@ -92,16 +92,16 @@ To send back an error from your handler, handle it in the conventional Node.js w
 return done(new Error('Oops'));
 ```
 
-Depending on how userland code chooses to work with the deferred object (**π**), your error will be passed back to userland as either the first argument to the `.exec()` callback, or as the promise's rejection "reason".
+Depending on how userland code chooses to work with the deferred object, your error will be passed back to userland as either the first argument to the `.exec()` callback, or as the promise's rejection "reason".
 
 ```javascript
 // Node-style callback
-π.exec(function(err, result) {
+.exec(function(err, result) {
   // => [Error: oops], undefined
 });
 
 // or promise
-π.catch(function(err) {
+.catch(function(err) {
   // => [Error: oops]
 });
 ```
@@ -133,7 +133,7 @@ Then in userland, this can be easily negotiated.  Note that whether the code is 
 
 ```javascript
 // Node-style callback
-π.exec(function(err, result) {
+.exec(function(err, result) {
   if (err) {
     switch(err.code) {
       case 'E_TOO_BIG': return res.status(400).json({ reason: 'Ooh, too bad!  '+err.message });
@@ -149,7 +149,7 @@ Then in userland, this can be easily negotiated.  Note that whether the code is 
 });
 
 // or promise
-π.catch(function(err) {
+.catch(function(err) {
   // => [Error: oops]
 });
 ```
@@ -330,7 +330,7 @@ Build and return a deferred object.
 As its first argument, expects a function that will run whenever userland code executes the deferred object.
 
 ```javascript
-parley(function (done) {
+var deferred = parley(function (done) {
   // ...
 });
 ```
@@ -338,7 +338,7 @@ parley(function (done) {
 Or, instead of passing in a function, you can pass in a dictionary of options.
 
 ```javascript
-var π = parley({
+var deferred = parley({
   codeName: 'doStuff',
   handleExec: function (done){
     // ...
