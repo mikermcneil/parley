@@ -23,6 +23,7 @@ var bluebird = require('bluebird');
  */
 
 module.exports = function parley(handleExecOrOpts){
+  // console.time('parley');
 
   //  ██╗   ██╗███████╗ █████╗  ██████╗ ███████╗
   //  ██║   ██║██╔════╝██╔══██╗██╔════╝ ██╔════╝
@@ -169,39 +170,45 @@ module.exports = function parley(handleExecOrOpts){
   //  ██║     ██║  ██║███████╗   ██║      ██║      ██║       ██║     ██║  ██║██║██║ ╚████║   ██║
   //  ╚═╝     ╚═╝  ╚═╝╚══════╝   ╚═╝      ╚═╝      ╚═╝       ╚═╝     ╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝   ╚═╝
   //
-  // Attempt to guess the code name (fall back to empty string)
-  var codeNameGuess;
-  if (opts.codeName) {
-    codeNameGuess = opts.codeName;
-  }
-  else if (opts.handleExec.name) {
-    codeNameGuess = opts.handleExec.name;
-  }
-  else {
-    codeNameGuess = '';
-  }
+  // Pretty-printing is disabled in production.
+  if (process.env.NODE_ENV !== 'production') {
+
+    // Attempt to guess the code name (fall back to empty string)
+    var codeNameGuess;
+    if (opts.codeName) {
+      codeNameGuess = opts.codeName;
+    }
+    else if (opts.handleExec.name) {
+      codeNameGuess = opts.handleExec.name;
+    }
+    else {
+      codeNameGuess = '';
+    }
 
 
-  // Now, attach `inspect` and `toString` to make for better console output.
-  // (note that we define it as a non-enumerable property)
-  (function (_prettyPrinter){
-    Object.defineProperties(π, {
-      inspect: { value: _prettyPrinter },
-      toString: { value: _prettyPrinter }
-    });
-  })(function(){ return '[Deferred'+(codeNameGuess?(': '+codeNameGuess):'')+']'; });
-
-
-  // Now do the same thing for each of the functions.
-  _.each(['exec', 'then', 'catch', 'toPromise'], function (methodName){
+    // Now, attach `inspect` and `toString` to make for better console output.
+    // (note that we define it as a non-enumerable property)
     (function (_prettyPrinter){
-      Object.defineProperties(π[methodName], {
+      Object.defineProperties(π, {
         inspect: { value: _prettyPrinter },
         toString: { value: _prettyPrinter }
       });
-    })(function(){ return '[Function: '+(codeNameGuess?(codeNameGuess+'()'):'')+'.'+methodName+']'; });
-  });
+    })(function(){ return '[Deferred'+(codeNameGuess?(': '+codeNameGuess):'')+']'; });
 
+
+    // Now do the same thing for each of the functions.
+    _.each(['exec', 'then', 'catch', 'toPromise'], function (methodName){
+      (function (_prettyPrinter){
+        Object.defineProperties(π[methodName], {
+          inspect: { value: _prettyPrinter },
+          toString: { value: _prettyPrinter }
+        });
+      })(function(){ return '[Function: '+(codeNameGuess?(codeNameGuess+'()'):'')+'.'+methodName+']'; });
+    });
+  }//>-
+
+
+  // console.timeEnd('parley');
 
   //  ██████╗ ███████╗████████╗██╗   ██╗██████╗ ███╗   ██╗
   //  ██╔══██╗██╔════╝╚══██╔══╝██║   ██║██╔══██╗████╗  ██║

@@ -350,7 +350,7 @@ var π = parley({
 | Option         | Data type       | Description
 |:---------------|-----------------|:-------------------------------------------------------------------------------------------------------------------|
 | handleExec     | ((function))    | This is the function that you must provide in order to describe what happens when the deferred object is executed.
-| codeName       | ((_string?_))   | An optional value used to improve readability when the deferred object is logged using console.log().
+| codeName       | ((_string?_))   | An optional value used to improve readability when the deferred object is logged using console.log().  Note that some readability enhancements are disabled in production (for performance reasons.)
 
 
 
