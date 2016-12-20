@@ -4,7 +4,7 @@
   "description": "Convention-over-configuration flow control",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node ./node_modules/mocha/bin/mocha test"
   },
   "repository": {
     "type": "git",
@@ -13,13 +13,11 @@
   "keywords": [
     "flowcontrol",
     "async",
-    "promise"
+    "promise",
+    "deferred"
   ],
   "author": "Mike McNeil",
   "license": "MIT",
-  "readmeFilename": "README.md",
   "dependencies": {
-    "underscore": "~1.4.2",
-    "async": "~0.1.22"
   }
 }

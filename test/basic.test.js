@@ -9,16 +9,15 @@
 // // Dependencies
 var _ = require('underscore');
 var parley = require('../index');
-var assert = require("assert");
 
 
 describe('parley', function() {
-	describe('#parley object ', function() {
-		it('should be created w/o an error', function(done) {
-			var $ = new parley();
-			$(function (cb) {
-				done();
-			})();
-		});
-	});
+  describe('#parley object ', function() {
+    it('should be created w/o an error', function(done) {
+      var $ = new parley();
+      $(function(cb) {
+        done();
+      })();
+    });
+  });
 });

@@ -1,253 +1,254 @@
 // Dependencies
 var async = require('async');
-var _ = require('underscore');
+var _ = require('lodash');
 var parley = require('./index.js');
 
 function runTests() {
 
-	function z(str, cb) {
-		console.log(str);
-		setTimeout(function() {
-			cb(null, str);
-		}, 1000);
-	}
+  function z(str, cb) {
+    console.log(str);
+    setTimeout(function() {
+      cb(null, str);
+    }, 1000);
+  }
 
-	function zzz($$promise, cb) {
-		console.log("Got result:", $$promise.data);
-		cb();
-	}
+  function zzz($$promise, cb) {
+    console.log("Got result:", $$promise.data);
+    cb();
+  }
 
-	// Define deferred parley objects
-	var $$ = new parley();
-	// var $$1 = new parley();
-	// var $$2 = new parley($$, $$1);
+  // Define deferred parley objects
+  var $$ = new parley();
+  // var $$1 = new parley();
+  // var $$2 = new parley($$, $$1);
 
-	//////////////////////////////////////////////////////////////////////
-	// Basic usage
-	//////////////////////////////////////////////////////////////////////
-	// console.log("\n\n\n\n\n\n\n");
-	// console.log("*************");
-	// console.log("Test #1");
-	// console.log("*************");
-	// $$ (z) ('test');					// z('test')
-	// $$ (z) ('2');						// z(2)
-	// var $$result = $$ (z) ('3');		// result = {data: z(3)}
-	// $$1 (z) ('some other chain');		// z('some other chain')
-	// $$1 (z) ('some other chain #2');	// z('some other chain #2')
-	// $$2 (zzz) ($$result);				// zzz(result)
+  //////////////////////////////////////////////////////////////////////
+  // Basic usage
+  //////////////////////////////////////////////////////////////////////
+  // console.log("\n\n\n\n\n\n\n");
+  // console.log("*************");
+  // console.log("Test #1");
+  // console.log("*************");
+  // $$ (z) ('test');					// z('test')
+  // $$ (z) ('2');						// z(2)
+  // var $$result = $$ (z) ('3');		// result = {data: z(3)}
+  // $$1 (z) ('some other chain');		// z('some other chain')
+  // $$1 (z) ('some other chain #2');	// z('some other chain #2')
+  // $$2 (zzz) ($$result);				// zzz(result)
 
-	//////////////////////////////////////////////////////////////////////
-	// Testing Parley.log and deferred object generation
-	//////////////////////////////////////////////////////////////////////
-	// console.log("\n\n\n\n\n\n\n");
-	// console.log("*************");
-	// console.log("Test #2");
-	// console.log("*************");
-	// var $$User = $$(User);
-	// var $$log = $$(parley.log);
-	// $$log($$User.find(3)); // This will return a data object
-	// $$log($$User.find("Johnny")); // This will return an error
-
-	
-	//////////////////////////////////////////////////////////////////////
-	// Real world use case of some simple serial logic
-	//////////////////////////////////////////////////////////////////////
-	// console.log("\n\n\n\n\n\n\n");
-	// console.log("*************");
-	// console.log("Test #3");
-	// console.log("*************");
-
-	// var cb = function(err, data, cb) {
-	// 		console.log("\n\n***\nOperation complete!");
-	// 		if (err) console.warn(err);
-	// 		else console.log(data);
-	// 		console.log("***\n");
-	// 	};
-	
-	// var $$cb = $$(cb);
-	// var martin = $$(User).find(3);
-	// $$cb(martin);
-
-	//////////////////////////////////////////////////////////////////////
-	// Serial callbacks
-	//////////////////////////////////////////////////////////////////////
-	// function test4 (cb) {
-	// 	console.log("\n\n\n\n\n\n\n");
-	// 	console.log("*************");
-	// 	console.log("Test #4");
-	// 	console.log("*************");
-
-	// 	// Callbacks can be executed serially
-	// 	// BTW the closure can access asynchronous data, but not consistently.  Always pass data as an arg.)
-	// 	var $ = new parley();
-	// 	var user3 = $(User).find(3);
-	// 	$(cb)(user3);
-	// 	// user3 = $(function (err,data,cb) {
-	// 	// 	if (err) cb(err);
-	// 	// 	else cb(err,data);
-	// 	// })(user3);
-	// 	// $(cb)(user3);
-	// }
-
-	// //////////////////////////////////////////////////////////////////////
-	// // An example of how to manage conditionals
-	// //////////////////////////////////////////////////////////////////////
-
-	// function test5 (cb) {
-	// 	console.log("\n\n\n\n\n\n\n");
-	// 	console.log("*************");
-	// 	console.log("Test #5");
-	// 	console.log("*************");
-
-	// 	var $ = new parley ();
-	// 	var criteria = {name: 'widget'};
-
-	// 	// Rather than using multiple serial parley calls,
-	// 	// define your logic within a single block and use nested parley objects if necessary
-	// 	var someUser = $(User).find(criteria);
-	// 	someUser = $(function (err,data,cb) {
-	// 		var $ = new parley();
-	// 		if (err) cb(err);
-	// 		else if (data) cb(err,data);
-	// 		else {
-	// 			var newUser = $(User).create(criteria);
-	// 			$(cb)(newUser);
-	// 		}
-	// 	})(someUser);
-	// 	$(cb)(someUser);
-	// }
+  //////////////////////////////////////////////////////////////////////
+  // Testing Parley.log and deferred object generation
+  //////////////////////////////////////////////////////////////////////
+  // console.log("\n\n\n\n\n\n\n");
+  // console.log("*************");
+  // console.log("Test #2");
+  // console.log("*************");
+  // var $$User = $$(User);
+  // var $$log = $$(parley.log);
+  // $$log($$User.find(3)); // This will return a data object
+  // $$log($$User.find("Johnny")); // This will return an error
 
 
-	//////////////////////////////////////////////////////////////////////
-	// An example of how to use built-in support for asynchonous conditions
-	//////////////////////////////////////////////////////////////////////
-	function test6 (cb) {
-		console.log("\n\n\n\n\n\n\n");
-		console.log("*************");
-		console.log("Test #6");
-		console.log("*************");
+  //////////////////////////////////////////////////////////////////////
+  // Real world use case of some simple serial logic
+  //////////////////////////////////////////////////////////////////////
+  // console.log("\n\n\n\n\n\n\n");
+  // console.log("*************");
+  // console.log("Test #3");
+  // console.log("*************");
 
-		var $ = new parley ();
-		var criteria = 35;
-		var someUser = $(User).find(criteria);
-		
+  // var cb = function(err, data, cb) {
+  // 		console.log("\n\n***\nOperation complete!");
+  // 		if (err) console.warn(err);
+  // 		else console.log(data);
+  // 		console.log("***\n");
+  // 	};
 
-		// ifNull conditional shortcut fn
-		$(cb).ifNull();
+  // var $$cb = $$(cb);
+  // var martin = $$(User).find(3);
+  // $$cb(martin);
 
-		// Anything afterwards is treated as "else"
-		$(cb)(null,"notNull!");
-	}
+  //////////////////////////////////////////////////////////////////////
+  // Serial callbacks
+  //////////////////////////////////////////////////////////////////////
+  // function test4 (cb) {
+  // 	console.log("\n\n\n\n\n\n\n");
+  // 	console.log("*************");
+  // 	console.log("Test #4");
+  // 	console.log("*************");
+
+  // 	// Callbacks can be executed serially
+  // 	// BTW the closure can access asynchronous data, but not consistently.  Always pass data as an arg.)
+  // 	var $ = new parley();
+  // 	var user3 = $(User).find(3);
+  // 	$(cb)(user3);
+  // 	// user3 = $(function (err,data,cb) {
+  // 	// 	if (err) cb(err);
+  // 	// 	else cb(err,data);
+  // 	// })(user3);
+  // 	// $(cb)(user3);
+  // }
+
+  // //////////////////////////////////////////////////////////////////////
+  // // An example of how to manage conditionals
+  // //////////////////////////////////////////////////////////////////////
+
+  // function test5 (cb) {
+  // 	console.log("\n\n\n\n\n\n\n");
+  // 	console.log("*************");
+  // 	console.log("Test #5");
+  // 	console.log("*************");
+
+  // 	var $ = new parley ();
+  // 	var criteria = {name: 'widget'};
+
+  // 	// Rather than using multiple serial parley calls,
+  // 	// define your logic within a single block and use nested parley objects if necessary
+  // 	var someUser = $(User).find(criteria);
+  // 	someUser = $(function (err,data,cb) {
+  // 		var $ = new parley();
+  // 		if (err) cb(err);
+  // 		else if (data) cb(err,data);
+  // 		else {
+  // 			var newUser = $(User).create(criteria);
+  // 			$(cb)(newUser);
+  // 		}
+  // 	})(someUser);
+  // 	$(cb)(someUser);
+  // }
 
 
+  //////////////////////////////////////////////////////////////////////
+  // An example of how to use built-in support for asynchonous conditions
+  //////////////////////////////////////////////////////////////////////
+  function test6(cb) {
+    console.log("\n\n\n\n\n\n\n");
+    console.log("*************");
+    console.log("Test #6");
+    console.log("*************");
 
-	//////////////////////////////////////////////////////////////////////
-	// An example of building a transactional findAndCreate() function
-	//////////////////////////////////////////////////////////////////////
-	function test7 (cb) {
-		console.log("\n\n\n\n\n\n\n");
-		console.log("*************");
-		console.log("Test #7");
-		console.log("*************");
+    var $ = new parley();
+    var criteria = 35;
+    var someUser = $(User).find(criteria);
 
-		var $ = new parley();
 
-		var u = $(findAndCreate)({name: 'mike'});
-		$(cb)(u);
-		
-		function findAndCreate(criteria,cb) {
-			var $ = new parley ();
-			$(User).lock(criteria);
-			$(User).find(criteria);
-			$(cb).ifNotNull();
-			$(cb).ifError("Error encountered when trying to find User.");
-			var u = $(User).create(criteria);
-			$(User).unlock(criteria);
-			$(cb)(u);
-		}
-	}
+    // ifNull conditional shortcut fn
+    $(cb).ifNull();
 
-	//////////////////////////////////////////////////////////////////////
-	// An example of using $$.log
-	//////////////////////////////////////////////////////////////////////
-	function test8 (cb) {
-		console.log("\n\n\n\n\n\n\n");
-		console.log("*************");
-		console.log("Test #8");
-		console.log("*************");
-
-		var $$ = new parley();
-		$$.log("test");
-		$$(cb)();
-	}
+    // Anything afterwards is treated as "else"
+    $(cb)(null, "notNull!");
+  }
 
 
 
-	// Run tests
-	var $ = new parley();
-	var result;
+  //////////////////////////////////////////////////////////////////////
+  // An example of building a transactional findAndCreate() function
+  //////////////////////////////////////////////////////////////////////
+  function test7(cb) {
+    console.log("\n\n\n\n\n\n\n");
+    console.log("*************");
+    console.log("Test #7");
+    console.log("*************");
 
-	// result = $(test4)();
-	// $(function (err,data,cb) {
-	// 	console.log("Outcome:\t("+err+",",data,")"); 
-	// 	cb();
-	// })(result);
+    var $ = new parley();
 
-	// result = $(test5)();
-	// $(function (err,data,cb) {
-	// 	console.log("Outcome:\t("+err+",",data,")"); 
-	// 	cb();
-	// })(result);
+    var u = $(findAndCreate)({
+      name: 'mike'
+    });
+    $(cb)(u);
 
-	// result = $(test6)();
-	// $(function (err,data,cb) {
-	// 	console.log("Outcome:\t("+err+",",data,")"); 
-	// 	cb();
-	// })(result);
+    function findAndCreate(criteria, cb) {
+      var $ = new parley();
+      $(User).lock(criteria);
+      $(User).find(criteria);
+      $(cb).ifNotNull();
+      $(cb).ifError("Error encountered when trying to find User.");
+      var u = $(User).create(criteria);
+      $(User).unlock(criteria);
+      $(cb)(u);
+    }
+  }
 
-	result = $(test7)();
-	$(function (err,data,cb) {
-		console.log("Outcome:\t("+err+",",data,")"); 
-		cb();
-	})(result);
-	result = $(test8)();
+  //////////////////////////////////////////////////////////////////////
+  // An example of using $$.log
+  //////////////////////////////////////////////////////////////////////
+  function test8(cb) {
+    console.log("\n\n\n\n\n\n\n");
+    console.log("*************");
+    console.log("Test #8");
+    console.log("*************");
+
+    var $$ = new parley();
+    $$.log("test");
+    $$(cb)();
+  }
 
 
-	$(function (cb) {
-		console.log("done");
-		
-		// Not required, but it's good to clean up after yourself
-		cb();
-	})();
 
-	// var findOrCreate = function (criteria,cb) {
-	// 	var $ = new parley();
+  // Run tests
+  var $ = new parley();
+  var result;
 
-	// 	$(User).lock(criteria);
+  // result = $(test4)();
+  // $(function (err,data,cb) {
+  // 	console.log("Outcome:\t("+err+",",data,")");
+  // 	cb();
+  // })(result);
 
-	// 	var user = $(User).find(criteria);
-	// 	$(function (err,data) {
+  // result = $(test5)();
+  // $(function (err,data,cb) {
+  // 	console.log("Outcome:\t("+err+",",data,")");
+  // 	cb();
+  // })(result);
 
-	// 	});
+  // result = $(test6)();
+  // $(function (err,data,cb) {
+  // 	console.log("Outcome:\t("+err+",",data,")");
+  // 	cb();
+  // })(result);
 
-	// 	$(User).create(criteria);
-	// 	$(function (err,data) {
+  result = $(test7)();
+  $(function(err, data, cb) {
+    console.log("Outcome:\t(" + err + ",", data, ")");
+    cb();
+  })(result);
+  result = $(test8)();
 
-	// 	});
 
-	// 	$(User).unlock(criteria);
-	// 	$(cb)(user);
-	// };
+  $(function(cb) {
+    console.log("done");
 
-	// var def = {
-	// 	name: 'johnny'
-	// };
-	// var johnny = $$(findOrCreate) (def);
-	// $$(cb)(johnny);
+    // Not required, but it's good to clean up after yourself
+    cb();
+  })();
+
+  // var findOrCreate = function (criteria,cb) {
+  // 	var $ = new parley();
+
+  // 	$(User).lock(criteria);
+
+  // 	var user = $(User).find(criteria);
+  // 	$(function (err,data) {
+
+  // 	});
+
+  // 	$(User).create(criteria);
+  // 	$(function (err,data) {
+
+  // 	});
+
+  // 	$(User).unlock(criteria);
+  // 	$(cb)(user);
+  // };
+
+  // var def = {
+  // 	name: 'johnny'
+  // };
+  // var johnny = $$(findOrCreate) (def);
+  // $$(cb)(johnny);
 
 
 }
-
 
 
 
@@ -261,47 +262,47 @@ function runTests() {
 
 
 // Define User object for real world use case above
-var User = { 
-	// Random other parameters will remain untouched
-	a: 1,
-	b: "g248",
-	c: "g8q234",
+var User = {
+  // Random other parameters will remain untouched
+  a: 1,
+  b: "g248",
+  c: "g8q234",
 
-	// Mock find function
-	find: function(criteria, cb) {
-		setTimeout(function() {
-			console.log("Finding users...",criteria);
-			if(_.isObject(criteria) || _.isFinite(criteria)) {
-				var result = criteria === 3 ? {
-					name: "Martin"
-				} : null;
-				cb(null, result);
-			} else cb("Invalid criteria parameter (" + criteria + ") passed to User.find.");
-		}, 1050);
-	},
-	create: function(definition, cb) {
-		console.log("Creating User...");
-		setTimeout(function() {
-			if(_.isObject(definition)) {
-				console.log("User created!");
-				cb(null, definition);
-			} else cb("Invalid definition parameter (" + definition + ") passed to User.create.");
-		}, 150);
-	},
+  // Mock find function
+  find: function(criteria, cb) {
+    setTimeout(function() {
+      console.log("Finding users...", criteria);
+      if (_.isObject(criteria) || _.isFinite(criteria)) {
+        var result = criteria === 3 ? {
+          name: "Martin"
+        } : null;
+        cb(null, result);
+      } else cb("Invalid criteria parameter (" + criteria + ") passed to User.find.");
+    }, 1050);
+  },
+  create: function(definition, cb) {
+    console.log("Creating User...");
+    setTimeout(function() {
+      if (_.isObject(definition)) {
+        console.log("User created!");
+        cb(null, definition);
+      } else cb("Invalid definition parameter (" + definition + ") passed to User.create.");
+    }, 150);
+  },
 
-	lock: function (criteria,cb) {
-		setTimeout(function () {
-			console.log("Locking users...",criteria);
-			cb();
-		},500);
-	},
+  lock: function(criteria, cb) {
+    setTimeout(function() {
+      console.log("Locking users...", criteria);
+      cb();
+    }, 500);
+  },
 
-	unlock: function (criteria,cb) {
-		setTimeout(function () {
-			console.log("Unlocking users...",criteria);
-			cb();
-		},500);
-	}
+  unlock: function(criteria, cb) {
+    setTimeout(function() {
+      console.log("Unlocking users...", criteria);
+      cb();
+    }, 500);
+  }
 };
 
 

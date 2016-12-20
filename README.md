@@ -102,4 +102,3 @@ var user = $$(User).find(17);
 ```
 
 
-[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/c87267eee787dd508d0106260261b6dc "githalytics.com")](http://githalytics.com/mikermcneil/parley)
