@@ -138,7 +138,7 @@ if (x < 0.4) {
 }
 ```
 
-Then in userland, this can be easily negotiated.  Note that whether the code is using a Node-style callback or a promise, the approach is the same regardless.
+Then in userland, this can be easily negotiated.  Note that whether the code is using a Node-style callback or a promise, the approach is conceptually the same regardless.
 
 
 ```javascript
@@ -149,18 +149,29 @@ Then in userland, this can be easily negotiated.  Note that whether the code is 
       case 'E_TOO_BIG': return res.status(400).json({ reason: 'Ooh, too bad!  '+err.message });
       case 'E_TOO_SMALL': return res.status(401).json({ reason: 'Please try again later.  '+err.message });
       default:
-        // Handle unexpected error:
-        console.error(err.stack);
+        console.error('Unexpected error:',err.stack);
         return res.sendStatus(500);
     }
   }//-•
 
   // ...
 });
+```
 
-// or promise
+```Javascript
+// Promises
+.then(function (result) {
+  // ...
+})
+.catch({ code: 'E_TOO_BIG' }, function(err) {
+  return res.status(400).json({ reason: 'Ooh, too bad!  '+err.message });
+})
+.catch({ code: 'E_TOO_SMALL' }, function(err) {
+  return res.status(401).json({ reason: 'Please try again later.  '+err.message });
+})
 .catch(function(err) {
-  // => [Error: oops]
+  console.error('Unexpected error:',err.stack);
+  return res.sendStatus(500);
 });
 ```
 
