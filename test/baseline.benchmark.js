@@ -43,6 +43,26 @@ describe('baseline.benchmark.js', function() {
   // Just some one-off samples.
   //
   //
+  // Dec 20, 2016 (take 3):  (all of them put together)
+  // ================================================================================================================
+  //  baseline.benchmark.js
+  //    parley(handler)
+  // • just_build#0 x 22,711 ops/sec ±2.51% (78 runs sampled)
+  //      ✓ should be performant enough (using benchSync())
+  //    parley(handler).exec(cb)
+  // • build_AND_exec#0 x 22,396 ops/sec ±2.02% (80 runs sampled)
+  //      ✓ should be performant enough (using benchSync())
+  //    practical benchmark
+  // • mock "find()"#0 x 33.60 ops/sec ±0.93% (72 runs sampled)
+  //      ✓ should be performant enough when calling fake "find" w/ .exec() (using bench())
+  // • mock "find()"#0 x 34.07 ops/sec ±0.93% (72 runs sampled)
+  //      ✓ should be performant enough when calling NAKED fake "find" (using bench())
+  // • mock "validate()"#0 x 19,394 ops/sec ±3.55% (70 runs sampled)
+  //      ✓ should be performant enough when calling fake "validate" w/ .exec() (using benchSync())
+  // • mock "validate()"#0 x 5,182,890 ops/sec ±12.10% (87 runs sampled)
+  //      ✓ should be performant enough when calling NAKED "validate" (using benchSync())
+  // ================================================================================================================
+  //
   // Dec 20, 2016 (take 2):  (notice how the additional time added by calling .exec() is actually a negative number)
   // ================================================================================================================
   //  baseline.benchmark.js
@@ -53,7 +73,7 @@ describe('baseline.benchmark.js', function() {
   // • build_AND_exec#0 x 22,743 ops/sec ±1.77% (83 runs sampled)
   // ================================================================================================================
   //
-  // Dec 20, 2016:
+  // Dec 20, 2016 (take 1):
   // ================================================================================================================
   //  baseline.benchmark.js
   //    parley(handler)
@@ -109,65 +129,17 @@ describe('baseline.benchmark.js', function() {
       ]);//</benchSync()>
     });
 
-    // Not particularly relevant:
-    // (the extra setImmediate just adds weight and makes it harder to judge results)
-    // =================================================================================
-    // it('should be performant enough (using bench())', function (done){
-    //   bench('parley(handler).exec(cb)', [
-
-    //     // •~ between 18,000 and 19,500 ops/sec  (Dec 20, 2016)
-    //     //    --the extra delay vs. the one directly above is probably
-    //     //    due to the setImmediate we're using in the test suite--
-    //     function (next){
-    //       var deferred = parley(function(handlerCb) { return handlerCb(); });
-    //       deferred.exec(function (err) {
-    //         if (err) { return next(err); }
-    //         return next();
-    //       });
-    //     }
-
-    //   ], done);//</bench()>
-    // });
-    // it('should be performant enough (using bench())', function (done){
-    //   bench('parley(handler).exec(cb) + artificial setImmediate in handler', [
-
-    //     // •~ between 18,000 and 19,500 ops/sec  (Dec 20, 2016)
-    //     //    --this is EXACTLY THE SAME AS THE ONE DIRECTLY ABOVE, basically --
-    //     //    it is consistently <~400 ops/second slower, sometimes only like 20ops slower --
-    //     function (next){
-    //       var deferred = parley(function(handlerCb) { setImmediate(function(){ return handlerCb(); }); });
-    //       deferred.exec(function (err) {
-    //         if (err) { return next(err); }
-    //         return next();
-    //       });
-    //     }
-
-    //   ], done);//</bench()>
-    // });
-    // it('should be performant enough (using bench())', function (done){
-    //   bench('parley(handler).exec(cb) + artificial setImmediate wrapped around the whole thing', [
-
-    //     // •~ between 18,000 and 19,500 ops/sec  (Dec 20, 2016)
-    //     //    -- ALSO THE SAME, WITH THE SAME SLIGHT VARIATIONS --
-    //     function (next){
-    //       setImmediate(function(){
-    //         var deferred = parley(function(handlerCb) { return handlerCb(); });
-    //         deferred.exec(function (err) {
-    //           if (err) { return next(err); }
-    //           return next();
-    //         });
-    //       });
-    //     }
-
-    //   ], done);//</bench()>
-    // });
-    // =================================================================================
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    // For additional permutations using bench() +/- extra setImmediate() calls,
+    // see the commit history of this file.  As it turn out, the setImmediate()
+    // calls just add weight and make it harder to judge the accuracy of results.
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   });//</ describe: parley(handler().exec(cb) )
 
 
 
-  describe.only('practical benchmark', function(){
+  describe('practical benchmark', function(){
     it('should be performant enough when calling fake "find" w/ .exec() (using bench())', function (done){
       bench('mock "find()"', [
 
