@@ -256,19 +256,26 @@ var fs = require('fs');
 (function _recursively(thisDir, done){
 
   var pathToCheck = path.resolve(thisDir, './package.json');
-  fs.exists(thisDir, function(err, exists) {
-    if (err) { return done(err); }
-    if (exists) {
-      // Found it!
-      return done(undefined, pathToCheck);
-    }
+  fs.stat(pathToCheck, function(err) {
+    if (err) {
+      switch (err.code) {
 
-    // Otherwise keep going.
-    var oneLvlUp = path.dirname(thisDir);
-    _recursively(oneLvlUp, function(err, nearestPJ) {
-      if (err) { return done(err); }
-      return done(undefined, nearestPJ);
-    });
+        // Not found -- so keep going.
+        case 'ENOENT':
+          var oneLvlUp = path.dirname(thisDir);
+          _recursively(oneLvlUp, function(err, nearestPJ) {
+            if (err) { return done(err); }
+            return done(undefined, nearestPJ);
+          });
+          return;
+
+        // Misc. error
+        default: return done(err);
+      }
+    }//-•
+
+    // Otherwise, found it!
+    return done(undefined, pathToCheck);
 
   });//</ fs.exists >
 
