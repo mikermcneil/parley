@@ -20,9 +20,8 @@ describe('behavior.test.js', function() {
 
   describe('.exec()', function() {
     describe('with proper usage', function() {
-      var deferred; before(function(){ deferred = parley(function(done){ setTimeout(function (){ return done(undefined, 'hello!'); }, 50); }); });
+      var deferred; before(function(){ deferred = parley(function(done){ setTimeout(function (){ return done(undefined, 'hello!'); }, 12); }); });
       it('should work', function(done){
-        this.slow(200);
         deferred.exec(function(err) {
           if (err) { return done(err); }
           return done();
@@ -30,9 +29,9 @@ describe('behavior.test.js', function() {
       });
     });
     describe('when called more than once', function() {
-      var deferred; before(function(){ deferred = parley(function(done){ setTimeout(function (){ return done(undefined, 'hello!'); }, 50); }); });
+      var deferred; before(function(){ deferred = parley(function(done){ setTimeout(function (){ return done(undefined, 'hello!'); }, 12); }); });
       it('should ignore subsequent calls', function(done){
-        this.slow(1200);
+        this.slow(300);
 
         // As a hack, override console.warn().
         // (this is mainly to improve the experience of looking at test results,
@@ -50,7 +49,7 @@ describe('behavior.test.js', function() {
               assert.equal(counter, 3);
             } catch(e) { return done(e); }
             return done();
-          }, 500);
+          }, 125);
         });
 
         // The following .exec() calls will be ignored.
@@ -67,7 +66,7 @@ describe('behavior.test.js', function() {
       });
     });
     describe('with invalid callback', function() {
-      var deferred; before(function(){ deferred = parley(function(done){ setTimeout(function (){ return done(undefined, 'hello!'); }, 50); }); });
+      var deferred; before(function(){ deferred = parley(function(done){ setTimeout(function (){ return done(undefined, 'hello!'); }, 12); }); });
       it('should throw', function(){
         try { deferred.exec(123); }
         catch (e) { return; }
@@ -75,7 +74,7 @@ describe('behavior.test.js', function() {
       });
     });
     describe('with no arguments', function() {
-      var deferred; before(function(){ deferred = parley(function(done){ setTimeout(function (){ return done(undefined, 'hello!'); }, 50); }); });
+      var deferred; before(function(){ deferred = parley(function(done){ setTimeout(function (){ return done(undefined, 'hello!'); }, 12); }); });
       it('should throw', function(){
         try { deferred.exec(); }
         catch (e) { return; }
@@ -88,18 +87,17 @@ describe('behavior.test.js', function() {
 
   describe('.then()', function() {
     describe('with proper usage', function() {
-      var deferred; before(function(){ deferred = parley(function(done){ setTimeout(function (){ return done(undefined, 'hello!'); }, 50); }); });
+      var deferred; before(function(){ deferred = parley(function(done){ setTimeout(function (){ return done(undefined, 'hello!'); }, 12); }); });
       it('should work', function(done){
-        this.slow(200);
         deferred.then(function(result) {
           return done();
         }).catch(function(err){ return done(err); });
       });
     });
     describe('when called more than once', function() {
-      var deferred; before(function(){ deferred = parley(function(done){ setTimeout(function (){ return done(undefined, 'hello!'); }, 50); }); });
+      var deferred; before(function(){ deferred = parley(function(done){ setTimeout(function (){ return done(undefined, 'hello!'); }, 12); }); });
       it('should ignore subsequent calls', function(done){
-        this.slow(1200);
+        this.slow(300);
         // As a hack, override console.warn().
         // (this is mainly to improve the experience of looking at test results,
         // but it also has the benefit of adding another check.)
@@ -116,7 +114,7 @@ describe('behavior.test.js', function() {
               assert.equal(counter, 3);
             } catch(e) { return done(e); }
             return done();
-          }, 500);
+          }, 125);
         }).catch(function(err){ return done(err); });
 
         // The following .then() calls will be ignored.
