@@ -372,12 +372,6 @@ The deferred object returned by `parley()` exposes a few different methods.
 #### .exec()
 
 ```javascript
-.exec(function (err, result) {
-
-});
-```
-
-```javascript
 parley(function(done){ return done(undefined, 1+1); })
 .exec(function (err, result) {
   // => undefined, 2
@@ -420,7 +414,7 @@ Promise.all([
   promise2
 ])
 .then(function(result){
-  // => result
+  // => [2, undefined]
 }).catch(function (err) {
 
 });
