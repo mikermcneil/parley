@@ -13,10 +13,13 @@ var bluebird = require('bluebird');
  * parley()
  *
  * Build a deferred object that supports Node-style callbacks and promises.
- *
+ * > See README.md for more details.
+ * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
  * @param {Function|Dictionary} handleExecOrOpts
  *        Either the `handleExec` function, or a dictionary of options.
- *        (See README.md for more details.)
+ * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ * @returns {Deferred}
+ * @throws {Error} If there are usage problems with how parley() itself is called
  */
 
 module.exports = function parley(handleExecOrOpts){
