@@ -51,7 +51,7 @@ describe('baseline.benchmark.js', function() {
   //   •  •      •       •      •    •
   //            •      •              o
   //   •    b e n c h m a r k s      •
-  //    •    (instantiation)       °
+  //    •                          °
   // ------------------------------------
   //     parley(handler)
   //  • just_build#0 x 527,939 ops/sec ±1.45% (85 runs sampled)
