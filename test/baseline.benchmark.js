@@ -45,7 +45,7 @@ describe('baseline.benchmark.js', function() {
   // For historical reports, see the history of this file on GitHub.
   //
   //
-  // Dec 20, 2016 (take 4):  (after removing pretty-print)
+  // Dec 20, 2016 (take 4):  (after removing pretty-print, BEFORE switching to the constructor approach)
   // ================================================================================================================
   //   baseline.benchmark.js
   //   •  •      •       •      •    •
@@ -105,6 +105,13 @@ describe('baseline.benchmark.js', function() {
   //   are orders of magnitude higher (e.g. in the millions instead of the hundreds of thousands.)
   //   Even then-- this is still less important than one might expect!
   //
+  // • Aside: using a standalone function declaration (rather than invoking a self-calling function)
+  //   increases performance, like you might expect.  Whether it's enough to matter is probably
+  //   situational.  In the case of the commit where this observation was added to the code base,
+  //   it made a difference of ~1,000,000 ops/sec for the "NAKED mock validate" benchmark, and a
+  //   difference of ~20,000 ops/sec for the "validate w/ .exec()" benchmark.  Worth it...?
+  //   No. Inline function declarations are NEVER worth it.  But in some cases it might be worthwhile
+  //   to pull out shared futures used by self-invoking functions and drop them into a separate module.
 
 
 

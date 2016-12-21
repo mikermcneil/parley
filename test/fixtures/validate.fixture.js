@@ -41,17 +41,17 @@ module.exports = function find( /* variadic */ ){
   // and proceed to where the real action is at.
   // Otherwise, no callback was specified explicitly,
   // so we'll build and return a Deferred instead.
-  (function _determineFinalCb(proceed){
-    if (!_.isUndefined(explicitCb)) {
-      proceed(undefined, explicitCb);
-    }
-    else {
-      deferred = parley(function (deferredCb){
-        proceed(undefined, deferredCb);
-      });
-    }
+  if (!_.isUndefined(explicitCb)) {
+    proceed(undefined, explicitCb);
+  }
+  else {
+    deferred = parley(function (deferredCb){
+      proceed(undefined, deferredCb);
+    });
+  }
+
   // ~∞%°
-  })(function (unused, finalCb) {
+  function proceed(unused, finalCb) {
     if (unused) {
       finalCb(new Error('Consistency violation: Unexpected internal error occurred before beginning with any business logic.  Details: '+unused.stack));
       return;
@@ -64,7 +64,7 @@ module.exports = function find( /* variadic */ ){
     // All done.
     return finalCb();
 
-  });//</ self-invoking function>
+  }
 
 
   // If we ended up building a Deferred above, we would have done so synchronously.
