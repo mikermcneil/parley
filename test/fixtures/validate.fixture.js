@@ -98,7 +98,19 @@ module.exports = function find( /* variadic */ ){
     meta: function (_meta){
       metadata.meta = _meta;
       return deferred;
-    }
+    },
+    a: function (beep, boop) { console.log(Math.random()+'hi0'); return deferred; },
+    b: function (baa, baaa, black, sheep) { console.log(Math.random()+'hi1'); return deferred; },
+    c: function (beep, boop) { console.log(Math.random()+'hi2'); return deferred; },
+    d: function (baa, baaa, black, sheep) { console.log(Math.random()+'hi3'); return deferred; },
+    e: function (beep, boop) { console.log(Math.random()+'hi5'); return deferred; },
+    f: function (baa, baaa, black, sheep) { console.log(Math.random()+'hi5'); return deferred; },
+    g: function (beep, boop) { console.log(Math.random()+'hi6'); return deferred; },
+    h: function (baa, baaa, black, sheep) { console.log(Math.random()+'hi7'); return deferred; },
+    i: function (beep, boop) { console.log(Math.random()+'hi8'); return deferred; },
+    j: function (baa, baaa, black, sheep) { console.log(Math.random()+'hi9'); return deferred; },
+    k: function (beep, boop) { console.log(Math.random()+'hi10'); return deferred; },
+    l: function (baa, baaa, black, sheep) { console.log(Math.random()+'hi11'); return deferred; },
   });
 
   // When we're confident that our Deferred is ready for primetime,

@@ -141,6 +141,13 @@ describe('baseline.benchmark.js', function() {
   //   on Lodash's built-in optimizations is the way to go.  Simply changing from `deferred.meta = ...`
   //   to `_.extend(deferred, { meta: ... })` split the difference as far as performance.  It improved
   //   the performance of the 'mock validate with .exec()' benchmark by ~50k-60k ops/sec; i.e. ~20%)
+  //
+  // • STILL BE CAREFUL when using the closure approach.  Even with the _.extend() trick, performance
+  //   decreases as more and more methods are added, whether or not they're within the same `.extend()`
+  //   call.  BUT: What's still unclear is if this is due to function construction, or something else.
+  //   In this case, in practice, tricks would need to be used to circumvent the need for closure scope
+  //   access (i.e. prbly .bind()).  But the answer to the question can actualy be figured out regardless--
+  //   by defining stub functions once per process.
 
 
   //  ╔═╗╦ ╦╦╔╦╗╔═╗
