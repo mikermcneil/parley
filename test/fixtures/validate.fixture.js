@@ -14,7 +14,7 @@ var helpValidate = require('./private/help-validate.util');
  * A simplified mock of a hypothetical `validate()` model method
  * that is actually synchronous.  (This is primariliy for use in benchmarks.)
  *
- * @param {Function} explicitCb
+ * @param {Function} explicitCbMaybe
  *
  * @returns {Deferred} If no callback specified
  */
@@ -22,12 +22,12 @@ module.exports = function find( /* variadic */ ){
 
   var metadata = {};
 
-  var explicitCb;
+  var explicitCbMaybe;
 
   // Handle variadic usage:
   // ===========================================================================
   if (!_.isUndefined(arguments[0])) {
-    explicitCb = arguments[0];
+    explicitCbMaybe = arguments[0];
   }//>-
   // ===========================================================================
 
@@ -41,14 +41,16 @@ module.exports = function find( /* variadic */ ){
   // and proceed to where the real action is at.
   // Otherwise, no callback was specified explicitly,
   // so we'll build and return a Deferred instead.
-  if (!_.isUndefined(explicitCb)) {
-    helpValidate(undefined, explicitCb);
-  }
-  else {
-    deferred = parley(function (deferredCb){
-      helpValidate(undefined, deferredCb);
-    });
-  }//>-
+  deferred = parley(helpValidate, explicitCbMaybe);
+  // deferred = parley(function (finalCb){
+
+  //   // Now actually do stuff.
+  //   // ...except actually don't-- this is just pretend.
+
+  //   // All done.
+  //   return finalCb();
+
+  // }, explicitCbMaybe);
 
 
   // If we ended up building a Deferred above, we would have done so synchronously.
