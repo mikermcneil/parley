@@ -135,8 +135,9 @@ describe('baseline.benchmark.js', function() {
   //   but it is definitely a thing.  Note that it is somewhat worse if in the constructor-- and
   //   also worse on assignment (this.foo = x) than on access (var x = this.foo).
   //
-  // • When using the closure approach, adding new methods dynamically is slow.  (working on a
-  //   middle ground to solve this)
+  // • When using the closure approach, adding new methods dynamically is slow.  This doesn't seem
+  //   to be because defining new functions is slow, per se.  Rather it seems to have to do with
+  //   mutating the object after it's already been created.
 
 
   //  ╔═╗╦ ╦╦╔╦╗╔═╗
@@ -210,7 +211,7 @@ describe('baseline.benchmark.js', function() {
       ], done);
     });
 
-    it('should be performant enough when calling fake "validate" w/ .exec() (using benchSync())', function (){
+    it.only('should be performant enough when calling fake "validate" w/ .exec() (using benchSync())', function (){
       benchSync('mock "validate()"', [
 
         function (){

@@ -69,6 +69,10 @@ module.exports = function find( /* variadic */ ){
   //   metadata.meta = _meta;
   //   return deferred;
   // };
+  var theMeta = function (_meta){
+    metadata.meta = _meta;
+    return deferred;
+  };
 
   // When we're confident that our Deferred is ready for primetime,
   // we finish up by returning it.
