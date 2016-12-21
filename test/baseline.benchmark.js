@@ -128,7 +128,8 @@ describe('baseline.benchmark.js', function() {
   // • It is worth noting that, despite how exciting the previous notes about pulling out self-invoking
   //   functions was, when attempted with the mock "find" fixture, the relevant benchmarks showed no
   //   noticeable improvement (i.e. because they're doing something asynchronous.)
-
+  //
+  // • Swapping out non-standard variable names (e.g. π) did not have any noticeable effect.
 
 
   //  ╔═╗╦ ╦╦╔╦╗╔═╗
