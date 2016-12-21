@@ -64,11 +64,11 @@ module.exports = function find( /* variadic */ ){
   // IWMIH, then we know we have a Deferred.
   // (and thus we haven't actually done anything yet.)
 
-  // At this point, we might opt to attach some methods to our Deferred.
-  deferred.meta = function (_meta){
-    metadata.meta = _meta;
-    return deferred;
-  };
+  // // At this point, we might opt to attach some methods to our Deferred.
+  // deferred.meta = function (_meta){
+  //   metadata.meta = _meta;
+  //   return deferred;
+  // };
 
   // When we're confident that our Deferred is ready for primetime,
   // we finish up by returning it.
