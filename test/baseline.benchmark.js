@@ -96,6 +96,10 @@ describe('baseline.benchmark.js', function() {
   //   construction.  But even then, that wouldn't explain "just_build" being slower, so
   //   it's probably not that...
   //
+  // • Reducing the number of `this`/`self` references did not seem to make any sort of
+  //   meaningful difference on performance. (see 1d8b6239de2cd84ac76ee015d099c3c5a7013989)
+  //
+  //
 
 
 
