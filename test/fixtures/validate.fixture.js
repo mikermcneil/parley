@@ -5,7 +5,7 @@
 var _ = require('@sailshq/lodash');
 var flaverr = require('flaverr');
 var parley = require('../../');
-var cbToReceiveAnotherCallbackAndUnusedError = require('./private/cb-to-receive-another-callback-and-unused-error.util');
+var helpValidate = require('./private/help-validate.util');
 
 
 /**
@@ -42,13 +42,13 @@ module.exports = function find( /* variadic */ ){
   // Otherwise, no callback was specified explicitly,
   // so we'll build and return a Deferred instead.
   if (!_.isUndefined(explicitCb)) {
-    cbToReceiveAnotherCallbackAndUnusedError(undefined, explicitCb);
+    helpValidate(undefined, explicitCb);
   }
   else {
     deferred = parley(function (deferredCb){
-      cbToReceiveAnotherCallbackAndUnusedError(undefined, deferredCb);
+      helpValidate(undefined, deferredCb);
     });
-  }
+  }//>-
 
 
   // If we ended up building a Deferred above, we would have done so synchronously.

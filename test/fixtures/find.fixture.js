@@ -57,7 +57,7 @@ module.exports = function find( /* variadic */ ){
     deferred = parley(function (deferredCb){
       helpFind(undefined, metadata, deferredCb);
     });
-  }
+  }//>-
 
   // If we ended up building a Deferred above, we would have done so synchronously.
   // In other words, if there's going to be a Deferred, we have it here.
