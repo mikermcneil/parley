@@ -5,8 +5,10 @@
 var _ = require('@sailshq/lodash');
 
 
-// This is temporary, and part of a benchmarking experiment.
-module.exports = function (unused, metadata, finalCb) {
+// This is used by find.fixture.js.
+// It was originally and part of a benchmarking experiment, and its extrapolation
+// was found to have a positive impact on performance.
+module.exports = function helpFind(unused, metadata, finalCb) {
   if (unused) {
     finalCb(new Error('Consistency violation: Unexpected internal error occurred before beginning with any business logic.  Details: '+unused.stack));
     return;
