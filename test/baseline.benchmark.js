@@ -87,6 +87,15 @@ describe('baseline.benchmark.js', function() {
   // • The additional time added by calling .exec() (vs. just building) is really only
   //   visible now, AFTER removing pretty-print.  It's a difference of 100,000 ops/sec.
   //
+  // • By itself, switching to a Deferred constructor doesn't really improve performance
+  //   by THAT much.  In some cases, it actually makes it worse (e.g. consistent decrease
+  //   in ops/sec for the first 2 benchmarks: just_build, build_and_exec).  BUT it does
+  //   ever-so-slightly increase performance for both mock "find" mock "validate".
+  //   The question is: "why?"  My guess is that it has something to do w/ accessing
+  //   `this` being slower than closure scope, and thus outweighing the gains of faster
+  //   construction.  But even then, that wouldn't explain "just_build" being slower, so
+  //   it's probably not that...
+  //
 
 
 
