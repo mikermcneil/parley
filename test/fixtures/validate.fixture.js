@@ -5,7 +5,6 @@
 var _ = require('@sailshq/lodash');
 var flaverr = require('flaverr');
 var parley = require('../../');
-var helpValidate = require('./private/help-validate.util');
 
 
 /**
@@ -41,16 +40,15 @@ module.exports = function find( /* variadic */ ){
   // and proceed to where the real action is at.
   // Otherwise, no callback was specified explicitly,
   // so we'll build and return a Deferred instead.
-  deferred = parley(helpValidate, explicitCbMaybe);
-  // deferred = parley(function (finalCb){
+  deferred = parley(function (finalCb){
 
-  //   // Now actually do stuff.
-  //   // ...except actually don't-- this is just pretend.
+    // Now actually do stuff.
+    // ...except actually don't-- this is just pretend.
 
-  //   // All done.
-  //   return finalCb();
+    // All done.
+    return finalCb();
 
-  // }, explicitCbMaybe);
+  }, explicitCbMaybe);
 
 
   // If we ended up building a Deferred above, we would have done so synchronously.
