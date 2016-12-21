@@ -148,6 +148,13 @@ describe('baseline.benchmark.js', function() {
   //   In this case, in practice, tricks would need to be used to circumvent the need for closure scope
   //   access (i.e. prbly .bind()).  But the answer to the question can actualy be figured out regardless--
   //   by defining stub functions once per process.
+  //   *******UPDATE*******:
+  //   Well, the answer is that the function construction must have mattered somewhat, but even after
+  //   pulling the entire dictionary of methods out (and pretending they're static), the performance is
+  //   still lower than when _.extend() is used to attach only ONE method-- even when that one method is
+  //   defined inline.  So, at the end of the day, we're just going to have to deal with the fact that,
+  //   if we add methods to the Deferred dynamically and construction-time, it's going to be slower and
+  //   slower for every additional method we add.
 
 
   //  ╔═╗╦ ╦╦╔╦╗╔═╗
