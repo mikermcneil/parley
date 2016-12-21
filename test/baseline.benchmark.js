@@ -130,6 +130,13 @@ describe('baseline.benchmark.js', function() {
   //   noticeable improvement (i.e. because they're doing something asynchronous.)
   //
   // • Swapping out non-standard variable names (e.g. π) did not have any noticeable effect.
+  //
+  // • When using the constructor+prototype approach, accessing `this` is slow.  It's not THAT bad,
+  //   but it is definitely a thing.  Note that it is somewhat worse if in the constructor-- and
+  //   also worse on assignment (this.foo = x) than on access (var x = this.foo).
+  //
+  // • When using the closure approach, adding new methods dynamically is slow.  (working on a
+  //   middle ground to solve this)
 
 
   //  ╔═╗╦ ╦╦╔╦╗╔═╗
