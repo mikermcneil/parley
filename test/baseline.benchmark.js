@@ -138,7 +138,6 @@ describe('baseline.benchmark.js', function() {
     it('should be performant enough (using benchSync())', function (){
       benchSync('parley(handler)', [
 
-        // •~ between 21,000 and 23,500 ops/sec  (Dec 20, 2016)
         function just_build(){
           var deferred = parley(function(handlerCb) { return handlerCb(); });
         }
@@ -151,9 +150,6 @@ describe('baseline.benchmark.js', function() {
     it('should be performant enough (using benchSync())', function (){
       benchSync('parley(handler).exec(cb)', [
 
-        // •~ between 21,000 and 23,000 ops/sec  (Dec 20, 2016)
-        //    --SAME AS ABOVE, basically -- like 200-500 ops/second slower, tops --
-        //    (and keep in mind that's below the % error margin)
         function build_AND_exec(){
           var deferred = parley(function(handlerCb) { return handlerCb(); });
           deferred.exec(function (err) {
