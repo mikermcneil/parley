@@ -98,9 +98,10 @@ describe('baseline.benchmark.js', function() {
   //
   // • Reducing the number of `this`/`self` references did not seem to make any sort of
   //   meaningful difference on performance. (see 1d8b6239de2cd84ac76ee015d099c3c5a7013989)
-  //   **UPDATE**: Actually -- it might... after removing two unncesssary `this` assignments
-  //   from the CONSTRUCTOR itself, performance for "just_build" shot up to where it was for
-  //   the original closure approach (and possibly a bit higher).  Still, this is negligible
+  //   *******UPDATE*******:
+  //   Actually -- it might... after removing two unncesssary `this` assignments from the
+  //   CONSTRUCTOR itself, performance for "just_build" shot up to where it was for the
+  //   original closure approach (and possibly a bit higher).  Still, this is negligible
   //   at the moment, but it's probably an effect that is more pronounced when overall ops/sec
   //   are orders of magnitude higher (e.g. in the millions instead of the hundreds of thousands.)
   //   Even then-- this is still less important than one might expect!
@@ -112,6 +113,17 @@ describe('baseline.benchmark.js', function() {
   //   difference of ~20,000 ops/sec for the "validate w/ .exec()" benchmark.  Worth it...?
   //   No. Inline function declarations are NEVER worth it.  But in some cases it might be worthwhile
   //   to pull out shared futures used by self-invoking functions and drop them into a separate module.
+  //   *******UPDATE*******:
+  //   Just verified that, by moving the inline function to a separate file, performance for the
+  //   "NAKED mock validate" went up by an ADDITIONAL 2,000,000 ops/sec, and by an ADDITIONAL
+  //   ~20,000 ops/sec for the "validate w/ .exec()" benchmark.  So, in conclusion, the answer to the
+  //   question of "Worth it?" is a resounding YES -- but only for a hot code path like this.  For
+  //   other bits of code, the advantages of keeping the logic inline and avoiding a separate,
+  //   weirdly-specific file, are well worth it.  And as for INLINE named function declarations?
+  //   They're still never worth it.  Not only do they clutter the local scope and create scoffable
+  //   confusion about flow control (plus all the resulting bug potential), they aren't even as fast
+  //   as pulling out the code into a separate file.  (Presumably this is because V8 has to make sure
+  //   the inline function can access the closure scope.)
 
 
 

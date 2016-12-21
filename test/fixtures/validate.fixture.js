@@ -5,7 +5,7 @@
 var _ = require('@sailshq/lodash');
 var flaverr = require('flaverr');
 var parley = require('../../');
-
+var cbToReceiveAnotherCallbackAndUnusedError = require('../utils/cb-to-receive-another-callback-and-unused-error.util');
 
 
 /**
@@ -42,28 +42,12 @@ module.exports = function find( /* variadic */ ){
   // Otherwise, no callback was specified explicitly,
   // so we'll build and return a Deferred instead.
   if (!_.isUndefined(explicitCb)) {
-    proceed(undefined, explicitCb);
+    cbToReceiveAnotherCallbackAndUnusedError(undefined, explicitCb);
   }
   else {
     deferred = parley(function (deferredCb){
-      proceed(undefined, deferredCb);
+      cbToReceiveAnotherCallbackAndUnusedError(undefined, deferredCb);
     });
-  }
-
-  // ~∞%°
-  function proceed(unused, finalCb) {
-    if (unused) {
-      finalCb(new Error('Consistency violation: Unexpected internal error occurred before beginning with any business logic.  Details: '+unused.stack));
-      return;
-    }//-•
-
-    // Now actually do stuff.
-
-    // ...except actually don't-- this is just pretend.
-
-    // All done.
-    return finalCb();
-
   }
 
 
