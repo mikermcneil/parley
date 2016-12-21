@@ -98,7 +98,12 @@ describe('baseline.benchmark.js', function() {
   //
   // • Reducing the number of `this`/`self` references did not seem to make any sort of
   //   meaningful difference on performance. (see 1d8b6239de2cd84ac76ee015d099c3c5a7013989)
-  //
+  //   **UPDATE**: Actually -- it might... after removing two unncesssary `this` assignments
+  //   from the CONSTRUCTOR itself, performance for "just_build" shot up to where it was for
+  //   the original closure approach (and possibly a bit higher).  Still, this is negligible
+  //   at the moment, but it's probably an effect that is more pronounced when overall ops/sec
+  //   are orders of magnitude higher (e.g. in the millions instead of the hundreds of thousands.)
+  //   Even then-- this is still less important than one might expect!
   //
 
 
