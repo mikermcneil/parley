@@ -5,7 +5,7 @@
 var _ = require('@sailshq/lodash');
 var flaverr = require('flaverr');
 var parley = require('../../');
-var cbToReceiveAnotherCallbackAndUnusedError = require('../utils/cb-to-receive-another-callback-and-unused-error.util');
+var cbToReceiveAnotherCallbackAndUnusedError = require('./private/cb-to-receive-another-callback-and-unused-error.util');
 
 
 /**

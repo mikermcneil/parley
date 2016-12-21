@@ -5,7 +5,7 @@
 var _ = require('@sailshq/lodash');
 var flaverr = require('flaverr');
 var parley = require('../../');
-var helpFind = require('../utils/help-find.util');
+var helpFind = require('./private/help-find.util');
 
 
 /**
