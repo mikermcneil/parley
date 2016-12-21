@@ -10,7 +10,7 @@ Parley helps you write functions that can be called like this:
 
 ```javascript
 doStuff({ foo: 123 })
-.set({ bar: 456 })
+.foo({ bar: 456 })
 .exec(function (err, result){
 
 });
@@ -20,7 +20,7 @@ Or like this:
 
 ```javascript
 doStuff({ foo: 123 })
-.set({ bar: 456 })
+.baz({ bar: 456 })
 .then(function (result){
 
 })
