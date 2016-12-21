@@ -124,6 +124,10 @@ describe('baseline.benchmark.js', function() {
   //   confusion about flow control (plus all the resulting bug potential), they aren't even as fast
   //   as pulling out the code into a separate file.  (Presumably this is because V8 has to make sure
   //   the inline function can access the closure scope.)
+  //
+  // • It is worth noting that, despite how exciting the previous notes about pulling out self-invoking
+  //   functions was, when attempted with the mock "find" fixture, the relevant benchmarks showed no
+  //   noticeable improvement (i.e. because they're doing something asynchronous.)
 
 
 

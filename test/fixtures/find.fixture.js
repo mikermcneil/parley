@@ -5,7 +5,7 @@
 var _ = require('@sailshq/lodash');
 var flaverr = require('flaverr');
 var parley = require('../../');
-
+var helpFind = require('../utils/help-find.util');
 
 
 /**
@@ -50,47 +50,14 @@ module.exports = function find( /* variadic */ ){
   // and proceed to where the real action is at.
   // Otherwise, no callback was specified explicitly,
   // so we'll build and return a Deferred instead.
-  (function _determineFinalCb(proceed){
-    if (!_.isUndefined(explicitCb)) {
-      proceed(undefined, explicitCb);
-    }
-    else {
-      deferred = parley(function (deferredCb){
-        proceed(undefined, deferredCb);
-      });
-    }
-  // ~∞%°
-  })(function (unused, finalCb) {
-    if (unused) {
-      finalCb(new Error('Consistency violation: Unexpected internal error occurred before beginning with any business logic.  Details: '+unused.stack));
-      return;
-    }//-•
-
-    // Now actually do stuff.
-
-
-    // In this case, we'll just pretend, since this part doesn't matter.
-    // (we just wait a few miliseconds, and then send back an array consisting
-    // of one item: the `criteria` that was received.)
-    setTimeout(function (){
-      var fakeResult = [ metadata.criteria ];
-
-      // Note that, as a way for our test cases to instrument the outcome,
-      // we check `metadata.criteria` here, and if it happens to be `false`
-      // or `null`, then we trigger an error instead.
-      if (metadata.criteria === false) {
-        return finalCb(flaverr('E_SOME_ERROR', new Error('Simulated failure (E_SOME_ERROR)')));
-      }
-      if (_.isNull(metadata.criteria)) {
-        return finalCb(new Error('Simulated failure (catchall / misc. error)'));
-      }
-
-      return finalCb(undefined, fakeResult);
-
-    }, 25);
-
-  });//</ self-invoking function>
-
+  if (!_.isUndefined(explicitCb)) {
+    helpFind(undefined, metadata, explicitCb);
+  }
+  else {
+    deferred = parley(function (deferredCb){
+      helpFind(undefined, metadata, deferredCb);
+    });
+  }
 
   // If we ended up building a Deferred above, we would have done so synchronously.
   // In other words, if there's going to be a Deferred, we have it here.
