@@ -64,15 +64,42 @@ module.exports = function find( /* variadic */ ){
   // IWMIH, then we know we have a Deferred.
   // (and thus we haven't actually done anything yet.)
 
-  // // At this point, we might opt to attach some methods to our Deferred.
+  // At this point, we might opt to attach some methods to our Deferred.
+  // --(1)-------------------------------------------------------
+  // --too slow:
+  // --(e.g. 212k ops/sec)
   // deferred.meta = function (_meta){
   //   metadata.meta = _meta;
   //   return deferred;
   // };
-  var theMeta = function (_meta){
-    metadata.meta = _meta;
-    return deferred;
-  };
+  // --(2)-------------------------------------------------------
+  // --perfectly fast, but doesn't do anything:
+  // --(e.g. 373k ops/sec)
+  // var theMeta = function (_meta){
+  //   metadata.meta = _meta;
+  //   return deferred;
+  // };
+  // --(3)-------------------------------------------------------
+  // --somewhat better than the original!!...
+  // --(e.g. 273k ops/sec)
+  // --....but problematic, because it doesn't actually mutate
+  // --the original deferred, which could cause inconsistencies.
+  // deferred = _.extend({
+  //   meta: function (_meta){
+  //     metadata.meta = _meta;
+  //     return deferred;
+  //   }
+  // }, deferred);
+  // --(4)-------------------------------------------------------
+  // --considerably better than the original!!
+  // --(Even more than #3... plus it's totally valid!)
+  // --(e.g. ~268k-292k ops/sec)
+  _.extend(deferred, {
+    meta: function (_meta){
+      metadata.meta = _meta;
+      return deferred;
+    }
+  });
 
   // When we're confident that our Deferred is ready for primetime,
   // we finish up by returning it.

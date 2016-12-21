@@ -137,7 +137,10 @@ describe('baseline.benchmark.js', function() {
   //
   // • When using the closure approach, adding new methods dynamically is slow.  This doesn't seem
   //   to be because defining new functions is slow, per se.  Rather it seems to have to do with
-  //   mutating the object after it's already been created.
+  //   mutating the object after it's already been created.  As a middle ground, it seems that relying
+  //   on Lodash's built-in optimizations is the way to go.  Simply changing from `deferred.meta = ...`
+  //   to `_.extend(deferred, { meta: ... })` split the difference as far as performance.  It improved
+  //   the performance of the 'mock validate with .exec()' benchmark by ~50k-60k ops/sec; i.e. ~20%)
 
 
   //  ╔═╗╦ ╦╦╔╦╗╔═╗
