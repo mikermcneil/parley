@@ -214,7 +214,7 @@ describe('baseline.benchmark.js', function() {
       ], done);
     });
 
-    it.only('should be performant enough when calling fake "validate" w/ .exec() (using benchSync())', function (){
+    it('should be performant enough when calling fake "validate" w/ .exec() (using benchSync())', function (){
       benchSync('mock "validate()"', [
 
         function (){

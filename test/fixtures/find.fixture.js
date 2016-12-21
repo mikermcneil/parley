@@ -73,11 +73,13 @@ module.exports = function find( /* variadic */ ){
   // (and thus we haven't actually done anything yet.)
 
   // At this point, we might opt to attach some methods to our Deferred.
-  deferred.where = function (clause){
-    metadata.criteria = metadata.criteria || {};
-    metadata.criteria.where = clause;
-    return deferred;
-  };
+  _.extend(deferred, {
+    where: function(clause) {
+      metadata.criteria = metadata.criteria || {};
+      metadata.criteria.where = clause;
+      return deferred;
+    }
+  });
 
   // When we're confident that our Deferred is ready for primetime,
   // we finish up by returning it.
