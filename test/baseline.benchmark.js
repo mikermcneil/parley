@@ -27,7 +27,7 @@ describe('baseline.benchmark.js', function() {
     '           •      •              o  \n'+
     '  •    b e n c h m a r k s      •    \n'+
     '   •    (instantiation)       °     \n'+
-    '------------------------------------\n'+
+    '------------------------------------'+
     '');
   });
 
@@ -38,58 +38,55 @@ describe('baseline.benchmark.js', function() {
   var validate = require('./fixtures/validate.fixture');
 
 
-  //  ╦ ╦╦╔═╗╔╦╗╔═╗╦═╗╦╔═╗╔═╗╦    ╦═╗╔═╗╔═╗╔═╗╦═╗╔╦╗╔═╗
-  //  ╠═╣║╚═╗ ║ ║ ║╠╦╝║║  ╠═╣║    ╠╦╝║╣ ╠═╝║ ║╠╦╝ ║ ╚═╗
-  //  ╩ ╩╩╚═╝ ╩ ╚═╝╩╚═╩╚═╝╩ ╩╩═╝  ╩╚═╚═╝╩  ╚═╝╩╚═ ╩ ╚═╝
-  // Just some one-off samples.
+  //  ╔═╗╔╗╔╔═╗╔═╗╔═╗╦ ╦╔═╗╔╦╗
+  //  ╚═╗║║║╠═╣╠═╝╚═╗╠═╣║ ║ ║
+  //  ╚═╝╝╚╝╩ ╩╩  ╚═╝╩ ╩╚═╝ ╩
+  // Just a one-off snapshot run on a laptop.
+  // For historical reports, see the history of this file on GitHub.
   //
   //
-  // Dec 20, 2016 (take 3):  (all of them put together)
+  // Dec 20, 2016 (take 4):  (after removing pretty-print)
   // ================================================================================================================
-  //  baseline.benchmark.js
-  //    parley(handler)
-  // • just_build#0 x 22,711 ops/sec ±2.51% (78 runs sampled)
-  //      ✓ should be performant enough (using benchSync())
-  //    parley(handler).exec(cb)
-  // • build_AND_exec#0 x 22,396 ops/sec ±2.02% (80 runs sampled)
-  //      ✓ should be performant enough (using benchSync())
-  //    practical benchmark
-  // • mock "find()"#0 x 33.60 ops/sec ±0.93% (72 runs sampled)
-  //      ✓ should be performant enough when calling fake "find" w/ .exec() (using bench())
-  // • mock "find()"#0 x 34.07 ops/sec ±0.93% (72 runs sampled)
-  //      ✓ should be performant enough when calling NAKED fake "find" (using bench())
-  // • mock "validate()"#0 x 19,394 ops/sec ±3.55% (70 runs sampled)
-  //      ✓ should be performant enough when calling fake "validate" w/ .exec() (using benchSync())
-  // • mock "validate()"#0 x 5,182,890 ops/sec ±12.10% (87 runs sampled)
-  //      ✓ should be performant enough when calling NAKED "validate" (using benchSync())
+  //   baseline.benchmark.js
+  //   •  •      •       •      •    •
+  //            •      •              o
+  //   •    b e n c h m a r k s      •
+  //    •    (instantiation)       °
+  // ------------------------------------
+  //     parley(handler)
+  //  • just_build#0 x 527,939 ops/sec ±1.45% (85 runs sampled)
+  //       ✓ should be performant enough (using benchSync())
+  //     parley(handler).exec(cb)
+  //  • build_AND_exec#0 x 420,899 ops/sec ±1.61% (85 runs sampled)
+  //       ✓ should be performant enough (using benchSync())
+  //     practical benchmark
+  //  • mock "find()"#0 x 34.33 ops/sec ±0.90% (73 runs sampled)
+  //       ✓ should be performant enough when calling fake "find" w/ .exec() (using bench())
+  //  • mock "find()"#0 x 34.20 ops/sec ±0.95% (74 runs sampled)
+  //       ✓ should be performant enough when calling NAKED fake "find" (using bench())
+  //  • mock "validate()"#0 x 173,206 ops/sec ±3.02% (78 runs sampled)
+  //       ✓ should be performant enough when calling fake "validate" w/ .exec() (using benchSync())
+  //  • mock "validate()"#0 x 5,805,213 ops/sec ±4.04% (87 runs sampled)
+  //       ✓ should be performant enough when calling NAKED "validate" (using benchSync())
+  // ------------------------------------
+  //   •  •      •       •      •    •
+  //            •      •              o
+  //   • < / b e n c h m a r k s >    •
+  //    •                           °
+  //                       o°
   // ================================================================================================================
+
+
+  //  ╔═╗╔╗ ╔═╗╔═╗╦═╗╦  ╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
+  //  ║ ║╠╩╗╚═╗║╣ ╠╦╝╚╗╔╝╠═╣ ║ ║║ ║║║║╚═╗
+  //  ╚═╝╚═╝╚═╝╚═╝╩╚═ ╚╝ ╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
   //
-  // Dec 20, 2016 (take 2):  (notice how the additional time added by calling .exec() is actually a negative number)
-  // ================================================================================================================
-  //  baseline.benchmark.js
-  //    parley(handler)
-  // • just_build#0 x 22,540 ops/sec ±3.15% (80 runs sampled)
-  //      ✓ should be performant enough (using benchSync())
-  //    parley(handler).exec(cb)
-  // • build_AND_exec#0 x 22,743 ops/sec ±1.77% (83 runs sampled)
-  // ================================================================================================================
+  // • Removing pretty-print caused a huge performance increase
+  //   (33x instead of 317x slower than naked usage)
   //
-  // Dec 20, 2016 (take 1):
-  // ================================================================================================================
-  //  baseline.benchmark.js
-  //    parley(handler)
-  // • parley(handler)#0 x 23,432 ops/sec ±2.95% (79 runs sampled)
-  //      ✓ should be performant enough (using benchSync())
-  //    parley(handler).exec(cb)
-  // • parley(handler).exec(cb)#0 x 22,959 ops/sec ±3.83% (78 runs sampled)
-  //      ✓ should be performant enough (using benchSync())
-  // • parley(handler).exec(cb)#0 x 19,548 ops/sec ±2.04% (72 runs sampled)
-  //      ✓ should be performant enough (using bench())
-  // • parley(handler).exec(cb) + artificial setImmediate in handler#0 x 19,135 ops/sec ±1.73% (73 runs sampled)
-  //      ✓ should be performant enough (using bench())
-  // • parley(handler).exec(cb) + artificial setImmediate wrapped around the whole thing#0 x 18,686 ops/sec ±6.00% (71 runs sampled)
-  //      ✓ should be performant enough (using bench())
-  // ================================================================================================================
+  // • The additional time added by calling .exec() (vs. just building) is actually a NEGATIVE number
+  //   in some cases.  i.e. calling .exec() does not add any noticeable latency.
+  //
 
 
 
