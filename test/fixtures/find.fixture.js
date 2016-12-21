@@ -43,21 +43,15 @@ module.exports = function find( /* variadic */ ){
   // This deferred may or may not actually need to get built.
   // (but in case it does, we define it out here so we can unambiguously
   // return it below)
-  var deferred;
+  //
+  // > If an explicit callback was specified, then go ahead
+  // > and proceed to where the real action is at.
+  // > Otherwise, no callback was specified explicitly,
+  // > so we'll build and return a Deferred instead.
+  var deferred = parley(function (deferredCb){
+    helpFind(undefined, metadata, deferredCb);
+  }, explicitCb);
 
-
-  // If an explicit callback was specified, then go ahead
-  // and proceed to where the real action is at.
-  // Otherwise, no callback was specified explicitly,
-  // so we'll build and return a Deferred instead.
-  if (!_.isUndefined(explicitCb)) {
-    helpFind(undefined, metadata, explicitCb);
-  }
-  else {
-    deferred = parley(function (deferredCb){
-      helpFind(undefined, metadata, deferredCb);
-    });
-  }//>-
 
   // If we ended up building a Deferred above, we would have done so synchronously.
   // In other words, if there's going to be a Deferred, we have it here.
