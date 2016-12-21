@@ -84,8 +84,8 @@ describe('baseline.benchmark.js', function() {
   // • Removing pretty-print caused a huge performance increase
   //   (33x instead of 317x slower than naked usage)
   //
-  // • The additional time added by calling .exec() (vs. just building) is actually a NEGATIVE number
-  //   in some cases.  i.e. calling .exec() does not add any noticeable latency.
+  // • The additional time added by calling .exec() (vs. just building) is really only
+  //   visible now, AFTER removing pretty-print.  It's a difference of 100,000 ops/sec.
   //
 
 
