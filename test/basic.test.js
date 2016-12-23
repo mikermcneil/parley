@@ -34,6 +34,11 @@ describe('parley(handleExec)', function() {
       catch (e) { return; }
       throw new Error('Should have thrown an Error');
     });
+    it('should throw', function(){
+      try { parley([123, 456]); }
+      catch (e) { return; }
+      throw new Error('Should have thrown an Error');
+    });
   });
 
   describe('with valid handleExec', function (){
@@ -62,58 +67,3 @@ describe('parley(handleExec)', function() {
 
 });
 
-
-
-describe('parley(opts)', function() {
-
-  describe('with invalid opts', function (){
-    it('should throw', function(){
-      try { parley([123, 456]); }
-      catch (e) { return; }
-      throw new Error('Should have thrown an Error');
-    });
-  });
-
-  describe('with missing opts.handleExec', function (){
-    it('should throw', function(){
-      try { parley({}); }
-      catch (e) { return; }
-      throw new Error('Should have thrown an Error');
-    });
-  });
-
-  describe('with invalid opts.handleExec', function (){
-    it('should throw', function(){
-      try { parley({ handleExec: 123, y: 456 }); }
-      catch (e) { return; }
-      throw new Error('Should have thrown an Error');
-    });
-  });
-
-  describe('with valid opts.handleExec', function (){
-    var π;
-    it('should not throw', function(){
-      π = parley({
-        handleExec: function (done){ return done(); }
-      });
-    });
-    it('should have returned an object of some sort', function(){
-      if (!_.isObject(π)) { throw new Error('Instead got: '+util.inspect(π,{depth:5})+''); }
-    });
-    describe('deferred object (the "parley" itself)', function (){
-      it('should have an `.exec()` method', function(){
-        if (!_.isFunction(π.exec)) { throw new Error('Instead got: '+util.inspect(π.exec,{depth:5})+''); }
-      });
-      it('should have a `.then()` method', function(){
-        if (!_.isFunction(π.then)) { throw new Error('Instead got: '+util.inspect(π.then,{depth:5})+''); }
-      });
-      it('should have a `.catch()` method', function(){
-        if (!_.isFunction(π.catch)) { throw new Error('Instead got: '+util.inspect(π.catch,{depth:5})+''); }
-      });
-      it('should have a `.toPromise()` method', function(){
-        if (!_.isFunction(π.toPromise)) { throw new Error('Instead got: '+util.inspect(π.toPromise,{depth:5})+''); }
-      });
-    });
-  });
-
-});

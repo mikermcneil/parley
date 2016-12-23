@@ -355,7 +355,7 @@ function afterwards(err) {
 
 Build and return a deferred object.
 
-As its first argument, expects a function that will run whenever userland code executes the deferred object.
+As its first argument, expects a function (often called the handler, or more specifically "handleExec") that will run whenever userland code executes the deferred object (e.g. with `.exec()`).
 
 ```javascript
 var deferred = parley(function (done) {
@@ -363,23 +363,27 @@ var deferred = parley(function (done) {
 });
 ```
 
+This first argument is mandatory-- it defines what your implementation _actually does_ when `.exec()` is called.
+
+
+There is also an optional second argument you can use: another function that, if provided, will cause your handler (the first arg) to run _immediately_.
+This provides a way to expose an optional callback to your users.
+
+> Why bother?  Well, for one thing, it's stylistically a good idea to give users a way to call your handler with as little sugar on top as possible.  More rarely, for very performance-sensitive applications, direct callback usage does provide a mild performance benefit.
+
 Or, instead of passing in a function, you can pass in a dictionary of options.
 
 ```javascript
 var deferred = parley({
   codeName: 'doStuff',
   handleExec: function (done){
-    // ...
+    // • If something goes wrong, call `done(new Error('something went wrong'))`
+    // • If everything worked out, and you want to send a result back, call `done(undefined, result);`
+    // • Otherwise, if everything worked out but no result is necessary, simply call:
     return done();
   }
 });
 ```
-
-| Option         | Data type       | Description
-|:---------------|-----------------|:-------------------------------------------------------------------------------------------------------------------|
-| handleExec     | ((function))    | This is the function that you must provide in order to describe what happens when the deferred object is executed.
-| codeName       | ((_string?_))   | An optional value used to improve readability in error messages.  If left unspecified, parley will fall back to the function name of the provided `handleExec` handler function, if it has one.
-
 
 
 
