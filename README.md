@@ -178,20 +178,21 @@ Then in userland, this can be easily negotiated.  Note that whether the code is 
 
 ### Flow control
 
-Since Node.js is asynchronous, seemingly-tricky flow control problems often arise in practical, userland code.  Fortunately, they're easy to solve when equipped with the proper tools.
+Since Node.js is asynchronous, seemingly-tricky flow control problems often arise in practical, userland code.  Fortunately, they're easy to solve when equipped with the proper tools and strategies.
 
-When using Node-style callbacks, use the [`async` package](http://npmjs.com/package/async).
-
-```javascript
-var async = require('async');
-```
-
-> Most of the examples below use async for simplicity, but note that many similar affordances are available for promises -- for example, check out `.toPromise()` ([below](#toPromise)) and `Promise.all()` (in bluebird, or native in ES6, etc.).  The concepts are more or less the same regardless.
-
+> Most of the examples below use simple Node callbacks, but note that many similar affordances are available for promises -- for example, check out `.toPromise()` ([below](#toPromise)) and `Promise.all()` (in bluebird, or native in ES6, etc.).  The concepts are more or less the same regardless.
+>
+> _Unless you and the rest of your team are experts with promises and already have tight, consistently-applied and agreed-upon conventions for how to implement the use cases below, you're probably best off using Node callbacks._
 
 #### Async loops
 
 Loop over many asynchronous things, one at a time, using `async.eachSeries()`.
+
+> For this example, make sure you have access to the [`async` library](http://npmjs.com/package/async):
+>
+>```javascript
+>var async = require('async');
+>```
 
 ```javascript
 var results = [];
