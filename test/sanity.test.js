@@ -9,7 +9,7 @@ var parley = require('../');
 
 
 /**
- * basic.test.js
+ * sanity.test.js
  *
  * A test of parley's most basic usage.
  *
