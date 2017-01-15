@@ -45,6 +45,41 @@ describe('baseline.benchmark.js', function() {
   // For historical reports, see the history of this file on GitHub.
   //
   //
+
+  // ================================================================================================================
+  // Jan 15, 2017 (take 5)
+  // ================================================================================================================
+  //   baseline.benchmark.js
+  //   •  •      •       •      •    •
+  //            •      •              o
+  //   •    b e n c h m a r k s      •
+  //    •    (instantiation)       °
+  // ------------------------------------
+  //     parley(handler)
+  //  • just_build#0 x 18,016,705 ops/sec ±1.35% (86 runs sampled)
+  //       ✓ should be performant enough (using benchSync())
+  //     parley(handler).exec(cb)
+  //  • build_AND_exec#0 x 1,724,116 ops/sec ±1.95% (86 runs sampled)
+  //       ✓ should be performant enough (using benchSync())
+  //     practical benchmark
+  //  • mock "find()"#0 x 34.01 ops/sec ±1.00% (73 runs sampled)
+  //       ✓ should be performant enough when calling fake "find" w/ .exec() (using bench())
+  //  • mock "find()"#0 x 34.35 ops/sec ±1.06% (74 runs sampled)
+  //       ✓ should be performant enough when calling NAKED fake "find" (using bench())
+  //  • mock "validate()"#0 x 542,632 ops/sec ±2.00% (85 runs sampled)
+  //       ✓ should be performant enough when calling fake "validate" w/ .exec() (using benchSync())
+  //  • mock "validate()"#0 x 8,333,857 ops/sec ±5.42% (83 runs sampled)
+  //       ✓ should be performant enough when calling NAKED "validate" (using benchSync())
+  // ------------------------------------
+  //   •  •      •       •      •    •
+  //            •      •              o
+  //   • < / b e n c h m a r k s >    •
+  //    •                           °
+  //                       o°
+  // ================================================================================================================
+
+
+  // ================================================================================================================
   // Dec 20, 2016 (take 4):  (after removing pretty-print, BEFORE switching to the constructor approach)
   // ================================================================================================================
   //   baseline.benchmark.js
