@@ -16,18 +16,9 @@ var parley = require('../../');
  *
  * @returns {Deferred} If no callback specified
  */
-module.exports = function validate( /* variadic */ ){
+module.exports = function validate(explicitCbMaybe){
 
   var metadata = {};
-
-  var explicitCbMaybe;
-
-  // Handle variadic usage:
-  // ===========================================================================
-  if (!_.isUndefined(arguments[0])) {
-    explicitCbMaybe = arguments[0];
-  }//>-
-  // ===========================================================================
 
   // This deferred may or may not actually need to get built.
   // (but in case it does, we define it out here so we can unambiguously
