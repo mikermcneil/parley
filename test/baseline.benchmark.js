@@ -34,8 +34,23 @@ describe('baseline.benchmark.js', function() {
   //  ╔═╗╦═╗ ╦╔╦╗╦ ╦╦═╗╔═╗╔═╗
   //  ╠╣ ║╔╩╦╝ ║ ║ ║╠╦╝║╣ ╚═╗
   //  ╚  ╩╩ ╚═ ╩ ╚═╝╩╚═╚═╝╚═╝
+  // These functions and data are used in both benchmarks below.
+  // (It's ok to have them up here--they are never mutated by the benchmarks or parley itself)
   var find = require('./fixtures/find.fixture');
   var validate = require('./fixtures/validate.fixture');
+  var validateButWith9CustomMethods = require('./fixtures/validate-but-with-9-custom-methods.fixture');
+  var NINE_CUSTOM_METHODS = {
+    pretend1: function(x,y){ this._i = this._i || 0; this._i++; console.log(this._i, x, y); return this; },
+    pretend2: function(x,y){ this._j = this._j || 0; this._j++; console.log(this._j, x, y); return this; },
+    pretend3: function(x,y){ this._k = this._k || 0; this._k++; console.log(this._k, x, y); return this; },
+    pretend4: function(x,y){ this._i = this._i || 0; this._i++; console.log(this._i, x, y); return this; },
+    pretend5: function(x,y){ this._j = this._j || 0; this._j++; console.log(this._j, x, y); return this; },
+    pretend6: function(x,y){ this._k = this._k || 0; this._k++; console.log(this._k, x, y); return this; },
+    pretend7: function(x,y){ this._i = this._i || 0; this._i++; console.log(this._i, x, y); return this; },
+    pretend8: function(x,y){ this._j = this._j || 0; this._j++; console.log(this._j, x, y); return this; },
+    pretend9: function(x,y){ this._k = this._k || 0; this._k++; console.log(this._k, x, y); return this; },
+  };
+
 
 
   //  ╔═╗╔╗╔╔═╗╔═╗╔═╗╦ ╦╔═╗╔╦╗
@@ -272,9 +287,42 @@ describe('baseline.benchmark.js', function() {
   });//</ describe: parley(handler().exec(cb) )
 
 
+  describe('parley(handler, undefined, {...})  (w/ 9 custom methods)', function(){
+    it('should be performant enough (using benchSync())', function (){
+      benchSync('parley(handler, undefined, {...})', [
+
+        function just_build_with_9_custom_methods(){
+          var deferred = parley(function(handlerCb) { return handlerCb(); }, undefined, NINE_CUSTOM_METHODS);
+        }
+
+      ]);//</benchSync()>
+    });
+  });//</ describe >
+
+
+  describe('parley(handler, undefined, {...}).exec(cb)   (w/ 9 custom methods)', function(){
+    it('should be performant enough (using benchSync())', function (){
+      benchSync('parley(handler, undefined, {...}).exec(cb)', [
+
+        function build_AND_exec_with_9_custom_methods(){
+          var deferred = parley(function(handlerCb) { return handlerCb(); }, undefined, NINE_CUSTOM_METHODS);
+          deferred.exec(function (err) {
+            if (err) {
+              console.error('Unexpected error running benchmark:',err);
+            }//>-
+            // Note: Since the handler is blocking, we actually make
+            // it in here within one tick of the event loop.
+          });
+        }
+
+      ]);//</benchSync()>
+    });
+  });//</ describe >
+
+
   describe('practical benchmark', function(){
     it('should be performant enough when calling fake "find" w/ .exec() (using bench())', function (done){
-      bench('mock "find()"', [
+      bench('mock "find().exec()"', [
 
         function (next){
           find({ where: {id:3, x:30} })
@@ -288,7 +336,7 @@ describe('baseline.benchmark.js', function() {
     });
 
     it('should be performant enough when calling NAKED fake "find" (using bench())', function (done){
-      bench('mock "find()"', [
+      bench('mock "find(..., explicitCb)"', [
 
         function (next){
           find({ where: {id:3, x:30} }, function (err, result) {
@@ -301,7 +349,7 @@ describe('baseline.benchmark.js', function() {
     });
 
     it('should be performant enough when calling fake "validate" w/ .exec() (using benchSync())', function (){
-      benchSync('mock "validate()"', [
+      benchSync('mock "validate().exec()"', [
 
         function (){
           validate()
@@ -317,8 +365,25 @@ describe('baseline.benchmark.js', function() {
       ]);
     });
 
+    it('should be performant enough calling fake "validateButWith9CustomMethods" w/ .exec() (using benchSync())', function (){
+      benchSync('mock "validateButWith9CustomMethods().exec()"', [
+
+        function (){
+          validateButWith9CustomMethods()
+          .exec(function (err) {
+            if (err) {
+              console.error('Unexpected error running benchmark:',err);
+            }//>-
+            // Note: Since the handler is blocking, we actually make
+            // it in here within one tick of the event loop.
+          });
+        }
+
+      ]);
+    });
+
     it('should be performant enough when calling NAKED "validate" (using benchSync())', function (){
-      benchSync('mock "validate()"', [
+      benchSync('mock "validate(..., explicitCb)"', [
 
         function (){
           validate(function (err) {
@@ -332,7 +397,7 @@ describe('baseline.benchmark.js', function() {
 
       ]);
     });
-  });
+  });//</describe>
 
 
   after(function(){

@@ -11,13 +11,13 @@ var parley = require('../../');
  * validate.fixture.js
  *
  * A simplified mock of a hypothetical `validate()` model method
- * that is actually synchronous.  (This is primariliy for use in benchmarks.)
+ * that is actually synchronous.  (This is primarily for use in benchmarks.)
  *
  * @param {Function} explicitCbMaybe
  *
  * @returns {Deferred} If no callback specified
  */
-module.exports = function find( /* variadic */ ){
+module.exports = function validate( /* variadic */ ){
 
   var metadata = {};
 
