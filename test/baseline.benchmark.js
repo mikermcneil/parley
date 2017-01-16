@@ -190,6 +190,10 @@ describe('baseline.benchmark.js', function() {
   //   defined inline.  So, at the end of the day, we're just going to have to deal with the fact that,
   //   if we add methods to the Deferred dynamically and construction-time, it's going to be slower and
   //   slower for every additional method we add.
+  //
+  // • _.each() is slower than `for`, sometimes by a factor of 10.  But this only matters in extreme
+  //   circumstances, where the logic being benchmarked is already very fast to begin with.  So in
+  //   almost every case, it's still never worth using a `for` loop instead of `_.each()`.
 
 
   //  ╔═╗╦ ╦╦╔╦╗╔═╗
