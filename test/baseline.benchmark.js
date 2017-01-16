@@ -47,6 +47,39 @@ describe('baseline.benchmark.js', function() {
   //
 
   // ================================================================================================================
+  // Jan 15, 2017 (take 6)
+  // ================================================================================================================
+  // After implementing auto-custom-method-attaching stuff:
+  //
+  //   baseline.benchmark.js
+  //   •  •      •       •      •    •
+  //            •      •              o
+  //   •    b e n c h m a r k s      •
+  //    •    (instantiation)       °
+  // ------------------------------------
+  //     parley(handler)
+  //  • just_build#0 x 16,889,956 ops/sec ±2.42% (79 runs sampled)
+  //       ✓ should be performant enough (using benchSync())
+  //     parley(handler).exec(cb)
+  //  • build_AND_exec#0 x 1,612,188 ops/sec ±2.92% (80 runs sampled)
+  //       ✓ should be performant enough (using benchSync())
+  //     practical benchmark
+  //  • mock "find()"#0 x 34.82 ops/sec ±1.23% (74 runs sampled)
+  //       ✓ should be performant enough when calling fake "find" w/ .exec() (using bench())
+  //  • mock "find()"#0 x 34.68 ops/sec ±1.14% (74 runs sampled)
+  //       ✓ should be performant enough when calling NAKED fake "find" (using bench())
+  //  • mock "validate()"#0 x 621,578 ops/sec ±1.66% (85 runs sampled)
+  //       ✓ should be performant enough when calling fake "validate" w/ .exec() (using benchSync())
+  //  • mock "validate()"#0 x 7,467,393 ops/sec ±4.01% (86 runs sampled)
+  //       ✓ should be performant enough when calling NAKED "validate" (using benchSync())
+  // ------------------------------------
+  //   •  •      •       •      •    •
+  //            •      •              o
+  //   • < / b e n c h m a r k s >    •
+  //    •                           °
+  //                       o°
+  //
+  // ================================================================================================================
   // Jan 15, 2017 (take 5)
   // ================================================================================================================
   //   baseline.benchmark.js
