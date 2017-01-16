@@ -44,19 +44,27 @@ As of January 15, 2017:
    •    (instantiation)       °
 ------------------------------------
     parley(handler)
- • just_build#0 x 18,016,705 ops/sec ±1.35% (86 runs sampled)
+ • just_build#0 x 18,860,047 ops/sec ±1.27% (89 runs sampled)
       ✓ should be performant enough (using benchSync())
     parley(handler).exec(cb)
- • build_AND_exec#0 x 1,724,116 ops/sec ±1.95% (86 runs sampled)
+ • build_AND_exec#0 x 1,825,566 ops/sec ±1.40% (86 runs sampled)
+      ✓ should be performant enough (using benchSync())
+    parley(handler, undefined, {...})  (w/ 9 custom methods)
+ • just_build_with_9_custom_methods#0 x 5,367,871 ops/sec ±1.91% (87 runs sampled)
+      ✓ should be performant enough (using benchSync())
+    parley(handler, undefined, {...}).exec(cb)   (w/ 9 custom methods)
+ • build_AND_exec_with_9_custom_methods#0 x 1,426,981 ops/sec ±1.50% (88 runs sampled)
       ✓ should be performant enough (using benchSync())
     practical benchmark
- • mock "find()"#0 x 34.01 ops/sec ±1.00% (73 runs sampled)
+ • mock "find().exec()"#0 x 33.32 ops/sec ±0.81% (72 runs sampled)
       ✓ should be performant enough when calling fake "find" w/ .exec() (using bench())
- • mock "find()"#0 x 34.35 ops/sec ±1.06% (74 runs sampled)
+ • mock "find(..., explicitCb)"#0 x 34.29 ops/sec ±1.00% (74 runs sampled)
       ✓ should be performant enough when calling NAKED fake "find" (using bench())
- • mock "validate()"#0 x 542,632 ops/sec ±2.00% (85 runs sampled)
+ • mock "validate().exec()"#0 x 652,905 ops/sec ±1.52% (90 runs sampled)
       ✓ should be performant enough when calling fake "validate" w/ .exec() (using benchSync())
- • mock "validate()"#0 x 8,333,857 ops/sec ±5.42% (83 runs sampled)
+ • mock "validateButWith9CustomMethods().exec()"#0 x 650,915 ops/sec ±1.84% (85 runs sampled)
+      ✓ should be performant enough calling fake "validateButWith9CustomMethods" w/ .exec() (using benchSync())
+ • mock "validate(..., explicitCb)"#0 x 8,714,281 ops/sec ±3.92% (88 runs sampled)
       ✓ should be performant enough when calling NAKED "validate" (using benchSync())
 ------------------------------------
   •  •      •       •      •    •
