@@ -2,8 +2,6 @@
  * Module dependencies
  */
 
-var _ = require('@sailshq/lodash');
-var flaverr = require('flaverr');
 var parley = require('../../');
 
 
