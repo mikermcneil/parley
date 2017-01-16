@@ -244,6 +244,7 @@ describe('baseline.benchmark.js', function() {
     });
   });
 
+
   describe('parley(handler).exec(cb)', function(){
     it('should be performant enough (using benchSync())', function (){
       benchSync('parley(handler).exec(cb)', [
@@ -269,7 +270,6 @@ describe('baseline.benchmark.js', function() {
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   });//</ describe: parley(handler().exec(cb) )
-
 
 
   describe('practical benchmark', function(){
