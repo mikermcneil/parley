@@ -19,11 +19,14 @@ var parley = require('../../');
  */
 module.exports = function validateButWith9CustomMethods(explicitCbMaybe){
 
+  // This deferred may or may not actually need to get built.
+  //
   // If an explicit callback was specified, then go ahead
-  // and proceed to where the real action is at.
+  // and proceed to where the real action is at & return `undefined`.
   // Otherwise, no callback was specified explicitly,
-  // so we'll build and return a Deferred instead.
-  return parley(function (finalCb){
+  // so we'll build and return a Deferred instance instead.
+
+  var deferred = parley(function (finalCb){
 
     // Now actually do stuff.
     // ...except actually don't-- this is just pretend.
@@ -42,6 +45,8 @@ module.exports = function validateButWith9CustomMethods(explicitCbMaybe){
     h: function (baa, baaa, black, sheep) { console.log(Math.random()+'hi7'); return this; },
     i: function (beep, boop) { console.log(Math.random()+'hi8'); return this; },
   });
+
+  return deferred;
 
 };
 
