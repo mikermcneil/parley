@@ -18,6 +18,13 @@ var parley = require('../');
 describe('behavior.test.js', function() {
 
 
+  //     ███████╗██╗  ██╗███████╗ ██████╗ ██╗██╗
+  //     ██╔════╝╚██╗██╔╝██╔════╝██╔════╝██╔╝╚██╗
+  //     █████╗   ╚███╔╝ █████╗  ██║     ██║  ██║
+  //     ██╔══╝   ██╔██╗ ██╔══╝  ██║     ██║  ██║
+  //  ██╗███████╗██╔╝ ██╗███████╗╚██████╗╚██╗██╔╝
+  //  ╚═╝╚══════╝╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═╝╚═╝
+  //
   describe('.exec()', function() {
     describe('with proper usage', function() {
       var deferred; before(function(){ deferred = parley(function(done){ setTimeout(function (){ return done(undefined, 'hello!'); }, 12); }); });
@@ -84,7 +91,13 @@ describe('behavior.test.js', function() {
   });//</.exec()>
 
 
-
+  //  ████████╗██╗  ██╗███████╗███╗   ██╗ ██╗██╗
+  //  ╚══██╔══╝██║  ██║██╔════╝████╗  ██║██╔╝╚██╗
+  //     ██║   ███████║█████╗  ██╔██╗ ██║██║  ██║
+  //     ██║   ██╔══██║██╔══╝  ██║╚██╗██║██║  ██║
+  //  ██╗██║   ██║  ██║███████╗██║ ╚████║╚██╗██╔╝
+  //  ╚═╝╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═══╝ ╚═╝╚═╝
+  //
   describe('.then()', function() {
     describe('with proper usage', function() {
       var deferred; before(function(){ deferred = parley(function(done){ setTimeout(function (){ return done(undefined, 'hello!'); }, 12); }); });
@@ -131,6 +144,115 @@ describe('behavior.test.js', function() {
       });
     });
   });//</.then()>
+
+
+  //  ██╗    ██╗    ██╗     ██████╗██╗   ██╗███████╗████████╗ ██████╗ ███╗   ███╗
+  //  ██║    ██║   ██╔╝    ██╔════╝██║   ██║██╔════╝╚══██╔══╝██╔═══██╗████╗ ████║
+  //  ██║ █╗ ██║  ██╔╝     ██║     ██║   ██║███████╗   ██║   ██║   ██║██╔████╔██║
+  //  ██║███╗██║ ██╔╝      ██║     ██║   ██║╚════██║   ██║   ██║   ██║██║╚██╔╝██║
+  //  ╚███╔███╔╝██╔╝       ╚██████╗╚██████╔╝███████║   ██║   ╚██████╔╝██║ ╚═╝ ██║
+  //   ╚══╝╚══╝ ╚═╝         ╚═════╝ ╚═════╝ ╚══════╝   ╚═╝    ╚═════╝ ╚═╝     ╚═╝
+  //
+  //  ███╗   ███╗███████╗████████╗██╗  ██╗ ██████╗ ██████╗ ███████╗
+  //  ████╗ ████║██╔════╝╚══██╔══╝██║  ██║██╔═══██╗██╔══██╗██╔════╝
+  //  ██╔████╔██║█████╗     ██║   ███████║██║   ██║██║  ██║███████╗
+  //  ██║╚██╔╝██║██╔══╝     ██║   ██╔══██║██║   ██║██║  ██║╚════██║
+  //  ██║ ╚═╝ ██║███████╗   ██║   ██║  ██║╚██████╔╝██████╔╝███████║
+  //  ╚═╝     ╚═╝╚══════╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═════╝ ╚══════╝
+  //
+  describe('building and/or executing a deferred that uses one or more custom methods', function(){
+
+    //  ┌┐┌┌─┐┬─┐┌┬┐┌─┐┬    ┌─┐┌─┐┌─┐┌─┐
+    //  ││││ │├┬┘│││├─┤│    │  ├─┤└─┐├┤
+    //  ┘└┘└─┘┴└─┴ ┴┴ ┴┴─┘  └─┘┴ ┴└─┘└─┘
+    describe('where everything is valid and normal', function(){
+      it('should work', function(){
+        var deferred = parley(function(done){
+          setTimeout(function (){ return done(undefined, 'hello!'); }, 12);
+        }, undefined, {
+          foo: function (){ return deferred; }
+        });
+      });//</it>
+    });//</ describe (valid & normal) >
+
+    //  ┌─┐┬ ┬┌─┐┌┬┐┌─┐┌┬┐  ┌┬┐┌─┐┌┬┐┬ ┬┌─┐┌┬┐  ┌┐┌┌─┐┌┬┐┌─┐
+    //  │  │ │└─┐ │ │ ││││  │││├┤  │ ├─┤│ │ ││  │││├─┤│││├┤
+    //  └─┘└─┘└─┘ ┴ └─┘┴ ┴  ┴ ┴└─┘ ┴ ┴ ┴└─┘─┴┘  ┘└┘┴ ┴┴ ┴└─┘
+    //  ╔═╗╔═╗╔╗╔╔═╗╦  ╦╔═╗╔╦╗╔═╗  ┬ ┬┬┌┬┐┬ ┬  ╦═╗╔═╗╔═╗╔═╗╦═╗╦  ╦╔═╗╔╦╗  ╔═╗╦═╗╔═╗╔═╗╔═╗╦═╗╔╦╗╦ ╦
+    //  ║  ║ ║║║║╠╣ ║  ║║   ║ ╚═╗  ││││ │ ├─┤  ╠╦╝║╣ ╚═╗║╣ ╠╦╝╚╗╔╝║╣  ║║  ╠═╝╠╦╝║ ║╠═╝║╣ ╠╦╝ ║ ╚╦╝
+    //  ╚═╝╚═╝╝╚╝╚  ╩═╝╩╚═╝ ╩ ╚═╝  └┴┘┴ ┴ ┴ ┴  ╩╚═╚═╝╚═╝╚═╝╩╚═ ╚╝ ╚═╝═╩╝  ╩  ╩╚═╚═╝╩  ╚═╝╩╚═ ╩  ╩
+    describe('but where one or more custom methods have names which conflict with a reserved property', function(){
+
+      describe('given `exec`', function(){
+        it('should throw', function(){
+          try {
+            var deferred = parley(function(done){ throw new Error('Should never make it here.'); }, undefined, {
+              foo: function (){ return deferred; },
+              exec: function (){ return deferred; }
+            });
+          } catch (e) { return; }
+
+          throw new Error('Should have thrown an Error');
+        });//</it>
+      });//</ describe >
+
+      describe('given `toPromise`', function(){
+        it('should throw', function(){
+          try {
+            var deferred = parley(function(done){ throw new Error('Should never make it here.'); }, undefined, {
+              foo: function (){ return deferred; },
+              toPromise: function (){ return deferred; }
+            });
+          } catch (e) { return; }
+
+          throw new Error('Should have thrown an Error');
+        });//</it>
+      });//</ describe >
+
+      describe('given `_hasBegunExecuting`', function(){
+        it('should throw', function(){
+          try {
+            var deferred = parley(function(done){ throw new Error('Should never make it here.'); }, undefined, {
+              foo: function (){ return deferred; },
+              _hasBegunExecuting: function (){ return deferred; }
+            });
+          } catch (e) { return; }
+
+          throw new Error('Should have thrown an Error');
+        });//</it>
+      });//</ describe >
+
+      describe('given `constructor`', function(){
+        it('should throw', function(){
+          try {
+            var deferred = parley(function(done){ throw new Error('Should never make it here.'); }, undefined, {
+              foo: function (){ return deferred; },
+              constructor: function (){ return deferred; }
+            });
+          } catch (e) { return; }
+
+          throw new Error('Should have thrown an Error');
+        });//</it>
+      });//</ describe >
+
+      describe('given `inspect`', function(){
+        it('should throw', function(){
+          try {
+            var deferred = parley(function(done){ throw new Error('Should never make it here.'); }, undefined, {
+              foo: function (){ return deferred; },
+              inspect: function (){ return deferred; }
+            });
+          } catch (e) { return; }
+
+          throw new Error('Should have thrown an Error');
+        });//</it>
+      });//</ describe >
+
+
+    });//</ describe (custom method name conflicts w/ reserved property) >
+
+
+  });//</ custom methods >
 
 });
 

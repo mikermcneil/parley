@@ -424,6 +424,29 @@ var deferred = parley(function (done){
 }, optionalCbFromUserland);
 ```
 
+##### Custom methods
+The safest way to attach custom methods is by using parley's optional 3rd argument.  The usual approach is for these custom methods to be chainable (i.e. return `this`).
+
+```javascript
+var privateMetadata = {};
+
+var deferred = parley(function (done){
+  // ...
+}, optionalCbFromUserland, {
+  someCustomMethod: function(a,b,c){
+    privateMetadata = privateMetadata || {};
+    privateMetadata.foo = privateMetadata.foo || 1;
+    privateMetadata.foo++;
+    return deferred;
+  }
+});
+```
+
+> Don't use this approach to define non-functions or overrides with special meaning (e.g. `inspect`, `toString`, or `toJSON`).
+> To do that, just set the property directly-- for example:
+> ```javascript
+> deferred.inspect = function(){ return '[My cool deferred!]'; };
+> ```
 
 
 ### Userland interface
@@ -484,7 +507,7 @@ Promise.all([
 
 #### Other methods
 
-Implementors may also choose to attach other methods to the deferred object (e.g. `.where()`).  The usual approach is for these custom methods to be chainable (i.e. return `this`).
+Implementors may also choose to attach other methods to the deferred object (e.g. `.where()`).  See "Custom methods" above for more information.
 
 
 ## Contributing &nbsp; [![Master Branch Build Status](https://travis-ci.org/mikermcneil/parley.svg?branch=master)](https://travis-ci.org/mikermcneil/parley) &nbsp; [![Master Branch Build Status (Windows)](https://ci.appveyor.com/api/projects/status/tdu70ax32iymvyq3?svg=true)](https://ci.appveyor.com/project/mikermcneil/parley)

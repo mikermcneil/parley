@@ -35,15 +35,15 @@ module.exports = function validateButWith9CustomMethods(explicitCbMaybe){
     return finalCb();
 
   }, explicitCbMaybe, {
-    a: function (beep, boop) { console.log(Math.random()+'hi0'); return this; },
-    b: function (baa, baaa, black, sheep) { console.log(Math.random()+'hi1'); return this; },
-    c: function (beep, boop) { console.log(Math.random()+'hi2'); return this; },
-    d: function (baa, baaa, black, sheep) { console.log(Math.random()+'hi3'); return this; },
-    e: function (beep, boop) { console.log(Math.random()+'hi5'); return this; },
-    f: function (baa, baaa, black, sheep) { console.log(Math.random()+'hi5'); return this; },
-    g: function (beep, boop) { console.log(Math.random()+'hi6'); return this; },
-    h: function (baa, baaa, black, sheep) { console.log(Math.random()+'hi7'); return this; },
-    i: function (beep, boop) { console.log(Math.random()+'hi8'); return this; },
+    a: function (beep, boop) { this._mathIsFun = (Math.random()+'hi0'); return this; },
+    b: function (baa, baaa, black, sheep) { this._mathIsFun = (Math.random()+'hi1'); return this; },
+    c: function (beep, boop) { this._mathIsFun = (Math.random()+'hi2'); return this; },
+    d: function (baa, baaa, black, sheep) { this._mathIsFun = (Math.random()+'hi3'); return this; },
+    e: function (beep, boop) { this._mathIsFun = (Math.random()+'hi5'); return this; },
+    f: function (baa, baaa, black, sheep) { this._mathIsFun = (Math.random()+'hi5'); return this; },
+    g: function (beep, boop) { this._mathIsFun = (Math.random()+'hi6'); return this; },
+    h: function (baa, baaa, black, sheep) { this._mathIsFun = (Math.random()+'hi7'); return this; },
+    i: function (beep, boop) { this._mathIsFun = (Math.random()+'hi8'); return this; },
   });
 
   return deferred;
