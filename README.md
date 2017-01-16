@@ -439,6 +439,11 @@ Promise.all([
 ```
 
 
+#### Other methods
+
+Implementors may also choose to attach other methods to the deferred object (e.g. `.where()`).  The usual approach is for these custom methods to be chainable (i.e. return `this`).
+
+
 ## Contributing &nbsp; [![Master Branch Build Status](https://travis-ci.org/mikermcneil/parley.svg?branch=master)](https://travis-ci.org/mikermcneil/parley) &nbsp; [![Master Branch Build Status (Windows)](https://ci.appveyor.com/api/projects/status/tdu70ax32iymvyq3?svg=true)](https://ci.appveyor.com/project/mikermcneil/parley)
 
 Please observe the guidelines and conventions laid out in the [Sails project contribution guide](http://sailsjs.com/documentation/contributing) when opening issues or submitting pull requests.
