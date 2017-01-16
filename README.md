@@ -360,30 +360,25 @@ As its first argument, expects a function (often called the handler, or more spe
 
 ```javascript
 var deferred = parley(function (done) {
-  // ...
+  // • If something goes wrong, call `done(new Error('something went wrong'))`
+  // • If everything worked out, and you want to send a result back, call `done(undefined, result);`
+  // • Otherwise, if everything worked out but no result is necessary, simply call:
+  return done();
 });
 ```
 
 This first argument is mandatory-- it defines what your implementation _actually does_ when `.exec()` is called.
 
-
+##### Optional callback
 There is also an optional second argument you can use: another function that, if provided, will cause your handler (the first arg) to run _immediately_.
-This provides a way to expose an optional callback to your users.
+This provides a simple, optimized shortcut for exposing an optional callback to your users.
 
 > Why bother?  Well, for one thing, it's stylistically a good idea to give users a way to call your handler with as little sugar on top as possible.  More rarely, for very performance-sensitive applications, direct callback usage does provide a mild performance benefit.
 
-Or, instead of passing in a function, you can pass in a dictionary of options.
-
 ```javascript
-var deferred = parley({
-  codeName: 'doStuff',
-  handleExec: function (done){
-    // • If something goes wrong, call `done(new Error('something went wrong'))`
-    // • If everything worked out, and you want to send a result back, call `done(undefined, result);`
-    // • Otherwise, if everything worked out but no result is necessary, simply call:
-    return done();
-  }
-});
+var deferred = parley(function (done){
+  // ...
+}, optionalCbFromUserland);
 ```
 
 
