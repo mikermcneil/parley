@@ -38,40 +38,40 @@ As of January 15, 2017:
 
 ```
   baseline.benchmark.js
-    •  •      •       •      •    •
-             •      •              o
-    •    b e n c h m a r k s      •
-     •    (instantiation)       °
-  ------------------------------------
-      parley(handler)
-   • just_build#0 x 17,127,793 ops/sec ±1.43% (85 runs sampled)
-        ✓ should be performant enough (using benchSync())
-      parley(handler).exec(cb)
-   • build_AND_exec#0 x 1,726,263 ops/sec ±1.86% (81 runs sampled)
-        ✓ should be performant enough (using benchSync())
-      parley(handler, undefined, {...})  (w/ 9 custom methods)
-   • just_build_with_9_custom_methods#0 x 5,011,976 ops/sec ±2.62% (84 runs sampled)
-        ✓ should be performant enough (using benchSync())
-      parley(handler, undefined, {...}).exec(cb)   (w/ 9 custom methods)
-   • build_AND_exec_with_9_custom_methods#0 x 1,335,137 ops/sec ±2.05% (86 runs sampled)
-        ✓ should be performant enough (using benchSync())
-      practical benchmark
-   • mock "find().exec()"#0 x 33.56 ops/sec ±0.93% (73 runs sampled)
-        ✓ should be performant enough when calling fake "find" w/ .exec() (using bench())
-   • mock "find(..., explicitCb)"#0 x 33.44 ops/sec ±0.98% (72 runs sampled)
-        ✓ should be performant enough when calling NAKED fake "find" (using bench())
-   • mock "validate().exec()"#0 x 703,211 ops/sec ±1.47% (86 runs sampled)
-        ✓ should be performant enough when calling fake "validate" w/ .exec() (using benchSync())
-   • mock "validateButWith9CustomMethods().exec()"#0 x 779,288 ops/sec ±1.44% (88 runs sampled)
-        ✓ should be performant enough calling fake "validateButWith9CustomMethods" w/ .exec() (using benchSync())
-   • mock "validate(..., explicitCb)"#0 x 10,419,403 ops/sec ±1.85% (83 runs sampled)
-        ✓ should be performant enough when calling NAKED "validate" (using benchSync())
-  ------------------------------------
-    •  •      •       •      •    •
-             •      •              o
-    • < / b e n c h m a r k s >    •
-     •                           °
-                        o°
+  •  •      •       •      •    •
+           •      •              o
+  •    b e n c h m a r k s      •
+   •    (instantiation)       °
+------------------------------------
+    parley(handler)
+ • just_build#0 x 18,162,364 ops/sec ±0.98% (90 runs sampled)
+      ✓ should be performant enough (using benchSync())
+    parley(handler).exec(cb)
+ • build_AND_exec#0 x 1,804,891 ops/sec ±1.77% (84 runs sampled)
+      ✓ should be performant enough (using benchSync())
+    parley(handler, undefined, {...})  (w/ 9 custom methods)
+ • just_build_with_9_custom_methods#0 x 3,947,502 ops/sec ±1.62% (90 runs sampled)
+      ✓ should be performant enough (using benchSync())
+    parley(handler, undefined, {...}).exec(cb)   (w/ 9 custom methods)
+ • build_AND_exec_with_9_custom_methods#0 x 1,259,925 ops/sec ±2.08% (76 runs sampled)
+      ✓ should be performant enough (using benchSync())
+    practical benchmark
+ • mock "find().exec()"#0 x 33.69 ops/sec ±0.98% (73 runs sampled)
+      ✓ should be performant enough when calling fake "find" w/ .exec() (using bench())
+ • mock "find(..., explicitCb)"#0 x 33.93 ops/sec ±0.90% (73 runs sampled)
+      ✓ should be performant enough when calling NAKED fake "find" (using bench())
+ • mock "validate().exec()"#0 x 789,446 ops/sec ±1.85% (92 runs sampled)
+      ✓ should be performant enough when calling fake "validate" w/ .exec() (using benchSync())
+ • mock "validateButWith9CustomMethods().exec()"#0 x 686,544 ops/sec ±1.21% (90 runs sampled)
+      ✓ should be performant enough calling fake "validateButWith9CustomMethods" w/ .exec() (using benchSync())
+ • mock "validate(..., explicitCb)"#0 x 10,157,027 ops/sec ±1.77% (87 runs sampled)
+      ✓ should be performant enough when calling NAKED "validate" (using benchSync())
+------------------------------------
+  •  •      •       •      •    •
+           •      •              o
+  • < / b e n c h m a r k s >    •
+   •                           °
+                      o°
 ```
 
 
