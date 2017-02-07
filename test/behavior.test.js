@@ -109,37 +109,22 @@ describe('behavior.test.js', function() {
     });
     describe('when called more than once', function() {
       var deferred; before(function(){ deferred = parley(function(done){ setTimeout(function (){ return done(undefined, 'hello!'); }, 12); }); });
-      it('should ignore subsequent calls', function(done){
+      it('should do the normal promise chaining thing', function(done){
         this.slow(300);
-        // As a hack, override console.warn().
-        // (this is mainly to improve the experience of looking at test results,
-        // but it also has the benefit of adding another check.)
-        var origConsoleWarn = global.console.warn;
-        var counter = 0;
-        global.console.warn = function(){
-          counter++;
-        };
 
         deferred.then(function (){
-          setTimeout(function (){
-            global.console.warn = origConsoleWarn;
-            try {
-              assert.equal(counter, 3);
-            } catch(e) { return done(e); }
-            return done();
-          }, 125);
+          // do nothing
         }).catch(function(err){ return done(err); });
 
-        // The following .then() calls will be ignored.
-        // (Note that 3 extra warnings will be logged, though.)
+        // The following .then() calls will all run in order.
         deferred.then(function (){
-          return done(new Error('Should never make it here'));
+          // do nothing
         }).catch(function(err){ return done(err); });
         deferred.then(function (){
-          return done(new Error('Should never make it here'));
+          // do nothing
         }).catch(function(err){ return done(err); });
         deferred.then(function (){
-          return done(new Error('Should never make it here'));
+          return done();
         }).catch(function(err){ return done(err); });
       });
     });
