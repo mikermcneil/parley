@@ -516,6 +516,12 @@ Please observe the guidelines and conventions laid out in the [Sails project con
 
 [![NPM](https://nodei.co/npm/parley.png?downloads=true)](http://npmjs.com/package/parley)
 
+## Pronunciation
+
+[`/ˈpärlē/`](http://www.macmillandictionary.com/us/pronunciation/american/parley)
+
+> _Rather than picking barley and getting snarly, she decided to `npm install parley` and listen to some Bob Marley._
+
 ## License
 
 This package, like the [Sails framework](http://sailsjs.com), is free and open-source under the [MIT License](http://sailsjs.com/license).
