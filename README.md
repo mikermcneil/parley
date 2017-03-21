@@ -298,7 +298,7 @@ User.findOne({ id: req.param('id') })
 
 #### Async recursion
 
-Much like "if/then/finally" above, the secret to tidy asynchronous recursion is self-calling function.
+Much like "if/then/finally" above, the secret to tidy asynchronous recursion is the (notorious) self-calling function.
 
 ```javascript
 #!/usr/bin/env node
