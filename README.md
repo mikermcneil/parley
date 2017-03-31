@@ -219,6 +219,85 @@ Then in userland, this can be easily negotiated.  Note that whether the code is 
 ```
 
 
+#### Handling uncaught exceptions
+
+Out of the box, when using asynchronous callbacks in Node.js, _if the code in your callback throws an uncaught error, the process **will crash!**_
+
+For example, the following code would crash the process:
+
+```javascript
+setTimeout(function (){
+
+  // Since this string can't be parsed as JSON, this will throw an error.
+  // And since we aren't using try...catch, it will crash the process.
+  JSON.parse('who0ps"thisis totally not valid js{}n');
+
+  return res.ok();
+
+}, 50);
+```
+
+To protect against this, always be sure to use try...catch blocks around any logic
+that might throw in an asynchronous, Node-style callback.
+
+For example:
+
+```javascript
+setTimeout(function (){
+
+  try {
+    JSON.parse('who0ps"thisis totally not valid js{}n');
+  } catch (e) { return res.serverError(e); }
+
+  return res.ok();
+
+}, 50);
+```
+
+Here are a few common use cases to watch out for:
++ basic JavaScript errors; e.g. syntax issues, or trying to use the dot (.) operator on `null`.
++ trying to JSON.parse() some data that is not a valid, parseable JSON string
++ trying to JSON.stringify() a circular object
++ RPS methods in Sails.js; e.g. `.publish()`, `.subscribe()`, `.unsubscribe()`
++ Waterline's `.validate()` model method
++ Node core's `assert()`
++ most synchronous methods from Node core (e.g. `fs.readFileSync()`)
++ any synchronous machine called with `.execSync()`
++ other synchronous functions from 3rd party libraries
+
+
+_Note that this is not an issue when using promises, since `.then()` automatically catches uncaught errors
+(although there are other considerations when using promises-- for instance, forgetting to use .catch()
+each time .then() is used is a common source of hard-to-debug issues, technical debt, and memory leaks.)_
+
+
+> **EXPERIMENTAL:** As of parley 2.3.x, there is a new, experimental feature that allows you to
+> easily provide an extra layer of protection: an optional 2nd argument to `.exec()`.  If specified,
+> this function will be used as an uncaught exception handler-- a simple fallback just in case something
+> happens to go wrong in your callback function.
+>
+> This allows you to safely write code like the following without crashing the server:
+>
+> ```javascript
+> User.create({ username: 'foo' }).exec(function (err, result) {
+>   if (err) {
+>     if (err.code === 'E_UNIQUE') { return res.badRequest('Username already in use.'); }
+>     else { return res.serverError(err); }
+>   }
+>
+>   var result = JSON.parse('who0ps"thisis totally not valid js{}n');
+>
+>   return res.ok(result);
+>
+> }, res.serverError);
+> ```
+>
+> Of course, it's still best to be explicit about error handling whenever possible.
+> The extra layer of protection is just that-- it's here to help prevent issues
+> stemming from the myriad runtime edge cases it's almost impossible to anticipate
+> when building a production-ready web application.
+
+
 ### Flow control
 
 Since Node.js is asynchronous, seemingly-tricky flow control problems often arise in practical, userland code.  Fortunately, they're easy to solve when equipped with the proper tools and strategies.
