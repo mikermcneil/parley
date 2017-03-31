@@ -285,9 +285,9 @@ each time .then() is used is a common source of hard-to-debug issues, technical 
 >     else { return res.serverError(err); }
 >   }
 >
->   var result = JSON.parse('who0ps"thisis totally not valid js{}n');
+>   var thisWillNeverWork = JSON.parse('who0ps"thisis totally not valid js{}n');
 >
->   return res.ok(result);
+>   return res.json(result);
 >
 > }, res.serverError);
 > ```
