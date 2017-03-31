@@ -373,6 +373,26 @@ describe('baseline.benchmark.js', function() {
       ]);
     });
 
+    it('should be performant enough when calling fake "validate" w/ .exec() + uncaught exception handler (using benchSync())', function (){
+      benchSync('mock "validate().exec()"', [
+
+        function (){
+          validate()
+          .exec(function (err) {
+            if (err) {
+              console.error('Unexpected error running benchmark:',err);
+            }//>-
+            // Note: Since the handler is blocking, we actually make
+            // it in here within one tick of the event loop.
+          }, function (){
+            console.error('Consistency violation: This should never happen:  Something is broken!');
+            throw new Error('Consistency violation: This should never happen:  Something is broken!');
+          });
+        }
+
+      ]);
+    });
+
     it('should be performant enough calling fake "validateButWith9CustomMethods" w/ .exec() (using benchSync())', function (){
       benchSync('mock "validateButWith9CustomMethods().exec()"', [
 
