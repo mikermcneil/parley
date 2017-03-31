@@ -88,6 +88,22 @@ describe('behavior.test.js', function() {
         throw new Error('Should have thrown an Error');
       });
     });
+    describe('with two arguments and a callback that throws an uncaught exception', function() {
+      var deferred; before(function(){ deferred = parley(function(done){ setTimeout(function (){ return done(undefined, 'hello!'); }, 12); }); });
+      it('should run uncaught exception handler', function(done){
+        this.slow(300);
+
+        deferred.exec(function (){
+          throw new Error('This is uncaught!  Watch out!');
+        }, function(uncaughtError) {
+          try {
+            assert.equal(uncaughtError.message, 'This is uncaught!  Watch out!');
+          } catch (e) { return done(e); }
+          return done();
+        });
+
+      });
+    });
   });//</.exec()>
 
 
