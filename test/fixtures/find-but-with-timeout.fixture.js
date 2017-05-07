@@ -11,7 +11,7 @@ var helpFind = require('./private/help-find.util');
 /**
  * find-but-with-timeout.fixture.js
  *
- * A simplified mock of Waterline's `find()` model method -- but slow, and with a timeout.
+ * A simplified mock of Waterline's `find()` model method -- but with an extremely short timeout.
  *
  * > See `find.fixture.js` for more info.  Many comments were removed from the code below
  * > to avoid unnecessary duplication and reduce the chances of things getting weird.
@@ -53,6 +53,6 @@ module.exports = function findButWithTimeout( /* variadic */ ){
       metadata.criteria.where = clause;
       return this;
     }
-  }, 15);
+  }, 2);
 
 };

@@ -192,58 +192,69 @@ describe('practical.test.js', function() {
   //
   describe('calling something that takes advantage of parley\'s built-in support for timeouts', function(){
 
-    it('should time out properly given explicit callback', function(done){
-      findButWithTimeout(function (err, result) {
-        try {
-          assert.equal(err.name, 'TimeoutError');
-        } catch (e) { return done(e); }
-        return done();
+    describe('cases where timeout is explicitly unsupported', function(){
+
+      it('should NOT RESPECT TIMEOUT WHEN given an explicit callback', function(done){
+        findButWithTimeout(function (err, result) {
+          if (err) { return done(err); }
+          try {
+            assert.deepEqual(result, [undefined]);
+          } catch (e) { return done(e); }
+          return done();
+        });
       });
-    });
-    it('should time out properly given 1st arg + explicit callback', function(done){
-      findButWithTimeout({ where: {id:3} }, function (err, result) {
-        try {
-          assert.equal(err.name, 'TimeoutError');
-        } catch (e) { return done(e); }
-        return done();
+      it('should NOT RESPECT TIMEOUT WHEN given 1st arg + explicit callback', function(done){
+        findButWithTimeout({ where: {id:3} }, function (err, result) {
+          if (err) { return done(err); }
+          try {
+            assert.deepEqual(result, [{ where:{id:3} }]);
+          } catch (e) { return done(e); }
+          return done();
+        });
       });
+
     });
 
-    it('should time out properly given .exec()', function(done){
-      findButWithTimeout().exec(function (err, result) {
-        try {
-          assert.equal(err.name, 'TimeoutError');
-        } catch (e) { return done(e); }
-        return done();
+
+    describe('cases where timeout is supposed to work', function(){
+
+      it('should time out properly given .exec()', function(done){
+        findButWithTimeout().exec(function (err, result) {
+          try {
+            assert.equal(err.name, 'TimeoutError');
+          } catch (e) { return done(e); }
+          return done();
+        });
       });
-    });
-    it('should time out properly given 1st arg + .exec()', function(done){
-      findButWithTimeout({ where: {id:3} }).exec(function (err, result) {
-        try {
-          assert.equal(err.name, 'TimeoutError');
-        } catch (e) { return done(e); }
-        return done();
+      it('should time out properly given 1st arg + .exec()', function(done){
+        findButWithTimeout({ where: {id:3} }).exec(function (err, result) {
+          try {
+            assert.equal(err.name, 'TimeoutError');
+          } catch (e) { return done(e); }
+          return done();
+        });
       });
-    });
-    it('should time out properly given .where() + .exec()', function(done){
-      findButWithTimeout()
-      .where({id:4})
-      .exec(function (err, result) {
-        try {
-          assert.equal(err.name, 'TimeoutError');
-        } catch (e) { return done(e); }
-        return done();
+      it('should time out properly given .where() + .exec()', function(done){
+        findButWithTimeout()
+        .where({id:4})
+        .exec(function (err, result) {
+          try {
+            assert.equal(err.name, 'TimeoutError');
+          } catch (e) { return done(e); }
+          return done();
+        });
       });
-    });
-    it('should time out properly given 1st arg + .where() + .exec()', function(done){
-      findButWithTimeout({ where: {id:3, x:30} })
-      .where({id:4})
-      .exec(function (err, result) {
-        try {
-          assert.equal(err.name, 'TimeoutError');
-        } catch (e) { return done(e); }
-        return done();
+      it('should time out properly given 1st arg + .where() + .exec()', function(done){
+        findButWithTimeout({ where: {id:3, x:30} })
+        .where({id:4})
+        .exec(function (err, result) {
+          try {
+            assert.equal(err.name, 'TimeoutError');
+          } catch (e) { return done(e); }
+          return done();
+        });
       });
+
     });
 
 
