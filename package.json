@@ -4,7 +4,10 @@
   "description": "Practical, lightweight flow control for Node.js.  Supports callbacks and promises.",
   "main": "lib/parley.js",
   "scripts": {
-    "test": "node ./node_modules/mocha/bin/mocha test"
+    "custom-tests": "node ./node_modules/mocha/bin/mocha test/*.test.js",
+    "lint": "node ./node_modules/eslint/bin/eslint . --max-warnings=0 --ignore-pattern 'test/'",
+    "bench": "node ./node_modules/mocha/bin/mocha test/*.benchmark.js",
+    "test": "npm run lint && npm run custom-tests && npm run bench"
   },
   "repository": {
     "type": "git",
@@ -24,7 +27,8 @@
   },
   "devDependencies": {
     "benchmark": "2.1.2",
-    "flaverr": "^1.0.0",
-    "mocha": "3.0.2"
+    "eslint": "3.5.0",
+    "mocha": "3.0.2",
+    "flaverr": "^1.0.0"
   }
 }

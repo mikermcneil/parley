@@ -8,12 +8,13 @@ var _ = require('@sailshq/lodash');
 var parley = require('../');
 var find = require('./fixtures/find.fixture');
 var validateButWith9CustomMethods = require('./fixtures/validate-but-with-9-custom-methods.fixture');
+var findButWithTimeout = require('./fixtures/find-but-with-timeout.fixture');
 
 
 /**
  * practical.test.js
  *
- * A simple test verifiying a real-world use case.
+ * A simple test verifiying a couple of real-world use cases.
  */
 
 describe('practical.test.js', function() {
@@ -171,5 +172,82 @@ describe('practical.test.js', function() {
     });
 
   });//</ calling something that takes advantage of parley\'s built-in support for custom methods >
+
+
+
+
+  //  ██╗   ██╗███████╗██╗███╗   ██╗ ██████╗
+  //  ██║   ██║██╔════╝██║████╗  ██║██╔════╝
+  //  ██║   ██║███████╗██║██╔██╗ ██║██║  ███╗
+  //  ██║   ██║╚════██║██║██║╚██╗██║██║   ██║
+  //  ╚██████╔╝███████║██║██║ ╚████║╚██████╔╝
+  //   ╚═════╝ ╚══════╝╚═╝╚═╝  ╚═══╝ ╚═════╝
+  //
+  //  ████████╗██╗███╗   ███╗███████╗ ██████╗ ██╗   ██╗████████╗
+  //  ╚══██╔══╝██║████╗ ████║██╔════╝██╔═══██╗██║   ██║╚══██╔══╝
+  //     ██║   ██║██╔████╔██║█████╗  ██║   ██║██║   ██║   ██║
+  //     ██║   ██║██║╚██╔╝██║██╔══╝  ██║   ██║██║   ██║   ██║
+  //     ██║   ██║██║ ╚═╝ ██║███████╗╚██████╔╝╚██████╔╝   ██║
+  //     ╚═╝   ╚═╝╚═╝     ╚═╝╚══════╝ ╚═════╝  ╚═════╝    ╚═╝
+  //
+  describe('calling something that takes advantage of parley\'s built-in support for timeouts', function(){
+
+    it('should time out properly given explicit callback', function(done){
+      findButWithTimeout(function (err, result) {
+        try {
+          assert.equal(err.name, 'TimeoutError');
+        } catch (e) { return done(e); }
+        return done();
+      });
+    });
+    it('should time out properly given 1st arg + explicit callback', function(done){
+      findButWithTimeout({ where: {id:3} }, function (err, result) {
+        try {
+          assert.equal(err.name, 'TimeoutError');
+        } catch (e) { return done(e); }
+        return done();
+      });
+    });
+
+    it('should time out properly given .exec()', function(done){
+      findButWithTimeout().exec(function (err, result) {
+        try {
+          assert.equal(err.name, 'TimeoutError');
+        } catch (e) { return done(e); }
+        return done();
+      });
+    });
+    it('should time out properly given 1st arg + .exec()', function(done){
+      findButWithTimeout({ where: {id:3} }).exec(function (err, result) {
+        try {
+          assert.equal(err.name, 'TimeoutError');
+        } catch (e) { return done(e); }
+        return done();
+      });
+    });
+    it('should time out properly given .where() + .exec()', function(done){
+      findButWithTimeout()
+      .where({id:4})
+      .exec(function (err, result) {
+        try {
+          assert.equal(err.name, 'TimeoutError');
+        } catch (e) { return done(e); }
+        return done();
+      });
+    });
+    it('should time out properly given 1st arg + .where() + .exec()', function(done){
+      findButWithTimeout({ where: {id:3, x:30} })
+      .where({id:4})
+      .exec(function (err, result) {
+        try {
+          assert.equal(err.name, 'TimeoutError');
+        } catch (e) { return done(e); }
+        return done();
+      });
+    });
+
+
+
+  });//</ calling something that takes advantage of parley\'s built-in support for timeouts >
 
 });
