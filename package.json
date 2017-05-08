@@ -24,7 +24,7 @@
   "dependencies": {
     "@sailshq/lodash": "^3.10.2",
     "bluebird": "3.2.1",
-    "flaverr": "^1.1.1"
+    "flaverr": "^1.2.1"
   },
   "devDependencies": {
     "benchmark": "2.1.2",
