@@ -34,15 +34,52 @@ doStuff({ foo: 123 })
 
 ## Benchmarks
 
-As of January 15, 2017:
+As of July 3, 2017:
 
 ```
   baseline.benchmark.js
-  •  •      •       •      •    •
-           •      •              o
-  •    b e n c h m a r k s      •
-   •    (instantiation)       °
+  •  •      •       •      •    •    
+           •      •              o  
+  •    b e n c h m a r k s      •    
+   •    (instantiation)       °     
 ------------------------------------
+    parley(handler)
+ • just_build#0 x 28,097,782 ops/sec ±1.42% (90 runs sampled)
+      ✓ should be performant enough (using benchSync())
+    parley(handler).exec(cb)
+ • build_AND_exec#0 x 3,185,038 ops/sec ±1.53% (93 runs sampled)
+      ✓ should be performant enough (using benchSync())
+    parley(handler, undefined, {...})  (w/ 9 custom methods)
+ • just_build_with_9_custom_methods#0 x 4,274,101 ops/sec ±1.38% (89 runs sampled)
+      ✓ should be performant enough (using benchSync())
+    parley(handler, undefined, {...}).exec(cb)   (w/ 9 custom methods)
+ • build_AND_exec_with_9_custom_methods#0 x 1,822,064 ops/sec ±1.24% (88 runs sampled)
+      ✓ should be performant enough (using benchSync())
+    practical benchmark
+ • mock "find().exec()"#0 x 34.61 ops/sec ±0.99% (78 runs sampled)
+      ✓ should be performant enough when calling fake "find" w/ .exec() (using bench())
+ • mock "find(..., explicitCb)"#0 x 35.04 ops/sec ±1.11% (79 runs sampled)
+      ✓ should be performant enough when calling NAKED fake "find" (using bench())
+ • mock "validate().exec()"#0 x 1,463,995 ops/sec ±1.03% (89 runs sampled)
+      ✓ should be performant enough when calling fake "validate" w/ .exec() (using benchSync())
+ • mock "validate().exec()"#0 x 1,240,289 ops/sec ±2.69% (94 runs sampled)
+      ✓ should be performant enough when calling fake "validate" w/ .exec() + uncaught exception handler (using benchSync())
+ • mock "validateButWith9CustomMethods().exec()"#0 x 1,030,355 ops/sec ±2.26% (96 runs sampled)
+      ✓ should be performant enough calling fake "validateButWith9CustomMethods" w/ .exec() (using benchSync())
+ • mock "validate(..., explicitCb)"#0 x 9,696,815 ops/sec ±2.76% (88 runs sampled)
+      ✓ should be performant enough when calling NAKED "validate" (using benchSync())
+------------------------------------
+  •  •      •       •      •    •    
+           •      •              o  
+  • < / b e n c h m a r k s >    •    
+   •                           °     
+                      o°            
+```
+
+
+_Originally, back in January 15, 2017:_
+
+```
     parley(handler)
  • just_build#0 x 18,162,364 ops/sec ±0.98% (90 runs sampled)
       ✓ should be performant enough (using benchSync())
@@ -66,12 +103,6 @@ As of January 15, 2017:
       ✓ should be performant enough calling fake "validateButWith9CustomMethods" w/ .exec() (using benchSync())
  • mock "validate(..., explicitCb)"#0 x 10,157,027 ops/sec ±1.77% (87 runs sampled)
       ✓ should be performant enough when calling NAKED "validate" (using benchSync())
-------------------------------------
-  •  •      •       •      •    •
-           •      •              o
-  • < / b e n c h m a r k s >    •
-   •                           °
-                      o°
 ```
 
 
