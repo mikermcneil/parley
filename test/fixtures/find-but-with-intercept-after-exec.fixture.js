@@ -55,11 +55,11 @@ module.exports = function findButWithInterceptAfterExec( /* variadic */ ){
       return this;
     }
   }, undefined, undefined, function (err, result){
-    console.log('* * * * running intercept');
+    // console.log('* * * * running intercept');
     if (err) {
       if (err.code !== 'E_SOME_ERROR') {
         err = flaverr('E_SOME_UNRECOGNIZED_ERROR', new Error(err.message));
-        console.log('* * MUTATED ERROR!');
+        // console.log('* * MUTATED ERROR!');
         return err;
       }//-•
       return err;
@@ -68,10 +68,9 @@ module.exports = function findButWithInterceptAfterExec( /* variadic */ ){
     // Unless criteria is `true`, simulate a case where we'd want to change the result.
     // > Note that we could mutate result and return that, or just return the result.
     // > It shouldn't matter!  Same thing for the error above.
-    console.log('* * got success.  metadata.criteria::',metadata.criteria);
     if (metadata.criteria !== true) {
       result.push({ fake: true });
-      console.log('* * MUTATED OUTPUT!');
+      // console.log('* * MUTATED OUTPUT!');
       return result;
     }//-•
     return result;
