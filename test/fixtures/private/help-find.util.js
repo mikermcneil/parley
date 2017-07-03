@@ -3,6 +3,7 @@
  */
 
 var _ = require('@sailshq/lodash');
+var flaverr = require('flaverr');
 
 
 // This is used by find.fixture.js.
