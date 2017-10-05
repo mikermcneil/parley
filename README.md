@@ -524,7 +524,31 @@ User.findOne({ id: req.param('id') })
 Using Node >= v7.9?  Recursion is never exactly "fun and easy" (IMO) but with `await`, you can do recursion just like you would in any other blocking language, with normal, synchronous code:
 
 ```javascript
+#!/usr/bin/env node
 
+var path = require('path');
+var stdlib = require('sails-stdlib'); 
+
+// Starting from the current working directory, ascend upwards
+// looking for a package.json file.  (Keep looking until we hit an error.)
+var nearestPJ = await (async function _recursively(thisDir){
+  var pathToCheck = path.resolve(thisDir, './package.json');
+  try {
+    await stdlib('fs').exists({path: pathToCheck});
+  } catch (err) {
+    if (err.code === 'doesNotExist') {
+      return _recursively(path.dirname(thisDir));
+    }
+    else {
+      throw err;
+    }
+  }
+  
+  // Otherwise, if there was no error, we found it!
+  return pathToCheck;
+})(process.cwd());
+
+console.log('Found nearest package.json file at:',nearestPJ);
 ```
 
 
