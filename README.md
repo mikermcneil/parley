@@ -521,7 +521,7 @@ User.findOne({ id: req.param('id') })
 
 #### Async recursion
 
-Using Node >= v7.9?  Recursion is never exactly "fun and easy" (IMO) but with `await`, you can do recursion just like you would in any other blocking language, with normal, synchronous code:
+Using Node >= v7.9?  Recursion is never exactly "fun and easy" (IMO) but with `await`, you can do recursion just like you would with normal, synchronous code (like any other programming language):
 
 ```javascript
 #!/usr/bin/env node
