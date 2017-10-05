@@ -145,7 +145,7 @@ This section offers a high-level look at how to use parley from both a userland 
 
 ### Building a deferred object
 
-Use parley to build a **deferred object**.  This provides access to `.exec()`, `.then()`, `.catch()`, and `.toPromise()`, but you can also attach any extra methods you'd like to add.
+Use parley to build a **deferred object**.  This provides access to `.exec()`, `.then()`, `.catch()`, and `.toPromise()`, but you can also attach any extra methods you'd like to add.  (There are also a few extra methods like `.log()` provided automatically as syntactic sugar-- more on that below.)
 
 ```javascript
 var parley = require('parley');
@@ -174,15 +174,20 @@ To send back a result value from your handler, specify it as the second argument
 return done(undefined, 'hello world');
 ```
 
-Depending on how userland code chooses to work with the deferred object, your result will be passed back to userland as either the second argument to the `.exec()` callback, or as the value resolved from the promise.
+Depending on how userland code chooses to work with the deferred object, your result will be passed back to userland as either the return value, the second argument to the `.exec()` callback, or as the value resolved from the promise.
 
 ```javascript
-// Node-style callback
+// Recommended approach   (available in Node.js >= v7.9)
+var result = await yourFn();
+```
+
+```javascript
+// traditional Node-style callback
 .exec(function(err, result) {
   // => undefined, 'hello world'
 });
 
-// or promise
+// or legacy promise chaining
 .then(function(result) {
   // => 'hello world'
 });
@@ -200,20 +205,32 @@ return done(new Error('Oops'));
 Depending on how userland code chooses to work with the deferred object, your error will be passed back to userland as either the first argument to the `.exec()` callback, or as the promise's rejection "reason".
 
 ```javascript
-// Node-style callback
+// Recommended approach   (available in Node.js >= v7.9)
+var result;
+try {
+  result = await yourFn();
+} catch (err) {
+  // => [Error: oops]
+}
+```
+
+```javascript
+// traditional Node-style callback
 .exec(function(err, result) {
   // => [Error: oops], undefined
 });
 
-// or promise
+// or legacy promise-chaining
 .catch(function(err) {
   // => [Error: oops]
 });
 ```
 
-#### Negotiating errors
+#### Custom exceptions
 
-Sometimes, there is more than one exceptional exit a function might take.  To make it possible for userland code to negotiate different exits from your function, give the error a `code` property.
+Sometimes, there is one or more "exceptional" exit a function might take, which are fundamentally different than other generic errors that might occur-- for example, consider the difference between a "someone with that username already exists" exception and a bug resulting from a typo, missing dependency, etc.
+
+To make it possible for userland code to negotiate different exits from your function, give your error a `code` property.
 
 ```javascript
 var x = Math.random();
@@ -233,11 +250,30 @@ if (x < 0.4) {
 }
 ```
 
-Then in userland, this can be easily negotiated.  Note that whether the code is using a Node-style callback or a promise, the approach is conceptually the same regardless.
+#### Negotiating errors
+
+The aforementioned approach makes it easy to negotiate errors in userland.  Whether the userland code is using `await`, a Node-style callback, or promise-chaining, the underlying approach is conceptually the same regardless.
 
 
 ```javascript
-// Node-style callback
+// Recommended approach   (available in Node.js >= v7.9)
+var result;
+try {
+  result = await yourFn();
+} catch (err) {
+  switch(err.code) {
+    case 'E_TOO_BIG': return res.status(400).json({ reason: 'Ooh, too bad!  '+err.message });
+    case 'E_TOO_SMALL': return res.status(401).json({ reason: 'Please try again later.  '+err.message });
+    default:
+      console.error('Unexpected error:',err.stack);
+      return res.sendStatus(500);
+  }
+}
+```
+
+
+```javascript
+// traditional Node-style callback
 .exec(function(err, result) {
   if (err) {
     switch(err.code) {
@@ -254,7 +290,7 @@ Then in userland, this can be easily negotiated.  Note that whether the code is 
 ```
 
 ```Javascript
-// Promises
+// or legacy promise-chaining
 .then(function (result) {
   // ...
 })
@@ -273,7 +309,7 @@ Then in userland, this can be easily negotiated.  Note that whether the code is 
 
 #### Handling uncaught exceptions
 
-Out of the box, when using asynchronous callbacks in Node.js, _if the code in your callback throws an uncaught error, the process **will crash!**_
+For a long time, uncaught exceptions were the skeletons in JavaScript's closet.  That's because, out of the box, when using asynchronous callbacks in Node.js, _if the code in your callback throws an uncaught error, the process **will crash!**_
 
 For example, the following code would crash the process:
 
@@ -289,7 +325,19 @@ setTimeout(function (){
 }, 50);
 ```
 
-To protect against this, always be sure to use try...catch blocks around any logic
+This behavior leads to stability issues, wasted dev hours, security vulnerabilities, extreme susceptibility to denial-of-service attacks, weeping, crying, moaning, therapist appointments and much wailing and gnashing of teeth.
+
+**But if you're using Node >= v7.9, you're in luck.  `await` solves _all_ of these problems.**
+
+> If you're new to Node, congratulations!  You're getting started at _the best possible time_.  It's never been faster, easier, and more secure to build apps with JavaScript.
+>
+> And for those of us that have been using Node.js for years, these are incredibly exciting times to be a Node.js developer.  As a community, we've finally conquered one of Node's biggest challenges and it's often-quoted only remaining hurdle to adoption: "callback hell".   The callbacks are dead.  Long live `await`!
+
+#### What if I'm stuck with an old version of Node.js?
+
+Well, then buckle up.  
+
+To protect against the problems mentioned above, you'll need to always be sure to use try...catch blocks around any logic
 that might throw in an asynchronous, Node-style callback.
 
 For example:
@@ -352,13 +400,35 @@ each time .then() is used is a common source of hard-to-debug issues, technical 
 
 ### Flow control
 
-Since Node.js is asynchronous, seemingly-tricky flow control problems often arise in practical, userland code.  Fortunately, they're easy to solve when equipped with the proper tools and strategies.
+If you're using Node >= v7.9, you're in luck.  With `await`, flow control works just like it does in any other language (with one exception: parallel processing/races.  More on that below.)
 
-> Most of the examples below use simple Node callbacks, but note that many similar affordances are available for promises -- for example, check out `.toPromise()` ([below](#toPromise)) and `Promise.all()` (in bluebird, or native in ES6, etc.).  The concepts are more or less the same regardless.
+
+##### What if I'm stuck with an old version of Node.js?
+
+Sorry to hear that...  Once again, `await` solves all of these problems too.  It's the biggest boon to JavaScript development since Node.js was released.
+
+But don't worry- this section's for you.  Since Node.js is asynchronous, when using Node < v7.9, seemingly-tricky flow control problems often arise in practical, userland code.  Fortunately, they're easy to solve when equipped with the proper tools and strategies.
+
+> Most of the examples below use simple Node callbacks, but note that many similar affordances are available for promise-chaining -- for example, check out `.toPromise()` ([below](#toPromise)) and `Promise.all()` (in bluebird, or native in ES6, etc.).  The concepts are more or less the same regardless.
 >
-> _Unless you and the rest of your team are experts with promises and already have tight, consistently-applied and agreed-upon conventions for how to implement the use cases below, you're probably best off using Node callbacks._
+> _Unless you and the rest of your team are experts with legacy promise-chaining and already have tight, consistently-applied and agreed-upon conventions for how to implement the use cases below, you're probably best off using Node callbacks._
 
 #### Async loops
+
+Using Node >= v7.9?  You can just do a `for` loop.
+
+```javascript
+var results = [];
+for (let letter of ['a','b','c','d','e','f','g','h','i','j','k','l']) {
+  results.push(await doStuff(letter));
+}
+return res.json(results);
+```
+
+But otherwise...
+
+
+##### What if I'm stuck with an old version of Node.js?
 
 Loop over many asynchronous things, one at a time, using `async.eachSeries()`.
 
@@ -388,6 +458,27 @@ function afterwards(err) {
 ```
 
 #### Async "if"
+
+Using Node >= v7.9?  You can just do an `if` statement.
+
+```javascript
+var profileUser = await User.findOne({ id: req.param('id') });
+if (!profileUser) { return res.notFound(); }
+
+var loggedInUser;
+if (req.session.userId) {
+  loggedInUser = await User.findOne({ id: req.session.userId });
+}
+
+return res.view('profile', {
+  profile: _.omit(profileUser, ['password', 'email']),
+  me: loggedInUser ? _.omit(loggedInUser, 'password') : {}
+});
+```
+
+But otherwise...
+
+##### What if I'm stuck with an old version of Node.js?
 
 Even simple detours and conditionals can sometimes be tricky when things get asynchronous.
 
@@ -427,7 +518,20 @@ User.findOne({ id: req.param('id') })
 
 > [More background on using the if/then/finally pattern for asynchronous flow control](https://gist.github.com/mikermcneil/32391da94cbf212611933fabe88486e3)
 
+
 #### Async recursion
+
+Using Node >= v7.9?  Recursion is never exactly "fun and easy" (IMO) but with `await`, you can do recursion just like you would in any other blocking language, with normal, synchronous code:
+
+```javascript
+
+```
+
+
+
+But otherwise...
+
+##### What if I'm stuck with an old version of Node.js?
 
 Much like "if/then/finally" above, the secret to tidy asynchronous recursion is the (notorious) self-calling function.
 
@@ -480,7 +584,18 @@ var fs = require('fs');
 > [More examples and thoughts on asynchronous recursion](https://gist.github.com/mikermcneil/225198a46317050af1f772296f67e6ce)
 
 
+
 #### Parallel processing / "races"
+
+Sometimes, for performance reasons, it's convenient to do more than one thing at the same time.  In many languages, this can be tricky.  But in JavaScript (and thus, in Node.js), this kind of optimization is supported right out of the box.
+
+However, note that this _is_ one area where you can't just use `await`-- you'll need to use either callbacks or promise chaining.
+
+> **When should I optimize my code with parallel processing?**
+> 
+> It's never worth optimizing until you've hit an _actual_ bottleneck, usually as far as per-user latency (or more rarely, as far as overall scalability).  It's never worth inheriting the complexity of parallel processing until you're 100% sure your performance issue is related to "having to wait for one thing to finish before the next thing can start".  If you're having performance issues for other reasons (e.g. slow SQL queries, slow 3rd party APIs, or a lack of indexes in your Mongo database), this won't help you at all, and like most forms of premature optimization, it'll just make your app more bug-prone, more complicated to understand, and harder to optimize in the future if _real_ performance issues arise.
+>
+> That said, if you actually need the performance boost from parallel processing, you're in luck:  when Node.js puts its mind to it, the engine can be incredibly fast.
 
 To manage "races" between deferred objects while still performing tasks simultaneously, you can use `async.each()` -- for example, here's the `async.eachSeries()` code from above again, but optimized to run on groups of letters simultaneously, while still processing letters within those groups in sequential order:
 
@@ -530,7 +645,7 @@ function afterwards(err) {
 
 Build and return a deferred object.
 
-As its first argument, expects a function (often called the handler, or more specifically "handleExec") that will run whenever userland code executes the deferred object (e.g. with `.exec()`).
+As its first argument, expects a function (often called the handler, or more specifically "handleExec") that will run whenever userland code executes the deferred object (e.g. with `await`, `.exec()`, or `.then()`).
 
 ```javascript
 var deferred = parley(function (done) {
@@ -541,10 +656,11 @@ var deferred = parley(function (done) {
 });
 ```
 
-This first argument is mandatory-- it defines what your implementation _actually does_ when `.exec()` is called.
+This first argument is mandatory-- it defines what your implementation _actually does_ when the `await` or `.exec()` is triggered.
 
 ##### Optional callback
 There is also an optional second argument you can use: another function that, if provided, will cause your handler (the first arg) to run _immediately_.
+
 This provides a simple, optimized shortcut for exposing an optional callback to your users.
 
 > Why bother?  Well, for one thing, it's stylistically a good idea to give users a way to call your handler with as little sugar on top as possible.  More rarely, for very performance-sensitive applications, direct callback usage does provide a mild performance benefit.
@@ -553,6 +669,12 @@ This provides a simple, optimized shortcut for exposing an optional callback to 
 var deferred = parley(function (done){
   // ...
 }, optionalCbFromUserland);
+
+// Note: if an optional cb was provided from userland, then parley **will not return anything**.
+// In other words:
+if (optionalCbFromUserland) {
+  assert(deferred === undefined);
+}
 ```
 
 ##### Custom methods
@@ -578,6 +700,88 @@ var deferred = parley(function (done){
 > ```javascript
 > deferred.inspect = function(){ return '[My cool deferred!]'; };
 > ```
+
+
+#### Stack traces
+
+When building asynchronous functions, you're likely to encounter issues with unhelpful stack traces.  There's no _easy_ solution to this problem per se, but over the years, our team has developed a decent approach to solving this problem.  It involves using temporary Error instances known colloquially as "omens":
+
+```javascript
+const flaverr = require('flaverr');
+
+// Take a snapshot of the stack trace BEFORE doing anything asynchronous.
+var omen = new Error('omen');
+
+var deferred = parley((done)=>{
+  
+  // Wait for up to 8 seconds.
+  var msToWait = 8 * Math.floor(Math.random()*1000);
+  setTimeout(()=>{
+    if (Math.random() > 0.5) {
+      // Use our "omen" (stack trace snapshot) to "flavor" our actual error.
+      return done(flaverr({
+        message: 'Too bad, your luck ran out!'
+      }, omen));
+    }
+    else {
+      return done();
+    }
+  }, msToWait);
+ 
+}, optionalCbFromUserland, {
+  someCustomMethod: (a,b,c)=>{
+    privateMetadata = privateMetadata || {};
+    privateMetadata.foo = privateMetadata.foo || 1;
+    privateMetadata.foo++;
+    return deferred;
+  }
+});
+```
+
+Now, when your function gets called, if there's an error, the developer who wrote the relevant code will get an excellent stack trace.
+
+
+#### Timeouts
+
+Sometimes, it's helpful to automatically time out if execution takes too long.  In parley, Sails, Waterline, and the node-machine project, this is supported right out of the box.
+
+For instance, in the code from the previous example above, the execution of our little function might take anywhere from one or two milliseconds all the way up to 8 entire seconds.  But what if we wanted it to time out after only 2 seconds?  For that, we can use the fourth argument to parley: the timeout.
+
+This should be a number, expressed in milliseconds:
+
+```javascript
+// … same code as the example above …
+
+// This time, with a timeout of 2 seconds (2000 milliseconds):
+var deferred = parley((done)=>{
+  // … same code as the example above …
+}, optionalCbFromUserland, {
+  … custom methods here …
+}, 2000);
+```
+
+If the timeout is exceeded, an error is triggered, and any subsequent calls to `done` from your provided custom implementation are ignored.
+
+#### Improving stack traces of built-in errors
+
+For important modules that impact many developers (or for authors that really care about the sanity of their users, and who want to make it easier to debug their code), it is sometimes useful to go so far as improving the stack trace of _even parley's built-in errors_ such as timeouts.  For this, simply use the 5th argument: the "omen".
+
+To stick with our running example:
+
+```javascript
+// … same code as the example above …
+
+// Take a snapshot of the stack trace BEFORE doing anything asynchronous.
+var omen = new Error('omen');
+
+var deferred = parley((done)=>{
+  // … same code as the example above …
+}, optionalCbFromUserland, {
+  … custom methods here …
+}, 2000, omen);
+```
+
+
 
 
 ### Userland interface
