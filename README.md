@@ -1,12 +1,22 @@
 parley
 =========
 
-Practical, lightweight flow control for Node.js
+Practical, lightweight flow control for Node.js, with support for `await`, deferred execution, traditional Node callbacks, and promise chaining.
+
+> Powered by [bluebird](http://bluebirdjs.com/)
 
 
 ## Usage
 
+These days, there are several different common ways that developers call functions in Node.js and JavaScript.  Parley helps _your code_ support all three of the mainstream flow control paradigms.
+
 Parley helps you write functions that can be called like this:
+
+```javascript
+var result = await doStuff({ foo: 123 }).foo({ bar: 456 });
+```
+
+Or like this:
 
 ```javascript
 doStuff({ foo: 123 })
@@ -16,7 +26,7 @@ doStuff({ foo: 123 })
 });
 ```
 
-Or like this:
+Or even like this:
 
 ```javascript
 doStuff({ foo: 123 })
@@ -29,7 +39,18 @@ doStuff({ foo: 123 })
 });
 ```
 
-> You can also obtain a promise simply by calling [`.toPromise()`](#toPromise).
+> parley functions return a Deferred.  You can also obtain a promise simply by calling [`.toPromise()`](#toPromise).
+
+
+
+## About
+
+Parley is brought to you by [the team behind Sails.js](https://sailsjs.com/about), and used internally by the [Sails framework](https://sailsjs.com), [Waterline ORM](http://waterlinejs.org), the [node-machine project](http://node-machine.org), and more.  
+
+
+## Compatibility
+
+Compatible with Node 8, Node 6, Node 4, Node 0.12, and Node 0.10.  (But note that `await` is not supported by Node versions < 7.9.)
 
 
 ## Benchmarks
