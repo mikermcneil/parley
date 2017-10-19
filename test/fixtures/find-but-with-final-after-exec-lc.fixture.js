@@ -9,7 +9,7 @@ var helpFind = require('./private/help-find.util');
 
 
 /**
- * find-but-with-intercept-after-exec.fixture.js
+ * find-but-with-final-after-exec-lc.fixture.js
  *
  * A simplified/fake mock of Waterline's `find()` model method --
  * but using a lifecycle callback to do some weird stuff.
@@ -24,7 +24,7 @@ var helpFind = require('./private/help-find.util');
  * @returns {Deferred} If no callback specified
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
  */
-module.exports = function findButWithInterceptAfterExec( /* variadic */ ){
+module.exports = function findButWithFinalAfterExecLC( /* variadic */ ){
 
   var metadata = {};
 

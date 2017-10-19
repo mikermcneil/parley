@@ -7,7 +7,7 @@ var _ = require('@sailshq/lodash');
 var find = require('./fixtures/find.fixture');
 var validateButWith9CustomMethods = require('./fixtures/validate-but-with-9-custom-methods.fixture');
 var findButWithTimeout = require('./fixtures/find-but-with-timeout.fixture');
-var findButWithInterceptAfterExec = require('./fixtures/find-but-with-intercept-after-exec.fixture');
+var findButWithFinalAfterExecLC = require('./fixtures/find-but-with-final-after-exec-lc.fixture');
 
 
 /**
@@ -280,7 +280,7 @@ describe('practical.test.js', function() {
     describe('in cases where interceptAfterExec is explicitly unsupported given an explicit callback with success (i.e. where the LC might normally modify the result/error if we were using .exec())', function(){
 
       it('should NOT RESPECT LC WHEN given explicit callback as first arg', function(done){
-        findButWithInterceptAfterExec(function (err, result) {
+        findButWithFinalAfterExecLC(function (err, result) {
           if (err) { return done(err); }
           try {
             assert.deepEqual(result, [undefined]);
@@ -289,7 +289,7 @@ describe('practical.test.js', function() {
         });
       });
       it('should NOT RESPECT LC WHEN given 1st arg + explicit callback', function(done){
-        findButWithInterceptAfterExec({ where: {id:3} }, function (err, result) {
+        findButWithFinalAfterExecLC({ where: {id:3} }, function (err, result) {
           if (err) { return done(err); }
           try {
             assert.deepEqual(result, [{ where:{id:3} }]);
@@ -304,7 +304,7 @@ describe('practical.test.js', function() {
     describe('in cases where this is supposed to work', function(){
 
       it('should work normally given .exec() with an error, where the LC is a pass-through', function(done){
-        findButWithInterceptAfterExec(false).exec(function (err) {
+        findButWithFinalAfterExecLC(false).exec(function (err) {
           try {
             assert(_.isError(err), 'Expecting `err` to be an Error instance!  But instead got: '+err);
             assert.equal(err.code, 'E_SOME_ERROR', 'Expected error with a `code` of "E_SOME_ERROR".  But instead, got an error with a different code (`'+err.code+'`).  Here\'s the error: '+err);
@@ -313,7 +313,7 @@ describe('practical.test.js', function() {
         });
       });
       it('should work normally given .exec() with success, where the LC is a pass-through', function(done){
-        findButWithInterceptAfterExec(true).exec(function (err, result) {
+        findButWithFinalAfterExecLC(true).exec(function (err, result) {
           try {
             assert(!err, 'Got unexpected error in test: '+err);
             assert(_.isArray(result), 'Expecting result to be an array!  But instead got: '+result);
@@ -324,7 +324,7 @@ describe('practical.test.js', function() {
         });
       });
       it('should properly apply changes from LC given .exec() with an error', function(done){
-        findButWithInterceptAfterExec(null).exec(function (err) {
+        findButWithFinalAfterExecLC(null).exec(function (err) {
           try {
             assert(_.isError(err), 'Expecting `err` to be an Error instance!  But instead got: '+err);
             assert.equal(err.code, 'E_SOME_UNRECOGNIZED_ERROR', 'Expected error with a `code` of "E_SOME_UNRECOGNIZED_ERROR".  But instead, got an error with a different code (`'+err.code+'`).  Here\'s the error: '+err);
@@ -333,7 +333,7 @@ describe('practical.test.js', function() {
         });
       });
       it('should properly apply changes from LC given .exec() with success', function(done){
-        findButWithInterceptAfterExec().exec(function (err, result) {
+        findButWithFinalAfterExecLC().exec(function (err, result) {
           try {
             assert(!err, 'Got unexpected error in test: '+err);
             assert(_.isArray(result), 'Expecting result to be an array!  But instead got: '+result);
@@ -428,6 +428,20 @@ describe('practical.test.js', function() {
         try {
           assert(_.isError(argReceivedInLC), 'Expecting arg received in LC to be an Error instance!  But instead got: '+argReceivedInLC);
           assert.equal(argReceivedInLC.code, 'E_SOME_ERROR', 'Expected error with a `code` of "E_SOME_ERROR".  But instead, got an error with a different code (`'+argReceivedInLC.code+'`).  Here\'s the error: '+argReceivedInLC);
+        } catch (e) { return done(e); }
+        return done();
+      });
+    });
+
+    it('should still call the final after exec LC from implementorland, if one was configured (and it should call it last, with the modifications from this LC already taken into account)', function(done){
+      findButWithFinalAfterExecLC(false)
+      .intercept(function(err){
+        return new Error('Some other error (interecepted from original error: '+err.stack+')');
+      })
+      .exec(function (err) {
+        try {
+          assert(_.isError(err), 'Expecting `err` to be an Error instance!  But instead got: '+err);
+          assert.equal(err.code, 'E_SOME_UNRECOGNIZED_ERROR', 'Expected error with a `code` of "E_SOME_UNRECOGNIZED_ERROR".  But instead, got an error with a different code (`'+err.code+'`).  Here\'s the error: '+err);
         } catch (e) { return done(e); }
         return done();
       });
@@ -532,6 +546,18 @@ describe('practical.test.js', function() {
         try {
           assert(_.isError(argReceivedInLC), 'Expecting arg received in LC to be an Error instance!  But instead got: '+argReceivedInLC);
           assert.equal(argReceivedInLC.code, 'E_SOME_ERROR', 'Expected error with a `code` of "E_SOME_ERROR".  But instead, got an error with a different code (`'+argReceivedInLC.code+'`).  Here\'s the error: '+argReceivedInLC);
+        } catch (e) { return done(e); }
+        return done();
+      });
+    });
+
+    it('should still call the final after exec LC from implementorland, if one was configured (and it should call it last, with the modifications from this LC already taken into account)', function(done){
+      findButWithFinalAfterExecLC(false)
+      .tolerate(function(){ return; })
+      .exec(function (err, result) {
+        if (err) { return done(err); }
+        try {
+          assert.deepEqual(result, [{fake: true}]);
         } catch (e) { return done(e); }
         return done();
       });
