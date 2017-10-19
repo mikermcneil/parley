@@ -362,7 +362,7 @@ describe('practical.test.js', function() {
   //
   describe('calling find().intercept()', function(){
 
-    it('should ignore `.intercept()` if it returns successfully', function(done){
+    it('should ignore `.intercept()` if find() returns successfully', function(done){
       var didRunIntercept;
       find()
       .intercept('E_SOME_ERROR', function(err){
@@ -379,7 +379,7 @@ describe('practical.test.js', function() {
       });
     });
 
-    it('should ignore `.intercept()` if it throws an unrelated exception', function(done){
+    it('should ignore `.intercept()` if find() throws an unrelated exception', function(done){
       var didRunIntercept;
       find(false)
       .intercept('E_SOME_OTHER_ERROR_THAT_WONT_BE_THROWN', function(err){
@@ -396,7 +396,7 @@ describe('practical.test.js', function() {
       });
     });
 
-    it('should run `.intercept()` if it throws a matching exception, and the final error thrown should be whatever .intercept() returned', function(done){
+    it('should run `.intercept()` if find() throws a matching exception, and the final error thrown should be whatever .intercept() returned', function(done){
       var didRunIntercept;
       find(false)
       .intercept('E_SOME_ERROR', function(err){
@@ -415,6 +415,24 @@ describe('practical.test.js', function() {
       });
     });
 
+    it('should pass in the proper error as the first and only argument to the LC', function(done){
+      var argReceivedInLC;
+      find(false)
+      .intercept('E_SOME_ERROR', function(err){
+        argReceivedInLC = err;
+        var newErr = new Error('Some new error (original err:'+err+')');
+        newErr.code = 'E_MASHED_POTATOES';
+        return newErr;
+      })
+      .exec(function () {
+        try {
+          assert(_.isError(argReceivedInLC), 'Expecting arg received in LC to be an Error instance!  But instead got: '+argReceivedInLC);
+          assert.equal(argReceivedInLC.code, 'E_SOME_ERROR', 'Expected error with a `code` of "E_SOME_ERROR".  But instead, got an error with a different code (`'+argReceivedInLC.code+'`).  Here\'s the error: '+argReceivedInLC);
+        } catch (e) { return done(e); }
+        return done();
+      });
+    });
+
   });//</ calling find().intercept() >
 
   //  ████████╗ ██████╗ ██╗     ███████╗██████╗  █████╗ ████████╗███████╗ ██╗██╗
@@ -426,14 +444,98 @@ describe('practical.test.js', function() {
   //
   describe('calling .find().tolerate()', function(){
 
-    describe('if it returns successfully', function(){
-    });//</ if it returns successfully >
+    it('should ignore `.tolerate()` if find() returns successfully', function(done){
+      var didRunTolerate;
+      find()
+      .tolerate('E_SOME_ERROR', function(){
+        didRunTolerate = true;
+      })
+      .exec(function (err, result) {
+        if (err) { return done(err); }
+        try {
+          assert.deepEqual(result, [undefined]);
+          assert(!didRunTolerate);
+        } catch (e) { return done(e); }
+        return done();
+      });
+    });
 
-    describe('if a recognized exception occurs', function(){
-    });//</ if a recognized exception occurs >
+    it('should ignore `.tolerate()` if find() throws an unrelated exception', function(done){
+      var didRunTolerate;
+      find(false)
+      .tolerate('E_SOME_OTHER_ERROR_THAT_WONT_BE_THROWN', function(){
+        didRunTolerate = true;
+      })
+      .exec(function (err) {
+        try {
+          assert(_.isError(err), 'Expecting `err` to be an Error instance!  But instead got: '+err);
+          assert.equal(err.code, 'E_SOME_ERROR', 'Expected error with a `code` of "E_SOME_ERROR".  But instead, got an error with a different code (`'+err.code+'`).  Here\'s the error: '+err);
+          assert(!didRunTolerate);
+        } catch (e) { return done(e); }
+        return done();
+      });
+    });
 
-    describe('if an unknown error occurs', function(){
-    });//</ if an unknown error occurs >
+    it('should run `.tolerate()` if find() throws a matching exception, and the final result should be whatever .tolerate() returned', function(done){
+      var didRunTolerate;
+      find(false)
+      .tolerate('E_SOME_ERROR', function(){
+        didRunTolerate = true;
+        return 'mm mmm mashed potatoes';
+      })
+      .exec(function (err, result) {
+        if (err) { return done(err); }
+        try {
+          assert(didRunTolerate);
+          assert.deepEqual(result, 'mm mmm mashed potatoes');
+        } catch (e) { return done(e); }
+        return done();
+      });
+    });
+
+    it('should honor `.tolerate()` even if it doesn\'t have a LC -- assuming find() throws a matching exception.  (In this case, the final result should be `undefined`.)', function(done){
+      find(false)
+      .tolerate('E_SOME_ERROR')
+      .exec(function (err, result) {
+        if (err) { return done(err); }
+        try {
+          assert.deepEqual(result, undefined);
+        } catch (e) { return done(e); }
+        return done();
+      });
+    });
+
+    it('should run `.tolerate()` even if it is completely generic (i.e. not filtered by any rule at all) -- assuming find() throws any kind of error.  (In this case, the final result should be whatever the `.tolerate()` LC returned.)', function(done){
+      var didRunTolerate;
+      find(false)
+      .tolerate(function(){
+        didRunTolerate = true;
+        return 'mm mmm mashed potatoes';
+      })
+      .exec(function (err, result) {
+        if (err) { return done(err); }
+        try {
+          assert(didRunTolerate);
+          assert.deepEqual(result, 'mm mmm mashed potatoes');
+        } catch (e) { return done(e); }
+        return done();
+      });
+    });
+
+    it('should pass in the proper error as the first and only argument to the LC', function(done){
+      var argReceivedInLC;
+      find(false)
+      .tolerate(function(err){
+        argReceivedInLC = err;
+      })
+      .exec(function () {
+        try {
+          assert(_.isError(argReceivedInLC), 'Expecting arg received in LC to be an Error instance!  But instead got: '+argReceivedInLC);
+          assert.equal(argReceivedInLC.code, 'E_SOME_ERROR', 'Expected error with a `code` of "E_SOME_ERROR".  But instead, got an error with a different code (`'+argReceivedInLC.code+'`).  Here\'s the error: '+argReceivedInLC);
+        } catch (e) { return done(e); }
+        return done();
+      });
+    });
 
   });//</ calling .find().tolerate() >
 
