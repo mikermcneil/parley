@@ -250,6 +250,8 @@ describe('baseline.benchmark.js', function() {
   // • _.each() is slower than `for`, sometimes by a factor of 10.  But this only matters in extreme
   //   circumstances, where the logic being benchmarked is already very fast to begin with.  So in
   //   almost every case, it's still never worth using a `for` loop instead of `_.each()`.
+  //
+  // • See Spring-Autumn 2017 commit history of the parley repo in general for more insights.
 
 
   //  ╔═╗╦ ╦╦╔╦╗╔═╗
