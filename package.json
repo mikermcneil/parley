@@ -1,7 +1,7 @@
 {
   "name": "parley",
   "version": "3.2.0",
-  "description": "Practical, lightweight flow control for Node.js.  Supports callbacks and promises.",
+  "description": "Practical, lightweight flow control for Node.js.  Supports `await`, callbacks and promises.",
   "main": "lib/parley.js",
   "scripts": {
     "custom-tests": "node ./node_modules/mocha/bin/mocha test/*.test.js",
@@ -15,8 +15,11 @@
   },
   "keywords": [
     "flowcontrol",
+    "await",
+    "async/await",
     "async",
     "promise",
+    "callback",
     "deferred"
   ],
   "author": "Mike McNeil",
