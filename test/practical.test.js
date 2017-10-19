@@ -248,7 +248,7 @@ describe('practical.test.js', function() {
       it('should time out properly given 1st arg + .where() + .exec()', function(done){
         findButWithTimeout({ where: {id:3, x:30} })
         .where({id:4})
-        .exec(function (err, result) {
+        .exec(function (err) {
           try {
             assert.equal(err.name, 'TimeoutError');
           } catch (e) { return done(e); }
@@ -263,20 +263,20 @@ describe('practical.test.js', function() {
   });//</ calling something that takes advantage of parley\'s built-in support for timeouts >
 
 
-  //  ██╗   ██╗███████╗██╗███╗   ██╗ ██████╗     ██╗      ██████╗                                                                                     
-  //  ██║   ██║██╔════╝██║████╗  ██║██╔════╝     ██║     ██╔════╝██╗                                                                                  
-  //  ██║   ██║███████╗██║██╔██╗ ██║██║  ███╗    ██║     ██║     ╚═╝                                                                                  
-  //  ██║   ██║╚════██║██║██║╚██╗██║██║   ██║    ██║     ██║     ██╗                                                                                  
-  //  ╚██████╔╝███████║██║██║ ╚████║╚██████╔╝    ███████╗╚██████╗╚═╝                                                                                  
-  //   ╚═════╝ ╚══════╝╚═╝╚═╝  ╚═══╝ ╚═════╝     ╚══════╝ ╚═════╝                                                                                     
-  //                                                                                                                                                  
+  //  ██╗   ██╗███████╗██╗███╗   ██╗ ██████╗     ██╗      ██████╗
+  //  ██║   ██║██╔════╝██║████╗  ██║██╔════╝     ██║     ██╔════╝██╗
+  //  ██║   ██║███████╗██║██╔██╗ ██║██║  ███╗    ██║     ██║     ╚═╝
+  //  ██║   ██║╚════██║██║██║╚██╗██║██║   ██║    ██║     ██║     ██╗
+  //  ╚██████╔╝███████║██║██║ ╚████║╚██████╔╝    ███████╗╚██████╗╚═╝
+  //   ╚═════╝ ╚══════╝╚═╝╚═╝  ╚═══╝ ╚═════╝     ╚══════╝ ╚═════╝
+  //
   //  ██╗███╗   ██╗████████╗███████╗██████╗  ██████╗███████╗██████╗ ████████╗ █████╗ ███████╗████████╗███████╗██████╗ ███████╗██╗  ██╗███████╗ ██████╗
   //  ██║████╗  ██║╚══██╔══╝██╔════╝██╔══██╗██╔════╝██╔════╝██╔══██╗╚══██╔══╝██╔══██╗██╔════╝╚══██╔══╝██╔════╝██╔══██╗██╔════╝╚██╗██╔╝██╔════╝██╔════╝
-  //  ██║██╔██╗ ██║   ██║   █████╗  ██████╔╝██║     █████╗  ██████╔╝   ██║   ███████║█████╗     ██║   █████╗  ██████╔╝█████╗   ╚███╔╝ █████╗  ██║     
-  //  ██║██║╚██╗██║   ██║   ██╔══╝  ██╔══██╗██║     ██╔══╝  ██╔═══╝    ██║   ██╔══██║██╔══╝     ██║   ██╔══╝  ██╔══██╗██╔══╝   ██╔██╗ ██╔══╝  ██║     
+  //  ██║██╔██╗ ██║   ██║   █████╗  ██████╔╝██║     █████╗  ██████╔╝   ██║   ███████║█████╗     ██║   █████╗  ██████╔╝█████╗   ╚███╔╝ █████╗  ██║
+  //  ██║██║╚██╗██║   ██║   ██╔══╝  ██╔══██╗██║     ██╔══╝  ██╔═══╝    ██║   ██╔══██║██╔══╝     ██║   ██╔══╝  ██╔══██╗██╔══╝   ██╔██╗ ██╔══╝  ██║
   //  ██║██║ ╚████║   ██║   ███████╗██║  ██║╚██████╗███████╗██║        ██║   ██║  ██║██║        ██║   ███████╗██║  ██║███████╗██╔╝ ██╗███████╗╚██████╗
   //  ╚═╝╚═╝  ╚═══╝   ╚═╝   ╚══════╝╚═╝  ╚═╝ ╚═════╝╚══════╝╚═╝        ╚═╝   ╚═╝  ╚═╝╚═╝        ╚═╝   ╚══════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚══════╝ ╚═════╝
-  //                                                                                                                                                  
+  //
   describe('calling something that takes advantage of interceptAfterExec', function(){
 
     describe('in cases where interceptAfterExec is explicitly unsupported given an explicit callback with success (i.e. where the LC might normally modify the result/error if we were using .exec())', function(){
@@ -306,7 +306,7 @@ describe('practical.test.js', function() {
     describe('in cases where this is supposed to work', function(){
 
       it('should work normally given .exec() with an error, where the LC is a pass-through', function(done){
-        findButWithInterceptAfterExec(false).exec(function (err, result) {
+        findButWithInterceptAfterExec(false).exec(function (err) {
           try {
             assert(_.isError(err), 'Expecting `err` to be an Error instance!  But instead got: '+err);
             assert.equal(err.code, 'E_SOME_ERROR', 'Expected error with a `code` of "E_SOME_ERROR".  But instead, got an error with a different code (`'+err.code+'`).  Here\'s the error: '+err);
@@ -326,7 +326,7 @@ describe('practical.test.js', function() {
         });
       });
       it('should properly apply changes from LC given .exec() with an error', function(done){
-        findButWithInterceptAfterExec(null).exec(function (err, result) {
+        findButWithInterceptAfterExec(null).exec(function (err) {
           try {
             assert(_.isError(err), 'Expecting `err` to be an Error instance!  But instead got: '+err);
             assert.equal(err.code, 'E_SOME_UNRECOGNIZED_ERROR', 'Expected error with a `code` of "E_SOME_UNRECOGNIZED_ERROR".  But instead, got an error with a different code (`'+err.code+'`).  Here\'s the error: '+err);
@@ -346,7 +346,7 @@ describe('practical.test.js', function() {
           return done();
         });
       });
-    
+
     });
 
 
