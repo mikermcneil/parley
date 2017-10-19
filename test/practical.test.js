@@ -2,10 +2,8 @@
  * Module dependencies
  */
 
-var util = require('util');
 var assert = require('assert');
 var _ = require('@sailshq/lodash');
-var parley = require('../');
 var find = require('./fixtures/find.fixture');
 var validateButWith9CustomMethods = require('./fixtures/validate-but-with-9-custom-methods.fixture');
 var findButWithTimeout = require('./fixtures/find-but-with-timeout.fixture');
@@ -352,5 +350,91 @@ describe('practical.test.js', function() {
 
   });//</ calling something that takes advantage of interceptAfterExec >
 
+
+
+
+  //     ██╗███╗   ██╗████████╗███████╗██████╗  ██████╗███████╗██████╗ ████████╗ ██╗██╗
+  //     ██║████╗  ██║╚══██╔══╝██╔════╝██╔══██╗██╔════╝██╔════╝██╔══██╗╚══██╔══╝██╔╝╚██╗
+  //     ██║██╔██╗ ██║   ██║   █████╗  ██████╔╝██║     █████╗  ██████╔╝   ██║   ██║  ██║
+  //     ██║██║╚██╗██║   ██║   ██╔══╝  ██╔══██╗██║     ██╔══╝  ██╔═══╝    ██║   ██║  ██║
+  //  ██╗██║██║ ╚████║   ██║   ███████╗██║  ██║╚██████╗███████╗██║        ██║   ╚██╗██╔╝
+  //  ╚═╝╚═╝╚═╝  ╚═══╝   ╚═╝   ╚══════╝╚═╝  ╚═╝ ╚═════╝╚══════╝╚═╝        ╚═╝    ╚═╝╚═╝
+  //
+  describe('calling find().intercept()', function(){
+
+    it('should ignore `.intercept()` if it returns successfully', function(done){
+      var didRunIntercept;
+      find()
+      .intercept('E_SOME_ERROR', function(err){
+        didRunIntercept = true;
+        return err;
+      })
+      .exec(function (err, result) {
+        if (err) { return done(err); }
+        try {
+          assert.deepEqual(result, [undefined]);
+          assert(!didRunIntercept);
+        } catch (e) { return done(e); }
+        return done();
+      });
+    });
+
+    it('should ignore `.intercept()` if it throws an unrelated exception', function(done){
+      var didRunIntercept;
+      find(false)
+      .intercept('E_SOME_OTHER_ERROR_THAT_WONT_BE_THROWN', function(err){
+        didRunIntercept = true;
+        return err;
+      })
+      .exec(function (err) {
+        try {
+          assert(_.isError(err), 'Expecting `err` to be an Error instance!  But instead got: '+err);
+          assert.equal(err.code, 'E_SOME_ERROR', 'Expected error with a `code` of "E_SOME_ERROR".  But instead, got an error with a different code (`'+err.code+'`).  Here\'s the error: '+err);
+          assert(!didRunIntercept);
+        } catch (e) { return done(e); }
+        return done();
+      });
+    });
+
+    it('should run `.intercept()` if it throws a matching exception, and the final error thrown should be whatever .intercept() returned', function(done){
+      var didRunIntercept;
+      find(false)
+      .intercept('E_SOME_ERROR', function(err){
+        didRunIntercept = true;
+        var newErr = new Error('Some new error (original err:'+err+')');
+        newErr.code = 'E_MASHED_POTATOES';
+        return newErr;
+      })
+      .exec(function (err) {
+        try {
+          assert(_.isError(err), 'Expecting `err` to be an Error instance!  But instead got: '+err);
+          assert.equal(err.code, 'E_MASHED_POTATOES', 'Expected error with a `code` of "E_MASHED_POTATOES", because it should have been intercepted and rethrown automatically using the return value from .intercept().  But instead, got an error with a different code (`'+err.code+'`).  Here\'s the error: '+err);
+          assert(didRunIntercept);
+        } catch (e) { return done(e); }
+        return done();
+      });
+    });
+
+  });//</ calling find().intercept() >
+
+  //  ████████╗ ██████╗ ██╗     ███████╗██████╗  █████╗ ████████╗███████╗ ██╗██╗
+  //  ╚══██╔══╝██╔═══██╗██║     ██╔════╝██╔══██╗██╔══██╗╚══██╔══╝██╔════╝██╔╝╚██╗
+  //     ██║   ██║   ██║██║     █████╗  ██████╔╝███████║   ██║   █████╗  ██║  ██║
+  //     ██║   ██║   ██║██║     ██╔══╝  ██╔══██╗██╔══██║   ██║   ██╔══╝  ██║  ██║
+  //  ██╗██║   ╚██████╔╝███████╗███████╗██║  ██║██║  ██║   ██║   ███████╗╚██╗██╔╝
+  //  ╚═╝╚═╝    ╚═════╝ ╚══════╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝ ╚═╝╚═╝
+  //
+  describe('calling .find().tolerate()', function(){
+
+    describe('if it returns successfully', function(){
+    });//</ if it returns successfully >
+
+    describe('if a recognized exception occurs', function(){
+    });//</ if a recognized exception occurs >
+
+    describe('if an unknown error occurs', function(){
+    });//</ if an unknown error occurs >
+
+  });//</ calling .find().tolerate() >
 
 });
