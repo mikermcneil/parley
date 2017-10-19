@@ -553,11 +553,11 @@ describe('practical.test.js', function() {
 
     it('should still call the final after exec LC from implementorland, if one was configured (and it should call it last, with the modifications from this LC already taken into account)', function(done){
       findButWithFinalAfterExecLC(false)
-      .tolerate(function(){ return; })
+      .tolerate(function(){ return ['how many', 'mashed potatoes', 'will it take??!']; })
       .exec(function (err, result) {
         if (err) { return done(err); }
         try {
-          assert.deepEqual(result, [{fake: true}]);
+          assert.deepEqual(result, ['how many', 'mashed potatoes', 'will it take??!', {fake: true}]);
         } catch (e) { return done(e); }
         return done();
       });
