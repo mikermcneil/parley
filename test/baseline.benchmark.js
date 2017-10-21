@@ -331,6 +331,29 @@ describe('baseline.benchmark.js', function() {
 
 
   describe('practical benchmark', function(){
+
+    var DOES_CURRENT_NODE_VERSION_SUPPORT_AWAIT = process.version.match(/^v8\./);
+
+    if (DOES_CURRENT_NODE_VERSION_SUPPORT_AWAIT) {
+      it('should be performant enough when calling fake "find" w/ `await` (using bench())', function (done){
+        bench('mock "await find()"', [
+
+          async function (next){
+
+            var result;
+            try {
+              result = await find({ where: {id:3, x:30} });
+            } catch (err) {
+              return next(err);
+            }
+
+            return next();
+          }
+
+        ], done);
+      });
+    }
+
     it('should be performant enough when calling fake "find" w/ .exec() (using bench())', function (done){
       bench('mock "find().exec()"', [
 
