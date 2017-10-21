@@ -254,7 +254,6 @@ if (x < 0.4) {
 
 The aforementioned approach makes it easy to negotiate errors in userland.  Whether the userland code is using `await`, a Node-style callback, or promise-chaining, the underlying approach is conceptually the same regardless.
 
-
 ```javascript
 // Recommended approach   (available in Node.js >= v7.9)
 var result;
@@ -269,6 +268,8 @@ try {
       return res.sendStatus(500);
   }
 }
+
+// …
 ```
 
 
@@ -396,6 +397,41 @@ each time .then() is used is a common source of hard-to-debug issues, technical 
 > The extra layer of protection is just that-- it's here to help prevent issues
 > stemming from the myriad runtime edge cases it's almost impossible to anticipate
 > when building a production-ready web application.
+
+
+#### Tolerating errors
+
+Sometimes, you just don't care.
+
+```javascript
+var result = await sails.stdlib('fs').readJson({ source: './package.json' })
+.tolerate('notFound', ()=>{
+  return {
+    name: 'not-a-real-package',
+    description: 'This is not a real package, and I don\'t care.'
+  };
+});
+
+// Now `result` is either the contents of the real package.json file... or our fake stuff.
+```
+
+
+#### Catching and rethrowing errors
+
+But sometimes, you care a little _too_ much.
+
+```javascript
+var result = await sails.stdlib('fs').readJson({ source: './package.json' })
+.intercept('notFound', (err)=>{
+  return flaverr({
+    message: 'No package.json file could be found in the current working directory.  And I care _very_ much.',
+    code: 'E_WHERE_IS_MY_PACKAGE_JSON'
+  }, err);
+});
+
+// If the package.json file doesn't exist, we will have now thrown a much more useful error.
+```
+
 
 
 ### Flow control
