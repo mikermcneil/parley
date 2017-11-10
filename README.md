@@ -1,7 +1,7 @@
 parley
 =========
 
-Practical, lightweight flow control for Node.js, with support for [`await`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await), deferred execution, traditional Node callbacks, and promise chaining.
+Practical, lightweight flow control for Node.js, with support for `await`, deferred execution, traditional Node callbacks, and promise chaining.
 
 > Powered by [bluebird](http://bluebirdjs.com/)
 
@@ -40,7 +40,6 @@ doStuff({ foo: 123 })
 ```
 
 > parley functions return a Deferred.  You can also obtain a promise simply by calling [`.toPromise()`](#toPromise).
-
 
 
 ## About
@@ -131,6 +130,11 @@ _Originally, back in January 15, 2017:_
 
 If you have questions or are having trouble, click [here](http://sailsjs.com/support).
 
+If you're in a hurry to use a _parley-enabled API in practice_, it might help to check out a couple of real-world examples:
+• [.find()](https://github.com/balderdashy/sails-docs/blob/f4858b0d3c6bb80bc130060ecdd428e735ec111e/reference/waterline/models/find.md)  _(in Sails.js / Waterline ORM)_
+• [`.build()`](https://github.com/node-machine/machine/tree/c65d6430d72fa93c794f0f80344665028b94cb0c#callables)  _(in `machine`)_
+
+If you're interested in learning more about this approach to async flow control in general, or considering using parley to support `await`, promises, and traditional Node callbacks _for your own functions_, then keep reading-- there's a whole lot more for you below.
 
 ## Bugs &nbsp; [![NPM version](https://badge.fury.io/js/parley.svg)](http://npmjs.com/package/parley)
 
