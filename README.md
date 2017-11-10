@@ -1,7 +1,7 @@
 parley
 =========
 
-Practical, lightweight flow control for Node.js, with support for `await`, deferred execution, traditional Node callbacks, and promise chaining.
+Practical, lightweight flow control for Node.js, with support for [`await`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await), deferred execution, traditional Node callbacks, and promise chaining.
 
 > Powered by [bluebird](http://bluebirdjs.com/)
 
@@ -328,7 +328,7 @@ setTimeout(function (){
 
 This behavior leads to stability issues, wasted dev hours, security vulnerabilities, extreme susceptibility to denial-of-service attacks, weeping, crying, moaning, therapist appointments and much wailing and gnashing of teeth.
 
-**But if you're using Node >= v7.9, you're in luck.  `await` solves _all_ of these problems.**
+**But if you're using Node >= v7.9, you're in luck.  [`await`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await) solves _all_ of these problems.**
 
 > If you're new to Node, congratulations!  You're getting started at _the best possible time_.  It's never been faster, easier, and more secure to build apps with JavaScript.
 >
