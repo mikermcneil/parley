@@ -774,7 +774,7 @@ When building asynchronous functions, you're likely to encounter issues with unh
 const flaverr = require('flaverr');
 
 // Take a snapshot of the stack trace BEFORE doing anything asynchronous.
-var omen = new Error('omen');
+var omen = flaverr.omen();
 
 var deferred = parley((done)=>{
   
@@ -784,6 +784,7 @@ var deferred = parley((done)=>{
     if (Math.random() > 0.5) {
       // Use our "omen" (stack trace snapshot) to "flavor" our actual error.
       return done(flaverr({
+        code: 'E_LUCK_RAN_OUT',
         message: 'Too bad, your luck ran out!'
       }, omen));
     }
@@ -799,7 +800,7 @@ var deferred = parley((done)=>{
     privateMetadata.foo++;
     return deferred;
   }
-});
+}, undefined, omen);
 ```
 
 Now, when your function gets called, if there's an error, the developer who wrote the relevant code will get an excellent stack trace.
