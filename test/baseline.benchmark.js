@@ -338,15 +338,17 @@ describe('baseline.benchmark.js', function() {
       it('should be performant enough when calling fake "find" w/ `await` (using bench())', function (done){
         bench('mock "await find()"', [
           eval(
-            'async function (next){\n'+
-            '  var result;\n'+
-            '  try {\n'+
-            '    result = await find({ where: {id:3, x:30} });\n'+
-            '  } catch (err) {\n'+
-            '    return next(err);\n'+
+            '(()=>{\n'+
+            '  return async function (next){\n'+
+            '    var result;\n'+
+            '    try {\n'+
+            '      result = await find({ where: {id:3, x:30} });\n'+
+            '    } catch (err) {\n'+
+            '      return next(err);\n'+
+            '    }\n'+
+            '    return next();\n'+
             '  }\n'+
-            '  return next();\n'+
-            '}\n'
+            '})()\n'
           )
         ], done);
       });
