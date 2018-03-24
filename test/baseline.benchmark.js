@@ -6,6 +6,9 @@ var parley = require('../');
 var benchSync = require('./utils/bench-sync.util');
 var bench = require('./utils/bench.util');
 
+if (process.env.NODE_ENV !== 'production') {
+  throw new Error('Benchmarks should be run with NODE_ENV=production!');
+}
 
 
 /**
