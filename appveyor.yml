@@ -34,7 +34,7 @@ test_script:
   - node --version
   - npm --version
   # Run the actual tests.
-  - SET NODE_ENV=production && npm run custom-tests && SET NODE_ENV=production && npm run bench
+  - SET NODE_ENV=production && npm run custom-tests && SET NODE_ENV=production && node ./node_modules/mocha/bin/mocha test/*.benchmark.js
 
 
 # Don't actually build.
