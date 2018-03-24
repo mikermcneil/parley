@@ -4,9 +4,9 @@
   "description": "Practical, lightweight flow control for Node.js.  Supports `await`, callbacks and promises.",
   "main": "lib/parley.js",
   "scripts": {
-    "custom-tests": "node ./node_modules/mocha/bin/mocha test/*.test.js",
-    "lint": "node ./node_modules/eslint/bin/eslint . --max-warnings=0 --ignore-pattern 'test/' && echo '✔  Your code looks good.'",
-    "bench": "node ./node_modules/mocha/bin/mocha test/*.benchmark.js",
+    "custom-tests": "mocha test/*.test.js",
+    "lint": "node eslint . --max-warnings=0 --ignore-pattern 'test/' && echo '✔  Your code looks good.'",
+    "bench": "node mocha test/*.benchmark.js",
     "test": "npm run lint && npm run custom-tests && npm run bench"
   },
   "repository": {
