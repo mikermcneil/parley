@@ -26,6 +26,9 @@ install:
   - npm install
 
 
+before_test:
+  - cmd: set NODE_ENV=production
+
 # Post-install test scripts.
 test_script:
   # Output Node and NPM version info.
