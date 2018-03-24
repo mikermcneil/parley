@@ -34,7 +34,7 @@ test_script:
   - node --version
   - npm --version
   # Run the actual tests.
-  - npm run custom-tests && npm run bench
+  - NODE_ENV=production npm run custom-tests && NODE_ENV=production npm run bench
 
 
 # Don't actually build.
