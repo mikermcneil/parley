@@ -5,8 +5,8 @@
   "main": "lib/parley.js",
   "scripts": {
     "custom-tests": "mocha test/*.test.js",
-    "lint": "node eslint . --max-warnings=0 --ignore-pattern 'test/' && echo '✔  Your code looks good.'",
-    "bench": "node mocha test/*.benchmark.js",
+    "lint": "eslint . --max-warnings=0 --ignore-pattern 'test/' && echo '✔  Your code looks good.'",
+    "bench": "NODE_ENV=production mocha test/*.benchmark.js",
     "test": "npm run lint && npm run custom-tests && npm run bench"
   },
   "repository": {
