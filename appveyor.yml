@@ -12,6 +12,7 @@
 
 # Test against these versions of Node.js.
 environment:
+  NODE_ENV: production
   matrix:
     - nodejs_version: "4"
     - nodejs_version: "6"
@@ -34,7 +35,7 @@ test_script:
   - node --version
   - npm --version
   # Run the actual tests.
-  - SET NODE_ENV=production && npm run custom-tests && SET NODE_ENV=production && node ./node_modules/mocha/bin/mocha test/*.benchmark.js
+  - npm run custom-tests && node ./node_modules/mocha/bin/mocha test/*.benchmark.js
 
 
 # Don't actually build.
