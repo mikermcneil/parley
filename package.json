@@ -7,7 +7,7 @@
     "custom-tests": "mocha test/*.test.js",
     "lint": "eslint . --max-warnings=0 --ignore-pattern 'test/' && echo '✔  Your code looks good.'",
     "bench": "NODE_ENV=production mocha test/*.benchmark.js",
-    "bench-win": "set NODE_ENV=production && mocha test\*.benchmark.js",
+    "bench-win": "set NODE_ENV=production && mocha test/*.benchmark.js",
     "test": "npm run lint && npm run custom-tests && npm run bench"
   },
   "repository": {
