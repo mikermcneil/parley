@@ -25,5 +25,3 @@ notifications:
   email:
     - ci@sailsjs.com
 
-env:
-  - NODE_ENV=production
