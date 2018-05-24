@@ -5,7 +5,6 @@ Practical, lightweight flow control for Node.js, with support for `await`, defer
 
 > Powered by [bluebird](http://bluebirdjs.com/)
 
-
 ## Usage
 
 These days, there are several different common ways that developers call functions in Node.js and JavaScript.  Parley helps _your code_ support all three of the mainstream flow control paradigms.
@@ -13,14 +12,13 @@ These days, there are several different common ways that developers call functio
 Parley helps you write functions that can be called like this:
 
 ```javascript
-var result = await doStuff({ foo: 123 }).foo({ bar: 456 });
+var result = await doStuff(123);
 ```
 
 Or like this:
 
 ```javascript
-doStuff({ foo: 123 })
-.foo({ bar: 456 })
+doStuff(123)
 .exec(function (err, result){
 
 });
@@ -29,8 +27,7 @@ doStuff({ foo: 123 })
 Or even like this:
 
 ```javascript
-doStuff({ foo: 123 })
-.baz({ bar: 456 })
+doStuff(123)
 .then(function (result){
 
 })
@@ -41,6 +38,9 @@ doStuff({ foo: 123 })
 
 > parley functions return a Deferred.  You can also obtain a promise simply by calling [`.toPromise()`](#toPromise).
 
+On top of the basics, parley makes it simple to implement timeouts (userland or implementorland), advanced error negotiation, improved stack traces (through omens), and retries (e.g. exponential backoff).
+
+> For more information on usage, keep reading below.
 
 ## About
 
@@ -408,7 +408,7 @@ each time .then() is used is a common source of hard-to-debug issues, technical 
 Sometimes, you just don't care.
 
 ```javascript
-var result = await sails.stdlib('fs').readJson({ source: './package.json' })
+var result = await sails.helpers.fs.readJson('./package.json')
 .tolerate('notFound', ()=>{
   return {
     name: 'not-a-real-package',
@@ -425,7 +425,7 @@ var result = await sails.stdlib('fs').readJson({ source: './package.json' })
 But sometimes, you care a little _too_ much.
 
 ```javascript
-var result = await sails.stdlib('fs').readJson({ source: './package.json' })
+var result = await sails.helpers.fs.readJson('./package.json')
 .intercept('notFound', (err)=>{
   return flaverr({
     message: 'No package.json file could be found in the current working directory.  And I care _very_ much.',
@@ -561,31 +561,24 @@ User.findOne({ id: req.param('id') })
 
 #### Async recursion
 
-Using Node >= v7.9?  Recursion is never exactly "fun and easy" (IMO) but with `await`, you can do recursion just like you would with normal, synchronous code (like any other programming language):
+Using Node >= v7.9?  Recursion is never exactly "fun and easy" (IMO) but with `await`, you can do recursion just like you would with normal, synchronous code (like any other programming language).
+
+In the example below, we demonstrate that, but also take advantage of `.tolerate()` for error negotiation instead of using a try/catch block:
 
 ```javascript
 #!/usr/bin/env node
 
 var path = require('path');
-var stdlib = require('sails-stdlib'); 
 
 // Starting from the current working directory, ascend upwards
-// looking for a package.json file.  (Keep looking until we hit an error.)
+// looking for a package.json file.  (Keep looking until we hit an error; if so, throw it.)
+// Otherwise, if there was no error, we found it!
 var nearestPJ = await (async function _recursively(thisDir){
-  var pathToCheck = path.resolve(thisDir, './package.json');
-  try {
-    await stdlib('fs').exists({path: pathToCheck});
-  } catch (err) {
-    if (err.code === 'doesNotExist') {
-      return _recursively(path.dirname(thisDir));
-    }
-    else {
-      throw err;
-    }
-  }
-  
-  // Otherwise, if there was no error, we found it!
-  return pathToCheck;
+  var pathToCheck = path.resolve(thisDir, 'package.json');
+  return await sails.helpers.fs.exists(pathToCheck)
+  .tolerate('doesNotExist', async (unusedErr)=>{
+    return await _recursively(path.dirname(thisDir));
+  }) || pathToCheck;
 })(process.cwd());
 
 console.log('Found nearest package.json file at:',nearestPJ);
