@@ -49,7 +49,7 @@ Parley is brought to you by [the team behind Sails.js](https://sailsjs.com/about
 
 ## Compatibility
 
-Compatible with Node 8, Node 6, Node 4, Node 0.12, and Node 0.10.  (But note that `await` is not supported by Node versions < 7.9.)
+Parley supports Node 8 and up, with backwards-compatibility for Node 6 and Node 4.  (But note that `await` is not supported by Node versions < 7.9.)
 
 
 ## Benchmarks
