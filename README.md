@@ -451,7 +451,7 @@ But don't worry- this section's for you.  Since Node.js is asynchronous, when us
 
 > Most of the examples below use simple Node callbacks, but note that many similar affordances are available for promise-chaining -- for example, check out `.toPromise()` ([below](#toPromise)) and `Promise.all()` (in bluebird, or native in ES6, etc.).  The concepts are more or less the same regardless.
 >
-> _Unless you and the rest of your team are experts with legacy promise-chaining and already have tight, consistently-applied and agreed-upon conventions for how to implement the use cases below, you're probably best off using Node callbacks._
+> _Unless you and the rest of your team are experts with legacy promise-chaining and already have tight, consistently-applied and agreed-upon conventions for how to implement the use cases below, you're probably best off using Node callbacks.  Of course, the **best and safest** strategy is to do neither, and instead to take advantage of `await`._
 
 #### Async loops
 
