@@ -1,6 +1,6 @@
 {
   "name": "parley",
-  "version": "3.8.3",
+  "version": "4.0.0-0",
   "description": "Practical, lightweight flow control for Node.js.  Supports `await`, callbacks and promises.",
   "main": "lib/parley.js",
   "scripts": {
