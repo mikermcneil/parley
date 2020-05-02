@@ -445,9 +445,9 @@ If you're using Node >= v7.9, you're in luck.  With `await`, flow control works 
 
 ##### What if I'm stuck with an old version of Node.js?
 
-Sorry to hear that...  Once again, `await` solves all of these problems too.  It's the biggest boon to JavaScript development since Node.js was released.
+Sorry to hear that...  Once again, `await` solves all of these problems.  It's the biggest boon to JavaScript development since Node.js was released.  You'll wish you could use it.
 
-But don't worry- this section's for you.  Since Node.js is asynchronous, when using Node < v7.9, seemingly-tricky flow control problems often arise in practical, userland code.  Fortunately, they're solveable when equipped with the proper tools and strategies.
+But don't worry- this section is for you.  Since Node.js is asynchronous, when using Node < v7.9, seemingly-tricky flow control problems often arise in practical, userland code.  Fortunately, they're solveable when equipped with the proper tools and strategies.
 
 > Most of the examples below use simple Node callbacks, but note that many similar affordances are available for promise-chaining -- for example, check out `.toPromise()` ([below](#toPromise)) and `Promise.all()` (in bluebird, or native in ES6, etc.).  The concepts are more or less the same regardless.
 >
