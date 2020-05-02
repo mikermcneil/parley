@@ -401,6 +401,8 @@ each time .then() is used is a common source of hard-to-debug issues, technical 
 > The extra layer of protection is just that-- it's here to help prevent issues
 > stemming from the myriad runtime edge cases it's almost impossible to anticipate
 > when building a production-ready web application.
+>
+> The best choice is to not use `.exec()` at all.  Use `await`.
 
 
 #### Tolerating errors
