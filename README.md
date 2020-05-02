@@ -36,7 +36,7 @@ doStuff(123)
 });
 ```
 
-> parley functions return a Deferred.  You can also obtain a promise simply by calling [`.toPromise()`](#toPromise).
+> parley functions return a Deferred.  You can also obtain a promise by calling [`.toPromise()`](#toPromise).
 
 On top of the basics, parley makes it simple to implement timeouts (userland or implementorland), advanced error negotiation, improved stack traces (through omens), and retries (e.g. exponential backoff).
 
