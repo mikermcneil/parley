@@ -19,7 +19,7 @@ Or like this:
 
 ```javascript
 doStuff(123)
-.exec(function (err, result){
+.exec((err, result)=>{
 
 });
 ```
@@ -28,10 +28,10 @@ Or even like this:
 
 ```javascript
 doStuff(123)
-.then(function (result){
+.then((result)=>{
 
 })
-.catch(function(err) {
+.catch((err)=>{
 
 });
 ```
@@ -154,8 +154,8 @@ Use parley to build a **deferred object**.  This provides access to `.exec()`, `
 ```javascript
 var parley = require('parley');
 
-var deferred = parley(function (done){
-  setTimeout(function (){
+var deferred = parley((done)=>{
+  setTimeout(()=>{
     if (Math.random() > 0.5) {
       return done(new Error('whoops, unlucky I guess'));
     }
@@ -187,12 +187,12 @@ var result = await yourFn();
 
 ```javascript
 // traditional Node-style callback
-.exec(function(err, result) {
+.exec((err, result)=>{
   // => undefined, 'hello world'
 });
 
 // or legacy promise chaining
-.then(function(result) {
+.then((result)=>{
   // => 'hello world'
 });
 ```
@@ -220,12 +220,12 @@ try {
 
 ```javascript
 // traditional Node-style callback
-.exec(function(err, result) {
+.exec((err, result)=>{
   // => [Error: oops], undefined
 });
 
 // or legacy promise-chaining
-.catch(function(err) {
+.catch((err)=>{
   // => [Error: oops]
 });
 ```
