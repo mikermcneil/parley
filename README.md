@@ -325,7 +325,7 @@ setTimeout(function (){
   // And since we aren't using try...catch, it will crash the process.
   JSON.parse('who0ps"thisis totally not valid js{}n');
 
-  return res.ok();
+  //…
 
 }, 50);
 ```
@@ -354,7 +354,7 @@ setTimeout(function (){
     JSON.parse('who0ps"thisis totally not valid js{}n');
   } catch (e) { return res.serverError(e); }
 
-  return res.ok();
+  //…
 
 }, 50);
 ```
